@@ -1,4 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# See https://help.github.com/articles/ignoring-files/
 
 # dependencies
 /node_modules
@@ -30,12 +30,46 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env — keep secrets out of git; commit `.env.example` as a template if you add one
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
 
 # vercel
 .vercel
 
-# typescript
+# typescript (keep next-env.d.ts tracked — Next generates it for types)
 *.tsbuildinfo
-next-env.d.ts
+
+# caches & tooling
+.turbo
+.eslintcache
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE / editors
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# logs
+logs
+*.log
+
+# Playwright (if added later)
+/test-results/
+/playwright-report/
+/blob-report/
+
+# Supabase local (if you use CLI linked branches)
+.branches
+.temp
