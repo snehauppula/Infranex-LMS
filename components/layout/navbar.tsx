@@ -3,17 +3,39 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRight, Menu, User, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { InfranexLogoMark } from "@/components/brand/infranex-logo";
+import { SignOutButton } from "@/components/auth/sign-out-button";
 
 const links = [
   { href: "/", label: "Home" },
   { href: "/courses", label: "Courses" },
   { href: "/about", label: "About us" },
-];
+] as const;
+
+function primaryNavLinks(sessionEmail: string | null | undefined) {
+  if (sessionEmail) {
+    return [
+      ...links,
+      { href: "/dashboard" as const, label: "Dashboard" },
+    ];
+  }
+  return [...links];
+}
+
+function linkIsActive(pathname: string, href: string) {
+  if (href === "/dashboard") {
+    return pathname === "/dashboard" || pathname.startsWith("/dashboard/");
+  }
+  if (href === "/courses") {
+    return pathname === "/courses" || pathname.startsWith("/courses/");
+  }
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
 export function Navbar({
   sessionEmail,
@@ -26,17 +48,41 @@ export function Navbar({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const accountWrapRef = useRef<HTMLDivElement>(null);
+  const navItems = primaryNavLinks(sessionEmail);
+
+  useEffect(() => {
+    setAccountMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!accountMenuOpen) return;
+    const onDocMouseDown = (e: MouseEvent) => {
+      const el = accountWrapRef.current;
+      if (el && !el.contains(e.target as Node)) setAccountMenuOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setAccountMenuOpen(false);
+    };
+    document.addEventListener("mousedown", onDocMouseDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocMouseDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [accountMenuOpen]);
 
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 border-b pt-[env(safe-area-inset-top,0px)] transition-shadow duration-300",
-        "border-deep/[0.08] bg-gradient-to-r from-white/95 via-[#f0f7fc]/95 to-white/95 shadow-[0_1px_0_rgba(255,255,255,1)_inset,0_14px_40px_-28px_rgba(10,31,68,0.08)] backdrop-blur-2xl",
-        "supports-[backdrop-filter]:from-white/88 supports-[backdrop-filter]:via-[#eef6fc]/90 supports-[backdrop-filter]:to-white/88"
+        "sticky z-40 mx-auto mb-2 mt-3 box-border w-[calc(100%-1.5rem)] max-w-[1360px] overflow-x-clip overflow-y-visible rounded-2xl border pt-[env(safe-area-inset-top,0px)] transition-shadow duration-300 sm:top-4 sm:mb-3 sm:mt-4 sm:w-[calc(100%-2rem)] sm:rounded-3xl md:w-[calc(100%-3rem)]",
+        "top-3",
+        "border-border bg-card/90 shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-card/85"
       )}
     >
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-border"
         aria-hidden
       />
 
@@ -44,7 +90,8 @@ export function Navbar({
       <div
         className="relative mx-auto hidden h-[88px] w-full max-w-[1360px] items-center gap-4 px-5 sm:px-8 md:grid"
         style={{
-          gridTemplateColumns: "minmax(14rem, min(28vw, 22rem)) 1fr minmax(11rem, auto)",
+          gridTemplateColumns:
+            "minmax(14rem, min(28vw, 22rem)) 1fr minmax(11rem, auto)",
         }}
       >
         <div className="flex shrink-0 justify-start pr-2">
@@ -61,24 +108,24 @@ export function Navbar({
           className="flex justify-center justify-self-center"
           aria-label="Primary"
         >
-          <div className="inline-flex items-center gap-1 rounded-full border border-deep/[0.08] bg-white/95 p-1.5 shadow-[0_4px_24px_-12px_rgba(10,31,68,0.12),inset_0_1px_0_rgba(255,255,255,1)] ring-1 ring-black/[0.03]">
-            {links.map((l) => {
-              const active = pathname === l.href;
+          <div className="inline-flex max-w-full flex-wrap items-center justify-center gap-1 rounded-full border border-border bg-surface p-1.5">
+            {navItems.map((l) => {
+              const active = linkIsActive(pathname, l.href);
               return (
                 <Link
                   key={l.href}
                   href={l.href}
                   className={cn(
-                    "relative min-w-0 rounded-full px-3.5 py-2.5 text-center text-sm font-semibold tracking-tight transition-all duration-200 sm:px-5 sm:text-[15px]",
+                    "relative min-w-0 rounded-full px-3 py-2.5 text-center text-sm font-semibold tracking-tight transition-all duration-200 sm:px-4 sm:text-[15px]",
                     active
-                      ? "bg-deep/[0.04] text-deep shadow-sm ring-1 ring-deep/[0.06]"
-                      : "text-muted hover:bg-deep/[0.03] hover:text-deep"
+                      ? "bg-card text-deep shadow-sm ring-1 ring-border"
+                      : "text-muted hover:bg-card hover:text-deep"
                   )}
                 >
                   {l.label}
                   {active ? (
                     <span
-                      className="pointer-events-none absolute inset-x-4 bottom-1 h-0.5 rounded-full bg-gradient-to-r from-primary/0 via-primary to-primary/0"
+                      className="pointer-events-none absolute inset-x-3 bottom-1 h-0.5 rounded-full bg-primary sm:inset-x-4"
                       aria-hidden
                     />
                   ) : null}
@@ -88,41 +135,64 @@ export function Navbar({
           </div>
         </nav>
 
-        <div className="flex shrink-0 items-center justify-end gap-2 pl-2">
+        <div className="flex min-w-0 shrink-0 flex-wrap items-center justify-end gap-2 pl-2">
           {sessionEmail ? (
             <>
-              <Link
-                href="/dashboard"
-                className="group flex max-w-[min(100vw-14rem,260px)] items-center gap-2.5 rounded-full border border-deep/[0.08] bg-white py-1.5 pl-1.5 pr-3 shadow-sm ring-1 ring-white transition-all duration-200 hover:border-primary/30 hover:shadow-[0_12px_32px_-16px_rgba(0,174,239,0.18)]"
-              >
-                <span
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-fuchsia-600 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] ring-1 ring-white"
-                  aria-hidden
+              <div className="relative" ref={accountWrapRef}>
+                <button
+                  type="button"
+                  id="nav-account-trigger"
+                  aria-expanded={accountMenuOpen}
+                  aria-haspopup="menu"
+                  aria-controls="nav-account-menu"
+                  onClick={() => setAccountMenuOpen((v) => !v)}
+                  className={cn(
+                    "flex min-w-0 max-w-[min(100vw-14rem,280px)] items-center gap-2.5 rounded-full border border-border bg-card py-1.5 pl-1.5 pr-3 text-left shadow-sm transition-[box-shadow,ring] sm:pr-3.5",
+                    accountMenuOpen && "ring-2 ring-primary/20"
+                  )}
                 >
-                  <User className="h-[17px] w-[17px]" strokeWidth={2.25} />
-                </span>
-                <span className="flex min-w-0 flex-col leading-tight">
-                  {displayName ? (
-                    <span className="truncate text-xs font-semibold text-deep">
-                      {displayName}
-                    </span>
-                  ) : null}
                   <span
-                    className={cn(
-                      "text-[10px] font-bold uppercase tracking-[0.12em] text-primary",
-                      displayName ? "mt-0.5" : "text-xs tracking-normal"
-                    )}
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm"
+                    aria-hidden
                   >
-                    Dashboard
+                    <User className="h-[17px] w-[17px]" strokeWidth={2.25} />
                   </span>
-                </span>
-              </Link>
+                  <span className="hidden min-w-0 flex-1 flex-col leading-tight sm:flex">
+                    {displayName ? (
+                      <span className="truncate text-xs font-semibold text-deep">
+                        {displayName}
+                      </span>
+                    ) : null}
+                    <span
+                      className={cn(
+                        "truncate text-[11px] text-muted",
+                        displayName && "mt-0.5"
+                      )}
+                    >
+                      {sessionEmail}
+                    </span>
+                  </span>
+                  <span className="min-w-0 flex-1 truncate text-xs font-semibold text-deep sm:hidden">
+                    {displayName ?? sessionEmail}
+                  </span>
+                </button>
+                {accountMenuOpen ? (
+                  <div
+                    id="nav-account-menu"
+                    role="menu"
+                    aria-labelledby="nav-account-trigger"
+                    className="absolute right-0 top-[calc(100%+0.5rem)] z-[60] rounded-2xl border border-border bg-card p-2 shadow-lg"
+                  >
+                    <SignOutButton className="h-10 min-w-[10rem] rounded-xl px-4 text-xs font-semibold" />
+                  </div>
+                ) : null}
+              </div>
               {role === "admin" && (
                 <Link href="/admin">
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-10 rounded-full border-deep/[0.1] bg-white px-4 text-xs font-bold uppercase tracking-wider text-deep shadow-sm transition hover:border-primary/35 hover:bg-primary/[0.03]"
+                    className="h-10 rounded-full border-border bg-card px-4 text-xs font-bold uppercase tracking-wider text-deep shadow-sm transition hover:border-primary/30"
                   >
                     Admin
                   </Button>
@@ -133,7 +203,7 @@ export function Navbar({
             <Link href="/auth">
               <Button
                 size="sm"
-                className="h-10 rounded-full px-6 text-xs font-bold uppercase tracking-wider shadow-[0_12px_32px_-12px_rgba(0,174,239,0.4)]"
+                className="h-10 rounded-full px-6 text-xs font-bold uppercase tracking-wider"
               >
                 Sign in
               </Button>
@@ -157,7 +227,7 @@ export function Navbar({
         </Link>
         <button
           type="button"
-          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-deep/[0.08] bg-white text-deep shadow-sm transition hover:border-primary/25 hover:bg-primary/[0.04]"
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-card text-deep shadow-sm transition hover:border-primary/30"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -175,14 +245,14 @@ export function Navbar({
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden border-t border-deep/[0.06] bg-white shadow-[0_20px_50px_-36px_rgba(10,31,68,0.12)] md:hidden"
+            className="overflow-hidden border-t border-border bg-card shadow-sm md:hidden"
           >
             <div className="mx-auto flex max-w-[1360px] flex-col gap-2 px-4 pb-5 pt-3 sm:px-8">
               <p className="px-1 text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
                 Menu
               </p>
-              {links.map((l) => {
-                const active = pathname === l.href;
+              {navItems.map((l) => {
+                const active = linkIsActive(pathname, l.href);
                 return (
                   <Link
                     key={l.href}
@@ -191,8 +261,8 @@ export function Navbar({
                     className={cn(
                       "flex items-center justify-between rounded-2xl px-4 py-4 text-base font-semibold transition-colors",
                       active
-                        ? "bg-primary/[0.08] text-deep ring-1 ring-primary/20"
-                        : "text-deep hover:bg-deep/[0.04]"
+                        ? "bg-surface text-deep ring-1 ring-border"
+                        : "text-deep hover:bg-surface"
                     )}
                   >
                     {l.label}
@@ -208,44 +278,52 @@ export function Navbar({
 
               {sessionEmail ? (
                 <>
-                  <div className="my-1 h-px bg-gradient-to-r from-transparent via-deep/[0.08] to-transparent" />
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 rounded-2xl border border-deep/[0.06] bg-[#f8fafc] px-4 py-4"
+                  <div className="my-1 h-px bg-border" />
+                  <div
+                    className="flex items-center gap-3 rounded-2xl border border-border bg-surface px-4 py-3.5"
+                    role="group"
+                    aria-label="Signed in as"
                   >
                     <span
-                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-fuchsia-600 text-white shadow-inner ring-2 ring-white"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm"
                       aria-hidden
                     >
                       <User className="h-5 w-5" strokeWidth={2.25} />
                     </span>
-                    <span className="flex min-w-0 flex-1 flex-col text-left">
+                    <div className="min-w-0 flex-1 text-left">
                       {displayName ? (
-                        <span className="truncate text-sm font-semibold text-deep">
-                          {displayName}
-                        </span>
-                      ) : null}
-                      <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary">
-                        Open dashboard
-                      </span>
-                    </span>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-muted" />
-                  </Link>
+                        <>
+                          <p className="truncate text-sm font-semibold text-deep">
+                            {displayName}
+                          </p>
+                          <p className="mt-0.5 truncate text-xs text-muted">
+                            {sessionEmail}
+                          </p>
+                        </>
+                      ) : (
+                        <p className="truncate text-sm font-semibold text-deep">
+                          {sessionEmail}
+                        </p>
+                      )}
+                    </div>
+                  </div>
                   {role === "admin" && (
                     <Link
                       href="/admin"
                       onClick={() => setOpen(false)}
-                      className="flex items-center justify-between rounded-2xl px-4 py-4 text-sm font-semibold text-deep hover:bg-deep/[0.04]"
+                      className="flex items-center justify-between rounded-2xl px-4 py-4 text-sm font-semibold text-deep hover:bg-surface"
                     >
                       Admin console
                       <ChevronRight className="h-4 w-4 shrink-0 text-muted" />
                     </Link>
                   )}
+                  <div className="mt-2 border-t border-border pt-4">
+                    <SignOutButton className="h-11 w-full rounded-xl text-sm font-semibold" />
+                  </div>
                 </>
               ) : (
                 <Link href="/auth" onClick={() => setOpen(false)} className="mt-1">
-                  <Button className="h-12 w-full rounded-xl text-sm font-bold shadow-[0_16px_40px_-14px_rgba(0,174,239,0.4)]">
+                  <Button className="h-12 w-full rounded-xl text-sm font-bold">
                     Sign in
                   </Button>
                 </Link>

@@ -17,51 +17,18 @@ function enrichCourseRow(c: CourseRow): CourseRow {
   return c;
 }
 
-const DEMO_COURSES: CourseRow[] = [
-  {
-    id: "11111111-1111-4111-8111-111111111101",
-    title: "Cloud Infrastructure Fundamentals",
-    description:
-      "Design resilient systems with modern IaC patterns and observability.",
-    duration: "12h",
-    price: 499900,
-    cloudinary_url: COURSE_PREVIEW_VIDEO_URL,
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "11111111-1111-4111-8111-111111111102",
-    title: "Security Engineering for Teams",
-    description:
-      "Threat modeling, zero trust, and practical hardening for SaaS products.",
-    duration: "8h",
-    price: 399900,
-    cloudinary_url: null,
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: "11111111-1111-4111-8111-111111111103",
-    title: "Data Pipelines at Scale",
-    description:
-      "Streaming ingestion, warehouse design, and cost-aware batch jobs.",
-    duration: "10h",
-    price: 449900,
-    cloudinary_url: null,
-    created_at: new Date().toISOString(),
-  },
-];
-
 export async function getCourses(): Promise<CourseRow[]> {
   const { createClient } = await import("@/lib/supabase/server");
   const supabase = await createClient();
-  if (!supabase) return DEMO_COURSES;
+  if (!supabase) return [];
 
   const { data, error } = await supabase
     .from("courses")
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (error || !data?.length) return DEMO_COURSES;
-  return (data as CourseRow[]).map(enrichCourseRow);
+  if (error) return [];
+  return ((data ?? []) as CourseRow[]).map(enrichCourseRow);
 }
 
 /**
@@ -94,10 +61,7 @@ export async function getCourseRowFromDatabase(id: string): Promise<CourseRow | 
   return enrichCourseRow(data as CourseRow);
 }
 
-/** Catalog / pages: prefer DB row, then demo fallback (local preview without DB). */
+/** Catalog / course detail: database only (no hardcoded fallback). */
 export async function getCourseById(id: string): Promise<CourseRow | null> {
-  const fromDb = await getCourseRowFromDatabase(id);
-  if (fromDb) return fromDb;
-
-  return DEMO_COURSES.find((c) => c.id === id) ?? null;
+  return getCourseRowFromDatabase(id);
 }

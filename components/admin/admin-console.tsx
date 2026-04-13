@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import type { AdminCourseRow, AdminStudentRow } from "@/services/admin";
+import { revalidateAdminPage } from "@/app/admin/actions";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Container } from "@/components/layout/container";
@@ -18,13 +19,22 @@ function avg(nums: number[]) {
 export function AdminConsole({
   students,
   courses,
+  serviceRoleConfigured,
 }: {
   students: AdminStudentRow[];
   courses: AdminCourseRow[];
+  /** When false, list reads use the signed-in JWT; set `SUPABASE_SERVICE_ROLE_KEY` for reliable full-table access. */
+  serviceRoleConfigured: boolean;
 }) {
   const [tab, setTab] = useState<Tab>("students");
   const [qStudent, setQStudent] = useState("");
   const [qCourse, setQCourse] = useState("");
+
+  const totalEnrollments = useMemo(
+    () =>
+      students.reduce((n, s) => n + (s.enrollments?.length ?? 0), 0),
+    [students]
+  );
 
   const filteredStudents = useMemo(() => {
     const t = qStudent.trim().toLowerCase();
@@ -45,17 +55,38 @@ export function AdminConsole({
   return (
     <div className="py-12 sm:py-16">
       <Container>
+        {!serviceRoleConfigured ? (
+          <div
+            className="mb-8 rounded-2xl border border-amber-200/80 bg-amber-50/90 px-4 py-3 text-sm text-amber-950 shadow-sm"
+            role="status"
+          >
+            <p className="font-medium">Configure the service role key</p>
+            <p className="mt-1 text-amber-900/85">
+              Set <code className="rounded bg-white/80 px-1 py-0.5 text-xs">SUPABASE_SERVICE_ROLE_KEY</code> in{" "}
+              <code className="rounded bg-white/80 px-1 py-0.5 text-xs">.env.local</code> (server only). Without it,
+              admin lists rely on your session and RLS — you need{" "}
+              <span className="font-medium">public.users.role = &apos;admin&apos;</span> for your user, not only App
+              Metadata.
+            </p>
+          </div>
+        ) : null}
+
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-deep sm:text-4xl">
               Admin insights
             </h1>
             <p className="mt-2 max-w-2xl text-muted">
-              Search learners or courses. Metrics stay compact so you can scan
-              fast.
+              Live data from Supabase: learners, catalog, and seats. Search to narrow lists.
             </p>
           </div>
-          <div className="flex gap-2 rounded-xl border border-border bg-white p-1 shadow-sm">
+          <div className="flex flex-wrap items-center gap-2">
+            <form action={revalidateAdminPage}>
+              <Button type="submit" variant="outline" size="sm" className="rounded-lg">
+                Refresh data
+              </Button>
+            </form>
+            <div className="flex gap-2 rounded-xl border border-border bg-white p-1 shadow-sm">
             <Button
               type="button"
               size="sm"
@@ -75,6 +106,13 @@ export function AdminConsole({
               Courses
             </Button>
           </div>
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-3 sm:grid-cols-3">
+          <MetricCard label="Learners" value={String(students.length)} />
+          <MetricCard label="Catalog courses" value={String(courses.length)} />
+          <MetricCard label="Enrollments" value={String(totalEnrollments)} />
         </div>
 
         {tab === "students" ? (
@@ -203,10 +241,17 @@ export function AdminConsole({
                           {(c.enrollments ?? []).map((e) => (
                             <div
                               key={e.id}
-                              className="flex items-center justify-between rounded-lg bg-background px-3 py-2 text-sm"
+                              className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-background px-3 py-2 text-sm"
                             >
-                              <span className="text-muted">Learner seat</span>
-                              <span className="font-semibold text-deep">
+                              <div className="min-w-0">
+                                <p className="truncate font-medium text-deep">
+                                  {e.studentName}
+                                </p>
+                                <p className="text-xs capitalize text-muted">
+                                  {e.status}
+                                </p>
+                              </div>
+                              <span className="shrink-0 font-semibold text-primary tabular-nums">
                                 {e.progress}%
                               </span>
                             </div>
@@ -224,6 +269,15 @@ export function AdminConsole({
           </motion.div>
         )}
       </Container>
+    </div>
+  );
+}
+
+function MetricCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-border bg-white px-4 py-4 shadow-sm">
+      <p className="text-xs font-semibold uppercase tracking-wide text-muted">{label}</p>
+      <p className="mt-1 text-2xl font-bold tabular-nums text-deep">{value}</p>
     </div>
   );
 }

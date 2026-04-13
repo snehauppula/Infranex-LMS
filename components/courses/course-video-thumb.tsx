@@ -19,7 +19,7 @@ export function CourseVideoThumb({
     return (
       <div
         className={cn(
-          "h-full w-full bg-gradient-to-br from-primary/20 via-white to-deep/10",
+          "h-full w-full bg-surface",
           className
         )}
         aria-hidden

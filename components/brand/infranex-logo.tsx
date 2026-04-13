@@ -1,7 +1,10 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-
-const LOGO_SRC = "/brand/infranex-logo.png";
+import {
+  BRAND_IMAGE_HEIGHT,
+  BRAND_IMAGE_SRC,
+  BRAND_IMAGE_WIDTH,
+} from "@/components/brand/brand-assets";
 
 export function InfranexLogoMark({
   className,
@@ -25,10 +28,10 @@ export function InfranexLogoMark({
 
   return (
     <Image
-      src={LOGO_SRC}
-      alt="Infranex Technologies"
-      width={560}
-      height={156}
+      src={BRAND_IMAGE_SRC}
+      alt="Infranex Technologies — Fast, reliable, future-ready"
+      width={BRAND_IMAGE_WIDTH}
+      height={BRAND_IMAGE_HEIGHT}
       priority={priority}
       sizes="(max-width: 640px) 420px, (max-width: 1024px) 520px, 560px"
       className={cn(

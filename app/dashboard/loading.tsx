@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Loading() {
   return (
-    <div className="border-b border-border/60 bg-gradient-to-b from-white to-background pb-16 pt-10 sm:pb-20 sm:pt-14">
+    <div className="border-b border-border bg-background pb-16 pt-10 sm:pb-20 sm:pt-14">
       <Container className="max-w-5xl">
         <Skeleton className="h-48 w-full rounded-3xl sm:h-52" />
         <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

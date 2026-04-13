@@ -95,7 +95,7 @@ export function AuthPanel({ authError }: { authError?: string }) {
   }
 
   return (
-    <div className="flex w-full max-w-md min-w-0 flex-col gap-5 rounded-3xl border border-border bg-white/90 p-6 shadow-[0_22px_60px_-18px_rgba(10,31,68,0.18)] backdrop-blur-md sm:gap-6 sm:p-8">
+    <div className="flex w-full max-w-md min-w-0 flex-col gap-5 rounded-3xl border border-border bg-card p-6 shadow-sm sm:gap-6 sm:p-8">
       {authError ? (
         <div
           role="alert"

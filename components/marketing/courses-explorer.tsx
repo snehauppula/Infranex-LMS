@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Search } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
 import type { CourseRow } from "@/types";
 import { Container } from "@/components/layout/container";
 import { Input } from "@/components/ui/input";
@@ -15,12 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  INFRANEX_DOMAINS,
-  inferCourseDomainSlug,
-  getDomainBySlug,
-} from "@/lib/infranex-domains";
-import { cn } from "@/lib/utils";
+import { inferCourseDomainSlug, getDomainBySlug } from "@/lib/infranex-domains";
 import { CourseVideoThumb } from "@/components/courses/course-video-thumb";
 
 function formatInrPaise(paise: number) {
@@ -33,71 +28,58 @@ function formatInrPaise(paise: number) {
 
 export function CoursesExplorer({ courses }: { courses: CourseRow[] }) {
   const [q, setQ] = useState("");
-  const [domainSlug, setDomainSlug] = useState<string>("all");
 
   const filtered = useMemo(() => {
     return courses.filter((c) => {
       const hay = `${c.title} ${c.description ?? ""}`.toLowerCase();
       const matchQ = !q.trim() || hay.includes(q.toLowerCase());
-      const slug = inferCourseDomainSlug(c);
-      const matchD = domainSlug === "all" || slug === domainSlug;
-      return matchQ && matchD;
+      return matchQ;
     });
-  }, [courses, q, domainSlug]);
+  }, [courses, q]);
+
+  if (courses.length === 0) {
+    return (
+      <Container className="mt-10">
+        <div className="mt-8 rounded-2xl border border-dashed border-border bg-white/60 px-8 py-16 text-center">
+          <p className="text-lg font-medium text-deep">No courses yet</p>
+          <p className="mt-2 text-sm text-muted">
+            Add rows to the <span className="font-medium text-deep/80">courses</span>{" "}
+            table in Supabase (or run your seed migration) to populate the catalog.
+          </p>
+          <Button asChild variant="outline" className="mt-6">
+            <Link href="/">Back to home</Link>
+          </Button>
+        </div>
+      </Container>
+    );
+  }
 
   return (
     <Container className="mt-10">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="relative w-full lg:max-w-md">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-          <Input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search courses…"
-            className="pl-10"
-            aria-label="Search courses"
-          />
-        </div>
-        <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:gap-3 lg:w-auto">
-          <label htmlFor="domain-filter" className="sr-only">
-            Filter by domain
-          </label>
-          <select
-            id="domain-filter"
-            value={domainSlug}
-            onChange={(e) => setDomainSlug(e.target.value)}
-            className={cn(
-              "h-11 w-full min-w-0 flex-1 rounded-xl border border-border bg-white px-4 text-sm font-medium text-deep shadow-sm transition-all",
-              "focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25",
-              "disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-[280px] lg:max-w-md"
-            )}
-          >
-            <option value="all">All domains</option>
-            {INFRANEX_DOMAINS.map((d) => (
-              <option key={d.slug} value={d.slug}>
-                {d.emoji} {d.label}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div className="relative w-full max-w-md">
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+        <Input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Search courses…"
+          className="pl-10"
+          aria-label="Search courses"
+        />
       </div>
 
       {filtered.length === 0 ? (
         <div className="mt-16 rounded-2xl border border-dashed border-border bg-white/60 px-8 py-16 text-center">
           <p className="text-lg font-medium text-deep">No courses match</p>
           <p className="mt-2 text-sm text-muted">
-            Try another keyword, pick &quot;All domains&quot;, or clear filters.
+            Try another keyword or clear the search box.
           </p>
           <Button
             type="button"
             variant="outline"
             className="mt-6"
-            onClick={() => {
-              setQ("");
-              setDomainSlug("all");
-            }}
+            onClick={() => setQ("")}
           >
-            Reset filters
+            Clear search
           </Button>
         </div>
       ) : (
@@ -105,6 +87,7 @@ export function CoursesExplorer({ courses }: { courses: CourseRow[] }) {
           {filtered.map((c, i) => {
             const slug = inferCourseDomainSlug(c);
             const d = slug ? getDomainBySlug(slug) : null;
+            const DomainIcon = d?.icon;
             return (
               <motion.div
                 key={c.id}
@@ -113,15 +96,19 @@ export function CoursesExplorer({ courses }: { courses: CourseRow[] }) {
                 transition={{ delay: i * 0.04, duration: 0.35 }}
               >
                 <Link href={`/courses/${c.id}`}>
-                  <Card className="h-full overflow-hidden transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_22px_60px_-18px_rgba(10,31,68,0.18)]">
+                  <Card className="h-full overflow-hidden transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md">
                     <div className="flex items-center justify-between gap-2 px-6 pt-6">
                       <span
                         className="inline-flex min-w-0 max-w-[85%] items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-deep"
                         title={d?.label ?? "General catalog"}
                       >
-                        {d ? (
+                        {d && DomainIcon ? (
                           <>
-                            <span aria-hidden>{d.emoji}</span>
+                            <DomainIcon
+                              className="h-3.5 w-3.5 shrink-0 text-primary"
+                              strokeWidth={2.25}
+                              aria-hidden
+                            />
                             <span className="truncate">{d.label}</span>
                           </>
                         ) : (
@@ -132,7 +119,7 @@ export function CoursesExplorer({ courses }: { courses: CourseRow[] }) {
                         {c.duration}
                       </span>
                     </div>
-                    <div className="relative mx-6 mt-4 h-28 overflow-hidden rounded-xl bg-deep ring-1 ring-white/10">
+                    <div className="relative mx-6 mt-4 h-28 overflow-hidden rounded-xl border border-border bg-deep">
                       {c.cloudinary_url ? (
                         <>
                           <CourseVideoThumb
@@ -146,7 +133,7 @@ export function CoursesExplorer({ courses }: { courses: CourseRow[] }) {
                           </span>
                         </>
                       ) : (
-                        <div className="h-full w-full bg-gradient-to-br from-primary/20 via-white to-deep/10" />
+                        <div className="h-full w-full bg-surface" />
                       )}
                     </div>
                     <CardHeader>
@@ -159,8 +146,9 @@ export function CoursesExplorer({ courses }: { courses: CourseRow[] }) {
                       <span className="text-sm font-semibold text-deep">
                         {formatInrPaise(c.price)}
                       </span>
-                      <span className="text-sm font-medium text-primary">
-                        View details →
+                      <span className="inline-flex items-center gap-1 text-sm font-medium text-primary">
+                        View details
+                        <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} aria-hidden />
                       </span>
                     </CardContent>
                   </Card>

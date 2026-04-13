@@ -4,7 +4,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-full min-w-0 overflow-x-clip bg-gradient-to-br from-background via-white/90 to-primary/[0.07]">
+    <div className="min-h-full min-w-0 overflow-x-clip bg-background">
       {children}
     </div>
   );

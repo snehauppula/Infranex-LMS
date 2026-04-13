@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { BRAND_IMAGE_SRC } from "@/components/brand/brand-assets";
 import { AppProviders } from "@/components/providers/app-providers";
 import "./globals.css";
 
@@ -20,6 +21,10 @@ export const metadata: Metadata = {
   },
   description:
     "Premium SaaS learning platform — courses, enrollments, and analytics in one calm surface.",
+  icons: {
+    icon: [{ url: BRAND_IMAGE_SRC, type: "image/png" }],
+    apple: [{ url: BRAND_IMAGE_SRC, type: "image/png" }],
+  },
 };
 
 export const viewport: Viewport = {
@@ -28,7 +33,7 @@ export const viewport: Viewport = {
   maximumScale: 5,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#e8f0fa" },
+    { media: "(prefers-color-scheme: light)", color: "#f4f6f9" },
     { media: "(prefers-color-scheme: dark)", color: "#0a1f44" },
   ],
 };

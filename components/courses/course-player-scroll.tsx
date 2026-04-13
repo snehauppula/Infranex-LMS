@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-/** Scrolls to `#course-player` when opening from Dashboard “Continue” (or any link with that hash). */
+/** Scrolls to `#course-player` when opening from Dashboard “Open course” (or any link with `#course-player`). */
 export function CoursePlayerScroll({ enabled }: { enabled: boolean }) {
   useEffect(() => {
     if (!enabled) return;

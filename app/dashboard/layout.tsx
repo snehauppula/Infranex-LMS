@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { DashboardHeader } from "@/components/dashboard/dashboard-header";
+import { Navbar } from "@/components/layout/navbar";
 import { getSessionUser, getUserDisplayName } from "@/services/auth";
 
 export const dynamic = "force-dynamic";
@@ -15,9 +15,9 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-full min-w-0 flex-col overflow-x-clip bg-background">
-      <DashboardHeader
+      <Navbar
+        sessionEmail={user.email ?? null}
         displayName={displayName}
-        email={user.email ?? null}
         role={role}
       />
       <div className="flex-1">{children}</div>

@@ -1,21 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  /* Brand-tinted canvas (not flat white) — electric blue + deep navy as wash */
-  --background: #e8f0fa;
+  /* Brand — logo only */
+  --background: #f4f6f9;
   --foreground: #0a1f44;
   --primary: #00aeef;
   --primary-foreground: #ffffff;
   --deep: #0a1f44;
-  --muted: #5c6d82;
+  --muted: #6b7280;
   --card: #ffffff;
-  --border: rgba(10, 31, 68, 0.1);
+  --border: #e5e7eb;
   --ring: #00aeef;
-  --glow: rgba(0, 174, 239, 0.45);
-  /* Secondary surfaces for sections / cards */
-  --surface: #eef5fc;
-  --surface-strong: #e2ecf8;
-  --footer-deep: #071525;
+  /* Section fills — neutral, low chroma */
+  --surface: #eef1f6;
+  --surface-strong: #e5e9f0;
 }
 
 @theme inline {
@@ -30,7 +28,6 @@
   --color-ring: var(--ring);
   --color-surface: var(--surface);
   --color-surface-strong: var(--surface-strong);
-  --color-footer-deep: var(--footer-deep);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -44,23 +41,18 @@ body {
   min-height: 100%;
   min-width: 0;
   background-color: var(--background);
-  background-image: radial-gradient(
-      ellipse 120% 70% at 100% -15%,
-      rgba(0, 174, 239, 0.14),
-      transparent 52%
-    ),
-    radial-gradient(
-      ellipse 90% 55% at 0% 100%,
-      rgba(10, 31, 68, 0.07),
-      transparent 48%
-    ),
-    linear-gradient(180deg, #f2f7fd 0%, var(--background) 38%, #e2ebf5 100%);
+  background-image: linear-gradient(
+    180deg,
+    #fafbfc 0%,
+    var(--background) 40%,
+    #f0f2f5 100%
+  );
   color: var(--foreground);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 ::selection {
-  background: rgba(0, 174, 239, 0.22);
+  background: rgba(0, 174, 239, 0.18);
   color: var(--deep);
 }
 

@@ -4,8 +4,9 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-export function SignOutButton() {
+export function SignOutButton({ className }: { className?: string }) {
   const router = useRouter();
 
   return (
@@ -13,6 +14,7 @@ export function SignOutButton() {
       type="button"
       variant="secondary"
       size="sm"
+      className={cn("shrink-0", className)}
       onClick={async () => {
         const supabase = createClient();
         if (!supabase) {

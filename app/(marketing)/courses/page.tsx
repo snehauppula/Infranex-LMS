@@ -26,10 +26,8 @@ export default async function CoursesPage() {
             Programs worth your nights and weekends
           </h1>
           <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
-            Filter by domain, compare depth, and pick something you will actually
-            finish. Tracks without a domain tag only show when{" "}
-            <span className="font-medium text-deep/80">All domains</span> is
-            selected — so nothing useful hides on “page four.”
+            Search the catalog and open a course to see pricing, previews, and
+            enrollment. Everything listed here comes from your database.
           </p>
         </div>
       </Container>

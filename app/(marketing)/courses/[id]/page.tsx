@@ -40,7 +40,7 @@ export default async function CourseDetailPage({
   const videoSrc = course.cloudinary_url?.split("#")[0] ?? null;
 
   return (
-    <div className="py-12 sm:py-16 md:py-20">
+    <div className="bg-background py-12 sm:py-16 md:py-20">
       <CoursePlayerScroll enabled={isEnrolled} />
       <Container className="min-w-0">
         <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted">
@@ -60,7 +60,7 @@ export default async function CourseDetailPage({
               className={
                 isEnrolled && videoSrc
                   ? "aspect-video w-full overflow-hidden rounded-2xl border border-border bg-black shadow-[0_22px_60px_-18px_rgba(10,31,68,0.22)]"
-                  : "aspect-video w-full overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-primary/15 via-white to-deep/10 shadow-[0_22px_60px_-18px_rgba(10,31,68,0.18)]"
+                  : "aspect-video w-full overflow-hidden rounded-2xl border border-border bg-background shadow-sm"
               }
             >
               {isEnrolled && videoSrc ? (
@@ -120,17 +120,17 @@ export default async function CourseDetailPage({
               {course.description}
             </p>
             <div className="mt-8 flex flex-wrap gap-3 text-sm text-muted">
-              <span className="rounded-full bg-white px-3 py-1 font-medium text-deep shadow-sm ring-1 ring-border">
+              <span className="rounded-full border border-border bg-card px-3 py-1 font-medium text-deep shadow-sm">
                 Duration: {course.duration ?? "Self-paced"}
               </span>
-              <span className="rounded-full bg-white px-3 py-1 font-medium text-deep shadow-sm ring-1 ring-border">
+              <span className="rounded-full border border-border bg-card px-3 py-1 font-medium text-deep shadow-sm">
                 Cloud-ready media
               </span>
             </div>
           </div>
 
           <aside className="min-w-0 lg:pt-4">
-            <div className="rounded-2xl border border-border bg-white/90 p-5 shadow-[0_22px_60px_-18px_rgba(10,31,68,0.16)] backdrop-blur-md sm:p-6 lg:sticky lg:top-24">
+            <div className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6 lg:sticky lg:top-24">
               <p className="text-sm font-medium text-muted">Investment</p>
               <p className="mt-2 text-3xl font-semibold text-deep">
                 {formatInrPaise(course.price)}

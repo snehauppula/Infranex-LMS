@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { BookOpen, Shield, Sparkles } from "lucide-react";
+import { BookOpen, Shield } from "lucide-react";
 import { Container } from "@/components/layout/container";
+import { DashboardWelcomeToast } from "@/components/dashboard/dashboard-welcome-toast";
 import {
   Card,
   CardContent,
@@ -22,8 +23,8 @@ async function Enrollments() {
   if (rows.length === 0) {
     return (
       <div className="mx-auto max-w-lg">
-        <div className="flex flex-col items-center rounded-3xl border border-dashed border-primary/30 bg-gradient-to-b from-white via-white to-primary/[0.07] px-8 py-14 text-center shadow-[0_18px_50px_-24px_rgba(10,31,68,0.12)]">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/12 text-primary ring-1 ring-primary/20">
+        <div className="flex flex-col items-center rounded-3xl border border-dashed border-border bg-card px-8 py-14 text-center shadow-sm">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-surface text-primary">
             <BookOpen className="h-8 w-8" strokeWidth={1.75} aria-hidden />
           </div>
           <h3 className="mt-6 text-xl font-semibold tracking-tight text-deep">
@@ -72,16 +73,16 @@ async function Enrollments() {
           <p className="text-xs font-medium uppercase tracking-wide text-muted">
             Status
           </p>
-          <p className="mt-1 text-sm font-semibold text-primary">On track</p>
+          <p className="mt-1 text-sm font-semibold text-deep">On track</p>
         </div>
       </div>
       <div className="grid gap-6 md:grid-cols-2">
         {rows.map((e) => (
           <Card
             key={e.id}
-            className="overflow-hidden transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_60px_-18px_rgba(10,31,68,0.16)]"
+            className="overflow-hidden border-border transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md"
           >
-            <div className="h-2 bg-gradient-to-r from-primary/40 via-primary to-deep/30" />
+            <div className="h-1 bg-primary" />
             <CardHeader>
               <CardTitle className="line-clamp-2">{e.course.title}</CardTitle>
               <CardDescription className="line-clamp-2">
@@ -94,9 +95,9 @@ async function Enrollments() {
                   <span>Progress</span>
                   <span>{e.progress}%</span>
                 </div>
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-surface-strong">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-primary to-deep transition-all"
+                    className="h-full rounded-full bg-primary transition-all"
                     style={{ width: `${e.progress}%` }}
                   />
                 </div>
@@ -104,7 +105,7 @@ async function Enrollments() {
               <div className="flex flex-wrap gap-2">
                 <Button asChild size="sm">
                   <Link href={`/courses/${e.course.id}#course-player`}>
-                    Continue
+                    Open course
                   </Link>
                 </Button>
                 <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium capitalize text-deep">
@@ -141,23 +142,24 @@ export default async function DashboardPage() {
   const firstName = displayName?.split(/\s+/)[0] ?? "there";
 
   return (
-    <div className="border-b border-border/60 bg-gradient-to-b from-white to-background pb-12 pt-8 sm:pb-20 sm:pt-14">
+    <div className="border-b border-border bg-background pb-12 pt-6 sm:pb-20 sm:pt-10">
       <Container className="max-w-5xl min-w-0">
+        <DashboardWelcomeToast firstName={firstName} />
         {role === "admin" ? (
-          <div className="mb-8 rounded-2xl border border-primary/30 bg-gradient-to-br from-deep via-[#0b2a5c] to-deep p-5 text-white shadow-[0_20px_50px_-20px_rgba(0,174,239,0.35)] sm:p-6">
+          <div className="mb-8 rounded-2xl border border-border border-l-4 border-l-primary bg-card p-5 shadow-sm sm:p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex gap-3">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/20 text-primary ring-1 ring-primary/30">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-primary">
                   <Shield className="h-5 w-5" aria-hidden />
                 </span>
                 <div>
-                  <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary/90">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
                     Administrator
                   </p>
-                  <p className="mt-1 text-lg font-semibold leading-snug">
+                  <p className="mt-1 text-lg font-semibold leading-snug text-deep">
                     Admin console is available
                   </p>
-                  <p className="mt-1 text-sm text-white/75">
+                  <p className="mt-1 text-sm text-muted">
                     Learners, courses, and enrollments — open the console anytime.
                   </p>
                 </div>
@@ -165,7 +167,7 @@ export default async function DashboardPage() {
               <Button
                 asChild
                 size="lg"
-                className="h-12 w-full shrink-0 border-0 bg-primary text-primary-foreground shadow-[0_16px_40px_-12px_rgba(0,174,239,0.5)] hover:bg-primary/90 sm:w-auto sm:px-8"
+                className="h-12 w-full shrink-0 sm:w-auto sm:px-8"
               >
                 <Link href="/admin">Open admin console</Link>
               </Button>
@@ -173,24 +175,7 @@ export default async function DashboardPage() {
           </div>
         ) : null}
 
-        <section className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-white via-[#f8fafc] to-primary/[0.07] p-6 shadow-[0_18px_50px_-24px_rgba(10,31,68,0.1)] sm:rounded-3xl sm:p-10">
-          <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
-          <div className="relative">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white/80 px-3 py-1 text-xs font-medium text-deep shadow-sm">
-              <Sparkles className="h-3.5 w-3.5 text-primary" aria-hidden />
-              Your workspace
-            </div>
-            <h1 className="mt-4 break-words text-2xl font-bold tracking-tight text-deep sm:mt-5 sm:text-3xl md:text-4xl">
-              Welcome back{firstName !== "there" ? `, ${firstName}` : ""}
-            </h1>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">
-              Head to the catalog to enroll, or jump back into a course below.
-              Progress saves automatically across devices.
-            </p>
-          </div>
-        </section>
-
-        <section className="mt-12 sm:mt-14">
+        <section className="mt-8 sm:mt-10">
           <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold tracking-tight text-deep sm:text-2xl">

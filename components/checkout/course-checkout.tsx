@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { scrollCoursePlayerIntoViewAndFullscreen } from "@/lib/focus-course-video";
 
 declare global {
   interface Window {
@@ -122,8 +123,13 @@ export function CourseCheckout({
     return (
       <div className="mt-6 space-y-3">
         <p className="text-sm font-medium text-deep">You already have this course.</p>
-        <Button asChild variant="secondary" className="w-full border-primary/25">
-          <a href="#course-player">Jump to video</a>
+        <Button
+          type="button"
+          variant="secondary"
+          className="w-full border-primary/25"
+          onClick={() => scrollCoursePlayerIntoViewAndFullscreen()}
+        >
+          Watch in fullscreen
         </Button>
         <Button asChild className="w-full">
           <Link href="/dashboard">View on dashboard</Link>
