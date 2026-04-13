@@ -24,6 +24,7 @@ export function EnrolledCourseVideo({
   const lastSent = useRef(Math.max(0, Math.min(100, Math.round(initialProgress))));
   const debounceRef = useRef<number | undefined>(undefined);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const persist = useCallback(
     async (pct: number) => {
@@ -31,6 +32,7 @@ export function EnrolledCourseVideo({
       if (p <= lastSent.current && p < 100) return;
 
       setSaveState("saving");
+      setSaveError(null);
       try {
         const res = await fetch("/api/enrollments/progress", {
           method: "POST",
@@ -39,12 +41,23 @@ export function EnrolledCourseVideo({
         });
         const data = (await res.json()) as { ok?: boolean; progress?: number; error?: string };
         if (!res.ok || !data.ok) {
-          throw new Error(data.error ?? "Save failed");
+          const msg = data.error ?? `Save failed (${res.status})`;
+          if (process.env.NODE_ENV === "development") {
+            console.error("[EnrolledCourseVideo] progress API:", msg);
+          }
+          setSaveError(msg);
+          setSaveState("error");
+          return;
         }
         lastSent.current = data.progress ?? p;
         setSaveState("saved");
         window.setTimeout(() => setSaveState("idle"), 2000);
-      } catch {
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : "Save failed";
+        if (process.env.NODE_ENV === "development") {
+          console.error("[EnrolledCourseVideo] progress save:", e);
+        }
+        setSaveError(msg);
         setSaveState("error");
       }
     },
@@ -124,7 +137,8 @@ export function EnrolledCourseVideo({
         >
           {saveState === "saving" && "Saving progress…"}
           {saveState === "saved" && "Progress saved"}
-          {saveState === "error" && "Could not save progress"}
+          {saveState === "error" &&
+            (saveError ? `Could not save: ${saveError}` : "Could not save progress")}
         </p>
       ) : null}
     </div>

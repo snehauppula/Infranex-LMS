@@ -130,7 +130,7 @@ export default async function CourseDetailPage({
           </div>
 
           <aside className="min-w-0 lg:pt-4">
-            <div className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6 lg:sticky lg:top-24">
+            <div className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
               <p className="text-sm font-medium text-muted">Investment</p>
               <p className="mt-2 text-3xl font-semibold text-deep">
                 {formatInrPaise(course.price)}
