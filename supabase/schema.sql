@@ -1,6 +1,6 @@
 -- Infranex LMS — canonical schema (see also supabase/migrations/*).
 -- Remote project: applied via Supabase MCP migrations + optional seed.
--- Links public.users.id to auth.users.id
+-- Links public.users.id to auth.users.id okay
 
 create table if not exists public.users (
   id uuid primary key references auth.users (id) on delete cascade,
