@@ -57,11 +57,11 @@ export default async function CourseDetailPage({
     user != null ? await getEnrollmentForCourse(user.id, course.id) : null;
   const isEnrolled = enrollment != null && enrollment.status !== "paused";
 
-  const previewThumb =
-    course.video_url != null
-      ? catalogVideoThumbnailUrl(course.video_url)
-      : null;
   const posterSrc = course.poster_url?.trim() || null;
+  // Prefer curated poster over derived video thumbnails.
+  const previewThumb =
+    posterSrc ??
+    (course.video_url != null ? catalogVideoThumbnailUrl(course.video_url) : null);
 
   const megaEmbedSrc = megaEmbedSrcFromVideoUrl(course.video_url);
   const directVideoSrc = course.video_url?.split("#")[0] ?? null;
@@ -79,8 +79,8 @@ export default async function CourseDetailPage({
     <div
       className={cn(
         "min-w-0 pb-20 sm:pb-28",
-        /* Clear fixed overlay navbar (~72–88px) + top offset + breathing room */
-        "pt-[max(6.5rem,calc(5.5rem+env(safe-area-inset-top,0px)))] sm:pt-[max(7.25rem,calc(6rem+env(safe-area-inset-top,0px)))]"
+        /* Clear fixed overlay navbar (~64–76px) + top offset + breathing room */
+        "pt-[max(6.1rem,calc(5.15rem+env(safe-area-inset-top,0px)))] sm:pt-[max(6.45rem,calc(5.55rem+env(safe-area-inset-top,0px)))]"
       )}
     >
       <CoursePlayerScroll enabled={isEnrolled} />

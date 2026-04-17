@@ -181,7 +181,7 @@ export function AuthPanel({ authError }: { authError?: string }) {
                   aria-controls="auth-form-panel"
                   onClick={() => setMode(m.id)}
                   className={cn(
-                    "relative rounded-full py-2.5 text-center text-sm font-semibold tracking-tight outline-none transition-colors duration-200 ease-out focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-card",
+                    "relative rounded-full py-2.5 text-center text-sm font-semibold tracking-tight outline-none transition-[color,background-color] duration-300 ease-brand-out motion-reduce:duration-150 focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-card",
                     selected ? "text-deep" : "text-muted hover:text-deep/90"
                   )}
                 >
@@ -237,7 +237,7 @@ export function AuthPanel({ authError }: { authError?: string }) {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@company.com"
             disabled={loading}
-            className="bg-surface/60 transition-[border-color,box-shadow,background-color] duration-200 ease-out focus-visible:bg-white"
+            className="bg-surface/60 transition-[border-color,box-shadow,background-color] duration-300 ease-brand-out motion-reduce:duration-150 focus-visible:bg-white"
           />
         </div>
         <div className="grid gap-2">
@@ -253,7 +253,7 @@ export function AuthPanel({ authError }: { authError?: string }) {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               disabled={loading}
-              className="bg-surface/60 pr-11 transition-[border-color,box-shadow,background-color] duration-200 ease-out focus-visible:bg-white"
+              className="bg-surface/60 pr-11 transition-[border-color,box-shadow,background-color] duration-300 ease-brand-out motion-reduce:duration-150 focus-visible:bg-white"
             />
             <button
               type="button"

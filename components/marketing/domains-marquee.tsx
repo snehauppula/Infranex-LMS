@@ -13,7 +13,7 @@ function DomainTile({
   return (
     <article
       aria-hidden={ariaHidden}
-      className="group flex w-[min(280px,88vw)] shrink-0 flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-[box-shadow,transform,border-color] duration-200 hover:-translate-y-0.5 hover:shadow-md sm:w-[min(292px,82vw)] sm:rounded-3xl sm:p-6"
+      className="group flex w-[min(280px,88vw)] shrink-0 flex-col rounded-2xl border border-border bg-card p-5 shadow-sm transition-[box-shadow,transform,border-color] duration-300 ease-brand-out motion-reduce:duration-150 hover:-translate-y-0.5 hover:shadow-md sm:w-[min(292px,82vw)] sm:rounded-3xl sm:p-6"
     >
       <div
         className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl border border-border bg-surface text-primary"
@@ -36,7 +36,7 @@ export function DomainsMarquee() {
 
   return (
     <div
-      className="relative mt-14 w-full overflow-hidden py-4"
+      className="relative mt-9 w-full overflow-hidden py-3 sm:mt-10"
       aria-label="Learning domains"
     >
       <div

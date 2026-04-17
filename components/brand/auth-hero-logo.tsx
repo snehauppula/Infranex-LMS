@@ -2,7 +2,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import {
   BRAND_IMAGE_HEIGHT,
-  BRAND_IMAGE_SRC,
+  BRAND_IMAGE_URL,
   BRAND_IMAGE_WIDTH,
 } from "@/components/brand/brand-assets";
 
@@ -17,7 +17,7 @@ export function AuthHeroLogo({
 }) {
   return (
     <Image
-      src={BRAND_IMAGE_SRC}
+      src={BRAND_IMAGE_URL}
       alt="Infranex Technologies — Fast, reliable, future-ready"
       width={BRAND_IMAGE_WIDTH}
       height={BRAND_IMAGE_HEIGHT}

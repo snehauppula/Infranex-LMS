@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { ArrowRight, BookOpen, LayoutDashboard, Scale } from "lucide-react";
+import {
+  ArrowRight,
+  ExternalLink,
+  Globe,
+  Mail,
+  MapPin,
+  Phone,
+} from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { InfranexLogoMark } from "@/components/brand/infranex-logo";
 import { cn } from "@/lib/utils";
@@ -19,16 +26,16 @@ function FooterLink({
     <Link
       href={href}
       className={cn(
-        "group inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors hover:text-white",
+        "group inline-flex items-center gap-1.5 text-[13px] text-white/72 transition-[color,opacity] duration-300 ease-brand-out motion-reduce:duration-150 hover:text-white",
         className
       )}
     >
-      <span className="border-b border-transparent pb-px transition-[border-color] group-hover:border-primary/80">
+      <span className="border-b border-transparent pb-px transition-[border-color] duration-300 ease-brand-out motion-reduce:duration-150 group-hover:border-primary/80">
         {children}
       </span>
       {showArrow ? (
         <ArrowRight
-          className="h-3.5 w-3.5 shrink-0 opacity-0 transition-[opacity,transform] group-hover:translate-x-0.5 group-hover:opacity-100"
+          className="h-3.5 w-3.5 shrink-0 opacity-0 transition-[opacity,transform] duration-300 ease-brand-out motion-reduce:duration-150 group-hover:translate-x-0.5 group-hover:opacity-100"
           strokeWidth={2.25}
           aria-hidden
         />
@@ -37,27 +44,11 @@ function FooterLink({
   );
 }
 
-function FooterColumn({
-  title,
-  icon: Icon,
-  children,
-}: {
-  title: string;
-  icon: typeof BookOpen;
-  children: React.ReactNode;
-}) {
+function FooterHeading({ children }: { children: React.ReactNode }) {
   return (
-    <div>
-      <div className="flex items-center gap-2">
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-primary ring-1 ring-white/10">
-          <Icon className="h-4 w-4" strokeWidth={2} aria-hidden />
-        </span>
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-white/90">
-          {title}
-        </p>
-      </div>
-      <ul className="mt-5 space-y-3.5">{children}</ul>
-    </div>
+    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/85">
+      {children}
+    </p>
   );
 }
 
@@ -67,103 +58,95 @@ export function Footer() {
   return (
     <footer className="relative mt-auto overflow-hidden border-t border-border bg-deep text-white">
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_100%_0%,rgba(0,174,239,0.08),transparent_50%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_85%_60%_at_12%_-18%,rgba(0,174,239,0.12),transparent_55%)]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_55%_at_100%_0%,rgba(0,174,239,0.10),transparent_55%)]"
         aria-hidden
       />
 
-      <Container className="relative py-14 sm:py-16 lg:py-20">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-10 lg:gap-y-14">
+      <Container className="relative py-7 sm:py-9">
+        <p className="text-center text-[11px] font-semibold tracking-wide text-white/60">
+          Placement-focused • Self-paced • Secure checkout
+        </p>
+
+        <div className="mt-6 grid gap-8 lg:grid-cols-12 lg:gap-10">
           {/* Brand */}
           <div className="lg:col-span-5">
-            <div className="flex flex-col items-start gap-3">
-              <div className="rounded-2xl bg-white/95 p-2.5 shadow-[0_20px_50px_-24px_rgba(0,0,0,0.45)] ring-1 ring-white/25">
-                <InfranexLogoMark height={44} className="max-w-[240px]" />
+            <div className="flex items-start gap-4">
+              <div className="rounded-2xl bg-white/95 p-2 shadow-[0_18px_46px_-28px_rgba(0,0,0,0.55)] ring-1 ring-white/15">
+                <InfranexLogoMark height={34} className="max-w-[220px]" />
               </div>
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
-                LMS platform
-              </span>
+              <p className="mt-0.5 max-w-sm text-sm leading-relaxed text-white/72">
+                Placement-focused courses and a calm learning surface—so you spend
+                energy on skills, not fighting the product.
+              </p>
             </div>
-            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/72">
-              Placement-focused courses and a calm learning surface—so you
-              spend energy on skills, not fighting the product.
-            </p>
-            <Link
-              href="/courses"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm outline-none transition hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-deep"
-            >
-              Browse courses
-              <ArrowRight className="h-4 w-4" strokeWidth={2.25} aria-hidden />
-            </Link>
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-[13px]">
+              <FooterLink href="/courses" showArrow={false}>
+                Courses
+              </FooterLink>
+              <FooterLink href="/about" showArrow={false}>
+                About
+              </FooterLink>
+              <FooterLink href="/dashboard" showArrow={false}>
+                Dashboard
+              </FooterLink>
+            </div>
           </div>
 
-          {/* Link columns */}
-          <div className="grid gap-10 sm:grid-cols-3 lg:col-span-7 lg:gap-8">
-            <FooterColumn title="Explore" icon={BookOpen}>
-              <li>
-                <FooterLink href="/">Home</FooterLink>
+          {/* Contact */}
+          <div className="lg:col-span-4">
+            <FooterHeading>Contact</FooterHeading>
+            <ul className="mt-3 space-y-2.5 text-[13px] text-white/72">
+              <li className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-primary" aria-hidden />
+                <span>+91 97052 81105</span>
               </li>
-              <li>
-                <FooterLink href="/courses">Courses</FooterLink>
+              <li className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-primary" aria-hidden />
+                <span>support@infranex.tech</span>
               </li>
-              <li>
-                <FooterLink href="/about">About us</FooterLink>
+              <li className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-primary" aria-hidden />
+                <span>Hyderabad, India</span>
               </li>
-            </FooterColumn>
+            </ul>
+          </div>
 
-            <FooterColumn title="Account" icon={LayoutDashboard}>
-              <li>
-                <FooterLink href="/auth">Sign in</FooterLink>
-              </li>
-              <li>
-                <FooterLink href="/dashboard">Dashboard</FooterLink>
-              </li>
-            </FooterColumn>
-
-            <FooterColumn title="Legal" icon={Scale}>
-              <li>
-                <FooterLink href="/privacy">Privacy</FooterLink>
-              </li>
-              <li>
-                <FooterLink href="/terms">Terms of use</FooterLink>
-              </li>
-            </FooterColumn>
+          {/* Follow */}
+          <div className="lg:col-span-3">
+            <FooterHeading>Follow us</FooterHeading>
+            <div className="mt-3 flex items-center gap-3">
+              {[
+                { href: "#", label: "Website", Icon: Globe },
+                { href: "#", label: "Updates", Icon: ExternalLink },
+                { href: "#", label: "Community", Icon: ExternalLink },
+                { href: "#", label: "Media", Icon: ExternalLink },
+              ].map(({ href, label, Icon }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-white shadow-sm backdrop-blur-sm transition hover:border-primary/35 hover:bg-white/15"
+                >
+                  <Icon className="h-4 w-4" aria-hidden />
+                </Link>
+              ))}
+            </div>
+            <p className="mt-4 text-[12px] leading-relaxed text-white/65">
+              Stay updated with new courses and announcements.
+            </p>
           </div>
         </div>
-      </Container>
 
-      <div className="relative border-t border-white/10 bg-deep/95">
-        <Container className="flex flex-col items-center justify-between gap-4 py-7 sm:flex-row sm:gap-6">
-          <p className="text-center text-xs text-white/50 sm:text-left">
+        <div className="mt-6 border-t border-white/10 pt-4">
+          <p className="text-center text-[11px] text-white/50 sm:text-left">
             © {year} Infranex Technologies. All rights reserved.
           </p>
-          <nav
-            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-white/45"
-            aria-label="Footer secondary"
-          >
-            <FooterLink
-              href="/privacy"
-              showArrow={false}
-              className="text-xs text-white/45 hover:text-white/80"
-            >
-              Privacy
-            </FooterLink>
-            <FooterLink
-              href="/terms"
-              showArrow={false}
-              className="text-xs text-white/45 hover:text-white/80"
-            >
-              Terms
-            </FooterLink>
-            <FooterLink
-              href="/courses"
-              showArrow={false}
-              className="text-xs text-white/45 hover:text-white/80"
-            >
-              Catalog
-            </FooterLink>
-          </nav>
-        </Container>
-      </div>
+        </div>
+      </Container>
     </footer>
   );
 }

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <Container className="max-w-3xl py-16 sm:py-20">
+    <Container className="max-w-3xl pb-16 pt-[max(6.1rem,calc(5.15rem+env(safe-area-inset-top,0px)))] sm:pb-20 sm:pt-[max(6.45rem,calc(5.55rem+env(safe-area-inset-top,0px)))]">
       <h1 className="text-3xl font-bold tracking-tight text-deep sm:text-4xl">
         Terms of use
       </h1>

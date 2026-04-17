@@ -56,9 +56,16 @@ function FlowArrow({ className }: { className?: string }) {
 
 export function AboutPageSections() {
   return (
-    <div className="overflow-x-hidden bg-transparent">
+    <div
+      className={cn(
+        "overflow-x-hidden bg-transparent",
+        /* Clear overlay navbar — same shell as /courses; section heroes stay compact */
+        "pt-[max(5.5rem,calc(4.65rem+env(safe-area-inset-top,0px)))] sm:pt-[max(5.85rem,calc(4.95rem+env(safe-area-inset-top,0px)))]",
+        "pb-12 sm:pb-14"
+      )}
+    >
       {/* Hero */}
-      <section className="relative border-b border-border pb-16 pt-28 sm:pb-20 sm:pt-32 lg:pb-24 lg:pt-36">
+      <section className="relative border-b border-border pb-10 pt-4 sm:pb-12 sm:pt-5 lg:pb-14 lg:pt-6">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_60%_at_12%_-18%,rgba(0,174,239,0.05),transparent_50%)]" />
         <Container className="relative max-w-[1100px]">
           <motion.div
@@ -69,11 +76,11 @@ export function AboutPageSections() {
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
               About Infranex Technologies
             </p>
-            <h1 className="mt-4 text-[clamp(1.75rem,5vw+0.5rem,3.25rem)] font-semibold leading-[1.12] tracking-tight text-deep sm:text-5xl lg:text-[3.25rem]">
+            <h1 className="mt-3 text-[clamp(1.75rem,5vw+0.5rem,3.25rem)] font-semibold leading-[1.12] tracking-tight text-deep sm:mt-4 sm:text-5xl lg:text-[3.25rem]">
               Theory gets you in the room.{" "}
               <span className="text-primary">Proof gets you the seat.</span>
             </h1>
-            <p className="mt-5 text-base leading-relaxed text-muted sm:mt-6 sm:text-lg md:text-xl">
+            <p className="mt-4 text-base leading-relaxed text-muted sm:mt-5 sm:text-lg md:text-xl">
               We started Infranex because the gap between campus and company is
               painfully wide — smart people with weak portfolios, outdated
               stacks, and zero rehearsal for real interviews. Our answer is
@@ -85,20 +92,19 @@ export function AboutPageSections() {
       </section>
 
       {/* Journey: brand-tinted band (navy + electric blue) — only this strip */}
-      <section className="relative overflow-hidden border-b border-border bg-surface py-16 sm:py-20 lg:py-24">
-
+      <section className="relative overflow-hidden border-b border-border bg-surface py-10 sm:py-12 lg:py-14">
         <Container className="relative max-w-[1200px]">
-          <motion.div {...fade} transition={{ duration: 0.45 }} className="mb-12 max-w-2xl">
+          <motion.div {...fade} transition={{ duration: 0.45 }} className="mb-8 max-w-2xl sm:mb-9">
             <p className="inline-flex rounded-full border border-border bg-card px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-primary">
               The problem we solve
             </p>
-            <h2 className="mt-4 text-2xl font-semibold tracking-tight text-deep sm:text-3xl">
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-deep sm:mt-4 sm:text-3xl">
               From “I read it once” to{" "}
               <span className="text-primary">“Here is what I shipped.”</span>
             </h2>
           </motion.div>
 
-          <div className="flex flex-col items-stretch gap-6 lg:flex-row lg:items-stretch lg:gap-2">
+          <div className="flex flex-col items-stretch gap-5 lg:flex-row lg:items-stretch lg:gap-2">
             {/* Column A — starting point */}
             <motion.div
               {...fade}
@@ -146,7 +152,7 @@ export function AboutPageSections() {
               </div>
             </motion.div>
 
-            <FlowArrow className="py-2 lg:py-0 lg:pt-24" />
+            <FlowArrow className="py-2 lg:py-0 lg:pt-10" />
 
             {/* Column B — what Infranex does (stacked “extraction” style) */}
             <motion.div
@@ -184,7 +190,7 @@ export function AboutPageSections() {
               </div>
             </motion.div>
 
-            <FlowArrow className="py-2 lg:py-0 lg:pt-24" />
+            <FlowArrow className="py-2 lg:py-0 lg:pt-10" />
 
             {/* Column C — outcome */}
             <motion.div
@@ -214,7 +220,7 @@ export function AboutPageSections() {
                   pursue roles in technology and business — supported by a team
                   obsessed with quality over vanity metrics.
                 </p>
-                <div className="mt-6 flex flex-wrap gap-2">
+                <div className="mt-5 flex flex-wrap gap-2">
                   {["Interview-ready", "Project proof", "Mentor network"].map((t) => (
                     <span
                       key={t}
@@ -224,7 +230,7 @@ export function AboutPageSections() {
                     </span>
                   ))}
                 </div>
-                <div className="mt-8 flex-1 rounded-xl border border-border bg-surface p-4">
+                <div className="mt-6 flex-1 rounded-xl border border-border bg-surface p-4">
                   <p className="text-xs font-semibold uppercase tracking-wider text-primary">
                     Your prep surface
                   </p>
@@ -240,13 +246,13 @@ export function AboutPageSections() {
       </section>
 
       {/* Mission + Vision */}
-      <section className="bg-background py-16 sm:py-20 lg:py-24">
+      <section className="bg-background py-10 sm:py-12 lg:py-14">
         <Container className="max-w-[1100px]">
-          <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
+          <div className="grid gap-5 sm:gap-6 lg:grid-cols-2 lg:gap-7">
             <motion.article
               {...fade}
               transition={{ duration: 0.45 }}
-              className="rounded-3xl border border-border bg-card p-8 shadow-sm"
+              className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-7"
             >
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
                 Mission
@@ -263,7 +269,7 @@ export function AboutPageSections() {
             <motion.article
               {...fade}
               transition={{ duration: 0.45, delay: 0.06 }}
-              className="rounded-3xl border border-border bg-card p-8 shadow-sm"
+              className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-7"
             >
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
                 Vision
@@ -282,18 +288,18 @@ export function AboutPageSections() {
       </section>
 
       {/* What makes us unique — bento */}
-      <section className="py-16 sm:py-20 lg:py-24">
+      <section className="py-10 sm:py-12 lg:py-14">
         <Container className="max-w-[1100px]">
           <motion.div {...fade} transition={{ duration: 0.45 }} className="max-w-2xl">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
               What makes us unique
             </p>
-            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-deep sm:text-3xl">
+            <h2 className="mt-2.5 text-2xl font-semibold tracking-tight text-deep sm:mt-3 sm:text-3xl">
               Built like a product studio — taught like a serious school.
             </h2>
           </motion.div>
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+          <div className="mt-8 grid gap-4 sm:mt-9 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
             {[
               {
                 icon: Zap,
@@ -320,7 +326,7 @@ export function AboutPageSections() {
                 key={item.title}
                 {...fade}
                 transition={{ duration: 0.4, delay: i * 0.05 }}
-                className="group rounded-2xl border border-border bg-card p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:shadow-md"
+                className="group rounded-2xl border border-border bg-card p-6 shadow-sm transition-[transform,box-shadow,border-color] duration-300 ease-brand-out motion-reduce:duration-150 hover:-translate-y-0.5 hover:border-border hover:shadow-md"
               >
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
                   <item.icon className="h-5 w-5" strokeWidth={2} />
@@ -334,15 +340,15 @@ export function AboutPageSections() {
       </section>
 
       {/* Audience · Offerings · Achievements */}
-      <section className="border-t border-border bg-surface py-16 sm:py-20 lg:py-24">
+      <section className="border-t border-border bg-surface py-10 sm:py-12 lg:py-14">
         <Container className="max-w-[1100px]">
-          <div className="grid gap-10 lg:grid-cols-3 lg:gap-8">
+          <div className="grid gap-8 lg:grid-cols-3 lg:gap-7">
             <motion.div {...fade} transition={{ duration: 0.45 }}>
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
                 Who we serve
               </p>
               <h3 className="mt-2 text-xl font-semibold text-deep">Target audience</h3>
-              <ul className="mt-6 space-y-3">
+              <ul className="mt-4 space-y-2.5 sm:mt-5 sm:space-y-3">
                 {[
                   "Students — graduates & undergraduates",
                   "Job seekers entering or re-entering the market",
@@ -364,7 +370,7 @@ export function AboutPageSections() {
                 What we offer
               </p>
               <h3 className="mt-2 text-xl font-semibold text-deep">Offerings</h3>
-              <div className="mt-6 flex flex-wrap gap-2">
+              <div className="mt-4 flex flex-wrap gap-2 sm:mt-5">
                 {[
                   "Training programs",
                   "Internship opportunities",
@@ -379,7 +385,7 @@ export function AboutPageSections() {
                   </span>
                 ))}
               </div>
-              <p className="mt-6 text-sm leading-relaxed text-muted">
+              <p className="mt-4 text-sm leading-relaxed text-muted sm:mt-5">
                 Everything builds toward one outcome: you leave with skills you
                 can demonstrate and a story recruiters believe.
               </p>
@@ -388,13 +394,13 @@ export function AboutPageSections() {
             <motion.div
               {...fade}
               transition={{ duration: 0.45, delay: 0.1 }}
-              className="rounded-3xl border border-border bg-card p-8 shadow-sm"
+              className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-7"
             >
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
                 Today & tomorrow
               </p>
               <h3 className="mt-2 text-xl font-semibold text-deep">Achievements</h3>
-              <ul className="mt-6 space-y-4 text-sm leading-relaxed text-muted">
+              <ul className="mt-4 space-y-3 text-sm leading-relaxed text-muted sm:mt-5 sm:space-y-4">
                 <li className="flex gap-3">
                   <Users className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                   A growing community of learners who care about craft.
@@ -408,7 +414,7 @@ export function AboutPageSections() {
                   Early-stage startup with a clear roadmap for expansion.
                 </li>
               </ul>
-              <p className="mt-6 text-xs text-muted">
+              <p className="mt-4 text-xs text-muted sm:mt-5">
                 Numbers evolve — we’ll keep this page honest as we grow.
               </p>
             </motion.div>
@@ -417,12 +423,12 @@ export function AboutPageSections() {
       </section>
 
       {/* CTA */}
-      <section className="border-t border-border bg-background py-14 sm:py-16">
+      <section className="border-t border-border bg-background py-10 sm:py-12">
         <Container className="max-w-[1100px]">
           <motion.div
             {...fade}
             transition={{ duration: 0.45 }}
-            className="flex flex-col items-start justify-between gap-6 rounded-3xl border border-border bg-card px-8 py-10 shadow-sm sm:flex-row sm:items-center sm:px-10"
+            className="flex flex-col items-start justify-between gap-5 rounded-3xl border border-border bg-card px-6 py-8 shadow-sm sm:flex-row sm:items-center sm:gap-6 sm:px-8 sm:py-9"
           >
             <div>
               <h2 className="text-xl font-semibold text-deep sm:text-2xl">

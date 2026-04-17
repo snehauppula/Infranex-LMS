@@ -112,7 +112,7 @@ async function Enrollments() {
         {rows.map((e) => (
           <Card
             key={e.id}
-            className="overflow-hidden border-border transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-sm"
+            className="overflow-hidden border-border transition-[transform,box-shadow] duration-300 ease-brand-out motion-reduce:duration-150 hover:-translate-y-0.5 hover:shadow-md motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-sm"
           >
             <div className="h-1 bg-primary" />
             <CardHeader>
@@ -226,7 +226,7 @@ export default async function DashboardPage() {
               </p>
             </div>
             <Button asChild variant="outline" size="sm" className="shrink-0 self-start sm:self-auto">
-              <Link href="/courses">Open catalog</Link>
+              <Link href="/courses">View all courses</Link>
             </Button>
           </div>
           <Suspense fallback={<EnrollmentsFallback />}>

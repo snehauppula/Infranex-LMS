@@ -1,3 +1,4 @@
+import { PageTransition } from "@/components/layout/page-transition";
 import { SkipToContent } from "@/components/layout/skip-to-content";
 
 export default function AuthLayout({
@@ -9,7 +10,7 @@ export default function AuthLayout({
     <div className="min-h-full min-w-0 overflow-x-clip bg-background">
       <SkipToContent />
       <main id="main-content" tabIndex={-1} className="min-h-full outline-none">
-        {children}
+        <PageTransition>{children}</PageTransition>
       </main>
     </div>
   );

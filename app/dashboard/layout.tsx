@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { Navbar } from "@/components/layout/navbar";
+import { PageTransition } from "@/components/layout/page-transition";
 import { SkipToContent } from "@/components/layout/skip-to-content";
 import { getSessionUser, getUserDisplayName } from "@/services/auth";
 
@@ -23,7 +24,7 @@ export default async function DashboardLayout({
         role={role}
       />
       <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
-        {children}
+        <PageTransition>{children}</PageTransition>
       </main>
     </div>
   );

@@ -5,7 +5,7 @@ import { cloudinaryVideoThumbnailUrl } from "@/lib/cloudinary";
  * Other hosts: cards fall back to a neutral surface; course detail can use `<video preload="metadata">`.
  */
 export function catalogVideoThumbnailUrl(videoUrl: string): string | null {
-  return cloudinaryVideoThumbnailUrl(videoUrl);
+  return cloudinaryVideoThumbnailUrl(videoUrl) ?? googleDriveThumbnailUrlFromVideoUrl(videoUrl);
 }
 
 /**
@@ -64,6 +64,73 @@ export function megaEmbedSrcFromVideoUrl(raw: string | null | undefined): string
 
 export function isMegaEmbedVideoUrl(raw: string | null | undefined): boolean {
   return megaEmbedSrcFromVideoUrl(raw) != null;
+}
+
+function googleDriveFileIdFromUrl(u: URL): string | null {
+  // Common formats:
+  // - https://drive.google.com/file/d/<id>/view?usp=sharing
+  // - https://drive.google.com/file/d/<id>/preview
+  // - https://drive.google.com/open?id=<id>
+  // - https://drive.google.com/uc?id=<id>&export=download
+  if (u.hostname !== "drive.google.com") return null;
+
+  const m = u.pathname.match(/^\/file\/d\/([^/]+)(?:\/|$)/i);
+  if (m?.[1]) return m[1];
+
+  const id = u.searchParams.get("id");
+  if (id) return id;
+
+  return null;
+}
+
+/**
+ * Google Drive: accept a share link (or iframe snippet) and return a stable embed URL.
+ * We prefer the `/preview` embed because Drive download links often break on CORS/range
+ * requests and can prompt downloads instead of streaming.
+ */
+export function googleDriveEmbedSrcFromVideoUrl(
+  raw: string | null | undefined
+): string | null {
+  if (!raw) return null;
+  const t = raw.trim();
+  const fromIframe = t.match(/\bsrc\s*=\s*["']([^"']+)["']/i);
+  const candidate = (fromIframe?.[1] ?? t).trim();
+  try {
+    const u = new URL(candidate);
+    const id = googleDriveFileIdFromUrl(u);
+    if (!id) return null;
+    return `https://drive.google.com/file/d/${encodeURIComponent(id)}/preview`;
+  } catch {
+    return null;
+  }
+}
+
+export function isGoogleDriveVideoUrl(raw: string | null | undefined): boolean {
+  return googleDriveEmbedSrcFromVideoUrl(raw) != null;
+}
+
+/**
+ * Google Drive: best-effort thumbnail for public/shared files.
+ * Requires the Drive file to be shareable (e.g. "Anyone with the link").
+ */
+export function googleDriveThumbnailUrlFromVideoUrl(
+  raw: string | null | undefined,
+  opts?: { size?: number }
+): string | null {
+  if (!raw) return null;
+  const t = raw.trim();
+  const fromIframe = t.match(/\bsrc\s*=\s*["']([^"']+)["']/i);
+  const candidate = (fromIframe?.[1] ?? t).trim();
+  try {
+    const u = new URL(candidate);
+    const id = googleDriveFileIdFromUrl(u);
+    if (!id) return null;
+    const size = Math.max(64, Math.min(4096, Math.floor(opts?.size ?? 1200)));
+    // Google Drive lightweight thumbnail endpoint.
+    return `https://drive.google.com/thumbnail?id=${encodeURIComponent(id)}&sz=w${size}`;
+  } catch {
+    return null;
+  }
 }
 
 /**

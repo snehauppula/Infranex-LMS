@@ -45,7 +45,7 @@ export default async function EnrollmentSuccessPage({
 
   return (
     <div
-      className="min-w-0 pb-20 sm:pb-28 pt-[max(6.5rem,calc(5.5rem+env(safe-area-inset-top,0px)))] sm:pt-[max(7.25rem,calc(6rem+env(safe-area-inset-top,0px)))]"
+      className="min-w-0 pb-20 sm:pb-28 pt-[max(6.1rem,calc(5.15rem+env(safe-area-inset-top,0px)))] sm:pt-[max(6.45rem,calc(5.55rem+env(safe-area-inset-top,0px)))]"
     >
       <Container className="min-w-0">
         <EnrollmentSuccessExperience courseTitle={course.title} courseSlug={course.slug} />

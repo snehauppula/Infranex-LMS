@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRight, Menu, User, X } from "lucide-react";
-import { startTransition, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
   AnimatePresence,
   LayoutGroup,
@@ -64,30 +64,7 @@ export function Navbar({
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
-  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
-  const accountWrapRef = useRef<HTMLDivElement>(null);
   const navItems = primaryNavLinks(sessionEmail);
-
-  useEffect(() => {
-    startTransition(() => setAccountMenuOpen(false));
-  }, [pathname]);
-
-  useEffect(() => {
-    if (!accountMenuOpen) return;
-    const onDocMouseDown = (e: MouseEvent) => {
-      const el = accountWrapRef.current;
-      if (el && !el.contains(e.target as Node)) setAccountMenuOpen(false);
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setAccountMenuOpen(false);
-    };
-    document.addEventListener("mousedown", onDocMouseDown);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onDocMouseDown);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [accountMenuOpen]);
 
   return (
     <header
@@ -95,7 +72,7 @@ export function Navbar({
         overlay
           ? "fixed left-1/2 -translate-x-1/2"
           : "relative sticky mx-auto mb-2 mt-3 sm:mb-3 sm:mt-4",
-        "z-40 mx-auto box-border w-[calc(100%-2rem)] max-w-[1280px] overflow-x-clip overflow-y-visible rounded-2xl border pt-[env(safe-area-inset-top,0px)] transition-shadow duration-300 sm:w-[calc(100%-2.5rem)] sm:rounded-3xl md:w-[calc(100%-3.5rem)]",
+        "z-40 mx-auto box-border w-[calc(100%-2rem)] max-w-[1280px] overflow-x-clip overflow-y-visible rounded-2xl border pt-[env(safe-area-inset-top,0px)] transition-shadow duration-300 ease-brand-out motion-reduce:duration-150 sm:w-[calc(100%-2.5rem)] sm:rounded-3xl md:w-[calc(100%-3.5rem)]",
         overlay ? "top-3 sm:top-4" : "top-3 sm:top-4",
         "border-border bg-background/92 shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-background/84"
       )}
@@ -121,16 +98,16 @@ export function Navbar({
 
       {/* Desktop: center nav; side columns sized so logo is not squeezed */}
       <div
-        className="relative z-10 mx-auto hidden h-[88px] w-full max-w-[1280px] items-center gap-4 px-5 sm:px-8 md:grid"
+        className="relative z-10 mx-auto hidden h-[76px] w-full max-w-[1280px] items-center gap-4 px-5 sm:px-8 md:grid"
         style={{
           gridTemplateColumns:
-            "minmax(14rem, min(28vw, 22rem)) 1fr minmax(11rem, auto)",
+            "minmax(15rem, min(34vw, 26rem)) 1fr minmax(11rem, auto)",
         }}
       >
         <div className="flex shrink-0 justify-start pr-2">
           <MotionLink
             href="/"
-            className="group flex items-center py-1 outline-none transition-opacity duration-200 ease-out hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="group flex items-center py-0.5 outline-none transition-opacity duration-300 ease-brand-out motion-reduce:duration-150 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="Infranex LMS home"
             whileTap={reduceMotion ? undefined : { scale: 0.98 }}
             transition={transitionSpring(reduceMotion)}
@@ -144,7 +121,7 @@ export function Navbar({
           aria-label="Primary"
         >
           <LayoutGroup id="nav-pills">
-            <div className="inline-flex max-w-full flex-wrap items-center justify-center gap-1 rounded-full border border-border bg-surface p-1.5">
+            <div className="inline-flex max-w-full flex-wrap items-center justify-center gap-1 rounded-full border border-border bg-surface p-1">
               {navItems.map((l) => {
                 const active = linkIsActive(pathname, l.href);
                 return (
@@ -152,7 +129,7 @@ export function Navbar({
                     key={l.href}
                     href={l.href}
                     className={cn(
-                      "relative min-w-0 rounded-full px-3 py-2.5 text-center text-sm font-semibold tracking-tight transition-colors duration-200 ease-out sm:px-4 sm:text-[15px]",
+                      "relative min-w-0 rounded-full px-3 py-2 text-center text-sm font-semibold tracking-tight transition-[color,background-color,box-shadow] duration-300 ease-brand-out motion-reduce:duration-150 sm:px-4 sm:text-[15px]",
                       "outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                       active
                         ? "bg-card text-deep shadow-sm ring-1 ring-border"
@@ -180,71 +157,46 @@ export function Navbar({
         <div className="flex min-w-0 shrink-0 flex-wrap items-center justify-end gap-2 pl-2">
           {sessionEmail ? (
             <>
-              <div className="relative" ref={accountWrapRef}>
-                <motion.button
-                  type="button"
-                  id="nav-account-trigger"
-                  aria-expanded={accountMenuOpen}
-                  aria-haspopup="menu"
-                  aria-controls="nav-account-menu"
-                  onClick={() => setAccountMenuOpen((v) => !v)}
-                  className={cn(
-                    "flex min-w-0 max-w-[min(100vw-14rem,280px)] items-center gap-2.5 rounded-full border border-border bg-card py-1.5 pl-1.5 pr-3 text-left shadow-sm outline-none transition-[box-shadow,ring] sm:pr-3.5",
-                    "focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                    accountMenuOpen && "ring-2 ring-primary/20"
-                  )}
-                  whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-                  transition={transitionSpring(reduceMotion)}
+              <div
+                className={cn(
+                  "flex min-w-0 max-w-[min(100vw-14rem,300px)] items-center gap-1 rounded-full border border-border bg-card py-1 pl-1 pr-1 shadow-sm transition-[box-shadow,border-color] duration-300 ease-brand-out motion-reduce:duration-150 sm:gap-1.5 sm:pr-1.5",
+                  "outline-none ring-offset-background focus-within:ring-2 focus-within:ring-primary/35 focus-within:ring-offset-2"
+                )}
+                role="group"
+                aria-label="Account"
+              >
+                <span
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm"
+                  aria-hidden
                 >
-                  <span
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm"
-                    aria-hidden
-                  >
-                    <User className="h-[17px] w-[17px]" strokeWidth={2.25} />
-                  </span>
-                  <span className="hidden min-w-0 flex-1 flex-col leading-tight sm:flex">
-                    {displayName ? (
-                      <span className="truncate text-xs font-semibold text-deep">
-                        {displayName}
-                      </span>
-                    ) : null}
-                    <span
-                      className={cn(
-                        "truncate text-[11px] text-muted",
-                        displayName && "mt-0.5"
-                      )}
-                    >
-                      {sessionEmail}
+                  <User className="h-4 w-4" strokeWidth={2.25} />
+                </span>
+                <span className="hidden min-w-0 flex-1 flex-col leading-tight sm:flex">
+                  {displayName ? (
+                    <span className="truncate text-xs font-semibold text-deep">
+                      {displayName}
                     </span>
-                  </span>
-                  <span className="min-w-0 flex-1 truncate text-xs font-semibold text-deep sm:hidden">
-                    {displayName ?? sessionEmail}
-                  </span>
-                </motion.button>
-                <AnimatePresence>
-                  {accountMenuOpen ? (
-                    <motion.div
-                      key="nav-account-menu"
-                      id="nav-account-menu"
-                      role="menu"
-                      aria-labelledby="nav-account-trigger"
-                      initial={{ opacity: 0, y: -8, scale: 0.96 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -6, scale: 0.98 }}
-                      transition={transitionSpring(reduceMotion)}
-                      className="absolute right-0 top-[calc(100%+0.5rem)] z-[60] origin-top-right rounded-2xl border border-border bg-card p-2 shadow-xl ring-1 ring-deep/[0.04]"
-                    >
-                      <SignOutButton className="h-10 min-w-[10rem] rounded-xl px-4 text-xs font-semibold" />
-                    </motion.div>
                   ) : null}
-                </AnimatePresence>
+                  <span
+                    className={cn(
+                      "truncate text-[11px] text-muted",
+                      displayName && "mt-0.5"
+                    )}
+                  >
+                    {sessionEmail}
+                  </span>
+                </span>
+                <span className="min-w-0 flex-1 truncate px-0.5 text-xs font-semibold text-deep sm:hidden">
+                  {displayName ?? sessionEmail}
+                </span>
+                <SignOutButton appearance="icon" />
               </div>
               {role === "admin" && (
                 <Link href="/admin">
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-10 rounded-full border-border bg-card px-4 text-xs font-bold uppercase tracking-wider text-deep shadow-sm transition hover:border-primary/30"
+                    className="h-9 rounded-full border-border bg-card px-4 text-xs font-bold uppercase tracking-wider text-deep shadow-sm transition hover:border-primary/30"
                   >
                     Admin
                   </Button>
@@ -255,7 +207,7 @@ export function Navbar({
             <Link href="/auth">
               <Button
                 size="sm"
-                className="h-10 rounded-full px-6 text-xs font-bold uppercase tracking-wider"
+                className="h-9 rounded-full px-6 text-xs font-bold uppercase tracking-wider"
               >
                 Sign in
               </Button>
@@ -265,10 +217,10 @@ export function Navbar({
       </div>
 
       {/* Mobile: logo + menu — taller row for readable mark */}
-      <div className="relative z-10 mx-auto flex min-h-[72px] w-full min-w-0 max-w-[1280px] items-center justify-between gap-2 py-2 ps-[max(0.75rem,env(safe-area-inset-left,0px))] pe-[max(0.5rem,env(safe-area-inset-right,0px))] sm:gap-3 sm:px-8 md:hidden">
+      <div className="relative z-10 mx-auto flex min-h-[64px] w-full min-w-0 max-w-[1280px] items-center justify-between gap-2 py-1.5 ps-[max(0.75rem,env(safe-area-inset-left,0px))] pe-[max(0.5rem,env(safe-area-inset-right,0px))] sm:gap-3 sm:px-8 md:hidden">
         <Link
           href="/"
-          className="flex min-w-0 flex-1 items-center py-1 pr-2"
+          className="flex min-w-0 flex-1 items-center py-0.5 pr-2"
           aria-label="Infranex LMS home"
         >
           <InfranexLogoMark
@@ -279,7 +231,7 @@ export function Navbar({
         </Link>
         <motion.button
           type="button"
-          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-card text-deep shadow-sm outline-none transition-colors duration-200 ease-out hover:border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border bg-card text-deep shadow-sm outline-none transition-[color,background-color,border-color,box-shadow] duration-300 ease-brand-out motion-reduce:duration-150 hover:border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -359,7 +311,7 @@ export function Navbar({
                       href={l.href}
                       onClick={() => setOpen(false)}
                       className={cn(
-                        "flex items-center justify-between rounded-2xl px-4 py-4 text-base font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                        "flex items-center justify-between rounded-2xl px-4 py-4 text-base font-semibold outline-none transition-[color,background-color] duration-300 ease-brand-out motion-reduce:duration-150 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                         active
                           ? "bg-surface text-deep ring-1 ring-border"
                           : "text-deep hover:bg-surface"
@@ -382,7 +334,7 @@ export function Navbar({
                 <>
                   <div className="my-1 h-px bg-border" />
                   <div
-                    className="flex items-center gap-3 rounded-2xl border border-border bg-surface px-4 py-3.5"
+                    className="flex items-center gap-2 rounded-2xl border border-border bg-surface px-3 py-3 sm:gap-3 sm:px-4 sm:py-3.5"
                     role="group"
                     aria-label="Signed in as"
                   >
@@ -408,6 +360,10 @@ export function Navbar({
                         </p>
                       )}
                     </div>
+                    <SignOutButton
+                      appearance="icon"
+                      className="h-10 w-10 sm:h-9 sm:w-9"
+                    />
                   </div>
                   {role === "admin" && (
                     <Link
@@ -419,9 +375,6 @@ export function Navbar({
                       <ChevronRight className="h-4 w-4 shrink-0 text-muted" />
                     </Link>
                   )}
-                  <div className="mt-2 border-t border-border pt-4">
-                    <SignOutButton className="h-11 w-full rounded-xl text-sm font-semibold" />
-                  </div>
                 </>
               ) : (
                 <Link href="/auth" onClick={() => setOpen(false)} className="mt-1">

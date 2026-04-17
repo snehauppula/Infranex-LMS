@@ -17,7 +17,8 @@ export function CourseVideoThumb({
 }) {
   const fromVideo = url ? catalogVideoThumbnailUrl(url) : null;
   const fromPoster = posterUrl?.trim() ? posterUrl.trim() : null;
-  const thumb = fromVideo ?? fromPoster;
+  // Poster should always win: it’s explicitly curated.
+  const thumb = fromPoster ?? fromVideo;
 
   if (!thumb) {
     return (

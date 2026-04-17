@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  googleDriveEmbedSrcFromVideoUrl,
   megaEmbedSrcFromVideoUrl,
   megaEmbedSrcWithStartSeconds,
   parseVideoDurationLabelToSeconds,
@@ -127,6 +128,7 @@ export function EnrolledCourseVideo({
   }, [initialProgress, src]);
 
   const baseMegaSrc = megaEmbedSrcFromVideoUrl(src);
+  const driveSrc = googleDriveEmbedSrcFromVideoUrl(src);
   const durationSec = parseVideoDurationLabelToSeconds(videoDurationLabel ?? undefined);
 
   let megaSrc = baseMegaSrc;
@@ -169,6 +171,29 @@ export function EnrolledCourseVideo({
         >
           {megaNoticeText}
         </p>
+      </div>
+    );
+  }
+
+  if (driveSrc) {
+    return (
+      <div className="relative h-full w-full overflow-hidden">
+        <iframe
+          title={title}
+          src={driveSrc}
+          className="h-full w-full border-0"
+          allow="autoplay; encrypted-media; fullscreen"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+        />
+        {/*
+          Drive’s “open in new tab” lives inside a cross-origin iframe; we can’t remove it via API.
+          A small top-right layer blocks clicks so learners aren’t bounced out to Drive mid-lesson.
+        */}
+        <div
+          className="pointer-events-auto absolute right-0 top-0 z-10 h-12 w-[4.75rem] bg-black sm:h-14 sm:w-[5.25rem]"
+          aria-hidden
+        />
       </div>
     );
   }

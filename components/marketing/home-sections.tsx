@@ -63,10 +63,10 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
       <section
         className={cn(
           "relative isolate overflow-x-clip bg-gradient-to-b from-background via-surface to-background",
-          /* Clear fixed overlay nav (~72–88px) + top inset + safe area. */
-          "pt-[max(6.75rem,calc(5.5rem+env(safe-area-inset-top,0px)))] pb-16 sm:pt-[max(7.25rem,calc(6rem+env(safe-area-inset-top,0px)))] sm:pb-24",
+          /* Clear fixed overlay nav (~64–76px) + top inset + safe area. */
+          "pt-[max(6.1rem,calc(5.15rem+env(safe-area-inset-top,0px)))] pb-16 sm:pt-[max(6.45rem,calc(5.55rem+env(safe-area-inset-top,0px)))] sm:pb-24",
           /* On large screens, keep the hero vertically centered in the viewport. */
-          "lg:flex lg:min-h-[min(86dvh,860px)] lg:items-center lg:pt-[max(7.5rem,calc(6.1rem+env(safe-area-inset-top,0px)))] lg:pb-24"
+          "lg:flex lg:min-h-[min(86dvh,860px)] lg:items-center lg:pt-[max(7rem,calc(5.85rem+env(safe-area-inset-top,0px)))] lg:pb-24"
         )}
       >
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_0%_-20%,rgba(0,174,239,0.14),transparent_50%)]" />
@@ -127,7 +127,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                   <Link href="/courses" className="sm:w-auto">
                     <Button
                       size="lg"
-                      className="h-12 w-full rounded-xl px-7 text-[15px] font-semibold shadow-[0_16px_44px_-18px_rgba(0,174,239,0.45)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_50px_-16px_rgba(0,174,239,0.4)] sm:w-auto"
+                      className="h-12 w-full rounded-xl px-7 text-[15px] font-semibold shadow-[0_16px_44px_-18px_rgba(0,174,239,0.45)] transition-[transform,box-shadow] duration-300 ease-brand-out motion-reduce:duration-150 hover:-translate-y-0.5 hover:shadow-[0_22px_50px_-16px_rgba(0,174,239,0.4)] sm:w-auto"
                     >
                       Find your next course
                       <ArrowRight className="h-4 w-4" />
@@ -137,7 +137,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                     <Button
                       size="lg"
                       variant="secondary"
-                      className="h-12 w-full rounded-xl border border-deep/[0.08] bg-white px-7 text-[15px] font-semibold text-deep shadow-sm transition-all duration-200 hover:border-primary/25 hover:bg-white sm:w-auto"
+                      className="h-12 w-full rounded-xl border border-deep/[0.08] bg-white px-7 text-[15px] font-semibold text-deep shadow-sm transition-[transform,box-shadow,border-color,background-color] duration-300 ease-brand-out motion-reduce:duration-150 hover:border-primary/25 hover:bg-white sm:w-auto"
                     >
                       See how we get you hired
                     </Button>
@@ -177,7 +177,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
       </section>
 
       {/* —— Domains —— */}
-      <section className="relative overflow-hidden py-24 sm:py-28">
+      <section className="relative overflow-hidden pb-14 pt-12 sm:pb-16 sm:pt-16">
         <div className="absolute inset-0 bg-gradient-to-b from-background via-card to-background" />
         <div className="pointer-events-none absolute left-1/2 top-0 h-px w-[min(72rem,90vw)] -translate-x-1/2 bg-border" />
 
@@ -197,9 +197,8 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                 <span className="text-muted">you actually care about.</span>
               </h2>
               <p className="mt-5 max-w-lg text-base leading-relaxed text-muted">
-                Hover to pause. From core engineering to professional programs —
-                no buried catalogs, just a steady stream of paths you could take
-                next.
+                From core engineering to professional programs — no buried catalogs,
+                just a steady stream of paths you could take next.
               </p>
             </motion.div>
           </div>
@@ -208,7 +207,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
       </section>
 
       {/* —— Featured courses —— */}
-      <section className="relative border-b border-border bg-surface py-24 sm:py-28">
+      <section className="relative border-b border-border bg-surface pt-14 pb-20 sm:pt-16 sm:pb-24">
         <Container className="relative z-10 max-w-[1360px]">
           <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
             <motion.div {...fadeUp} transition={{ duration: 0.5 }}>
@@ -229,7 +228,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="h-12 rounded-2xl border border-border px-6 transition-colors duration-200 hover:border-primary/35 hover:bg-primary/[0.03]"
+                  className="h-12 rounded-2xl border border-border px-6 transition-[color,background-color,border-color] duration-300 ease-brand-out motion-reduce:duration-150 hover:border-primary/35 hover:bg-primary/[0.03]"
                 >
                   See everything we teach
                   <ArrowRight className="h-4 w-4" />
@@ -238,7 +237,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
             </motion.div>
           </div>
 
-          <div className="mt-14 grid gap-8 lg:grid-cols-3">
+          <div className="mt-10 grid gap-8 lg:grid-cols-3">
             {featured.map((c, i) => (
               <motion.div
                 key={c.id}
@@ -289,8 +288,8 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
         </Container>
       </section>
 
-      {/* —— Why us: staggered / alternating —— */}
-      <section className="relative border-t border-border py-24 sm:py-28">
+      {/* —— Why us: tight grid (less “void space” than alternating wide rails) —— */}
+      <section className="relative border-t border-border py-16 sm:py-20">
         <div className="absolute inset-0 bg-gradient-to-b from-background to-surface" />
         <Container className="relative z-10 max-w-[1360px]">
           <motion.div
@@ -304,13 +303,13 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
             <h2 className="mt-3 text-3xl font-bold tracking-tight text-deep sm:text-4xl">
               Built for depth — not dopamine.
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base text-muted lg:mx-0">
+            <p className="mx-auto mt-3 max-w-xl text-base text-muted lg:mx-0">
               No filler modules. No fake urgency. Just a straight path from “I
               studied this” to “Here is what I built.”
             </p>
           </motion.div>
 
-          <div className="mt-20 flex flex-col gap-20 lg:gap-24">
+          <div className="mt-10 flex flex-col gap-10 sm:gap-12 lg:gap-14">
             {whyRows.map((row, i) => {
               const Icon = row.icon;
               const reverse = i % 2 === 1;
@@ -319,28 +318,35 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                   key={row.n}
                   {...fadeUp}
                   transition={{ duration: 0.55, delay: i * 0.06 }}
-                  className={cn(
-                    "flex flex-col gap-10 lg:flex-row lg:items-center lg:gap-20",
-                    reverse && "lg:flex-row-reverse"
-                  )}
+                  className="grid items-start gap-6 sm:gap-7 lg:grid-cols-12 lg:gap-8"
                 >
-                  <div className="min-w-0 lg:w-[42%]">
-                    <span className="inline-block bg-gradient-to-br from-primary from-15% via-[#4dc8f5] to-[#006fa3] bg-clip-text text-transparent text-6xl font-black leading-none tracking-tighter sm:text-7xl md:text-[5rem]">
+                  <div
+                    className={cn(
+                      "min-w-0 lg:col-span-3",
+                      reverse ? "lg:order-2" : "lg:order-1"
+                    )}
+                  >
+                    <span className="inline-block bg-gradient-to-br from-primary from-15% via-[#4dc8f5] to-[#006fa3] bg-clip-text text-transparent text-5xl font-black leading-none tracking-tighter sm:text-6xl md:text-7xl">
                       {row.n}
                     </span>
                   </div>
-                  <div className="min-w-0 lg:w-[58%]">
+                  <div
+                    className={cn(
+                      "min-w-0 lg:col-span-9",
+                      reverse ? "lg:order-1" : "lg:order-2"
+                    )}
+                  >
                     <div
                       className={cn(
-                        "inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-border bg-surface text-primary"
+                        "inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-border bg-surface text-primary"
                       )}
                     >
-                      <Icon className="h-7 w-7" strokeWidth={1.5} />
+                      <Icon className="h-6 w-6" strokeWidth={1.5} />
                     </div>
-                    <h3 className="mt-6 text-2xl font-bold tracking-tight text-deep sm:text-3xl">
+                    <h3 className="mt-4 text-xl font-bold tracking-tight text-deep sm:text-2xl">
                       {row.title}
                     </h3>
-                    <p className="mt-4 max-w-xl text-base leading-relaxed text-muted">
+                    <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">
                       {row.body}
                     </p>
                   </div>
@@ -355,31 +361,47 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
       {/* —— Domains —— */}
 
       {/* —— CTA —— */}
-      <section className="relative pb-24 pt-4 sm:pb-32">
+      <section className="relative pb-20 pt-2 sm:pb-24">
         <Container className="relative max-w-[1360px]">
           <motion.div
             {...fadeUp}
             transition={{ duration: 0.55 }}
-            className="relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-deep px-5 py-12 text-center shadow-lg sm:rounded-[2rem] sm:px-16 sm:py-20"
+            className="relative overflow-hidden rounded-2xl border border-border bg-card px-4 py-8 text-center shadow-sm ring-1 ring-deep/[0.035] sm:px-8 sm:py-10"
           >
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(0,174,239,0.12),transparent_55%)]" />
+            <div
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_0%,rgba(0,174,239,0.12),transparent_60%)]"
+              aria-hidden
+            />
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.55] [mask-image:radial-gradient(ellipse_70%_55%_at_50%_0%,black,transparent_70%)]"
+              style={{
+                backgroundImage: `linear-gradient(to right, rgba(8,28,61,0.06) 1px, transparent 1px),
+                  linear-gradient(to bottom, rgba(8,28,61,0.06) 1px, transparent 1px)`,
+                backgroundSize: "52px 52px",
+              }}
+              aria-hidden
+            />
+            <div
+              className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary/80 via-primary to-primary/80 opacity-60"
+              aria-hidden
+            />
 
-            <div className="relative mx-auto max-w-2xl">
+            <div className="relative mx-auto max-w-xl">
               <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
                 Your move
               </p>
-              <h2 className="mt-4 text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-4xl">
+              <h2 className="mt-3 text-2xl font-bold tracking-tight text-deep sm:text-3xl">
                 One strong course beats a vague “someday.”
               </h2>
-              <p className="mt-5 text-base leading-relaxed text-white/70">
+              <p className="mt-4 text-sm leading-relaxed text-muted sm:text-base">
                 Pick a track, ship something real this month, and stack evidence
                 recruiters can’t ignore — then keep going.
               </p>
-              <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <div className="mt-6 flex flex-col items-center justify-center gap-2.5 sm:flex-row">
                 <Link href="/courses">
                   <Button
                     size="lg"
-                    className="h-14 rounded-2xl px-10 text-base transition-transform duration-300 hover:-translate-y-0.5"
+                    className="h-11 rounded-xl px-6 text-sm font-semibold shadow-[0_14px_34px_-18px_rgba(0,174,239,0.55)] transition-transform duration-300 hover:-translate-y-0.5"
                   >
                     Browse all programs
                   </Button>
@@ -388,7 +410,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                   <Button
                     size="lg"
                     variant="secondary"
-                    className="h-14 rounded-2xl border-2 border-white/20 bg-white/10 px-10 text-base text-white backdrop-blur-md transition-all duration-300 hover:border-white/35 hover:bg-white/15"
+                    className="h-11 rounded-xl border border-primary/20 bg-surface px-6 text-sm font-semibold text-deep shadow-sm transition-[color,background-color,border-color,box-shadow] duration-300 ease-brand-out motion-reduce:duration-150 hover:border-primary/30 hover:bg-primary/[0.06]"
                   >
                     Sign in and continue
                   </Button>
