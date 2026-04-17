@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { Navbar } from "@/components/layout/navbar";
+import { SkipToContent } from "@/components/layout/skip-to-content";
 import { getSessionUser, getUserDisplayName } from "@/services/auth";
 
 export const dynamic = "force-dynamic";
@@ -15,12 +16,15 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-full min-w-0 flex-col overflow-x-clip bg-background">
+      <SkipToContent />
       <Navbar
         sessionEmail={user.email ?? null}
         displayName={displayName}
         role={role}
       />
-      <div className="flex-1">{children}</div>
+      <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
+        {children}
+      </main>
     </div>
   );
 }

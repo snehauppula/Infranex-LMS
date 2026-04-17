@@ -1,5 +1,6 @@
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { SkipToContent } from "@/components/layout/skip-to-content";
 import { getSessionUser, getUserDisplayName } from "@/services/auth";
 
 export const dynamic = "force-dynamic";
@@ -14,12 +15,18 @@ export default async function MarketingLayout({
 
   return (
     <>
+      <SkipToContent />
       <Navbar
         sessionEmail={user?.email ?? null}
         displayName={displayName}
         role={role}
+        overlay
       />
-      <main className="min-w-0 flex-1 overflow-x-clip bg-transparent">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="min-w-0 flex-1 overflow-x-clip bg-transparent outline-none"
+      >
         {children}
       </main>
       <Footer />

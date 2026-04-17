@@ -58,7 +58,7 @@ export function AboutPageSections() {
   return (
     <div className="overflow-x-hidden bg-transparent">
       {/* Hero */}
-      <section className="relative border-b border-border py-16 sm:py-20 lg:py-24">
+      <section className="relative border-b border-border pb-16 pt-28 sm:pb-20 sm:pt-32 lg:pb-24 lg:pt-36">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_60%_at_12%_-18%,rgba(0,174,239,0.05),transparent_50%)]" />
         <Container className="relative max-w-[1100px]">
           <motion.div

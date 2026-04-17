@@ -1,19 +1,23 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { cloudinaryVideoThumbnailUrl } from "@/lib/cloudinary";
+import { catalogVideoThumbnailUrl } from "@/lib/video";
 
 /** Static first-frame thumbnail for catalog / featured cards (no video playback). */
 export function CourseVideoThumb({
   url,
-  title,
+  posterUrl,
   className,
 }: {
-  url: string;
-  title: string;
+  /** Video delivery URL (Cloudinary and similar may yield an auto thumbnail). */
+  url?: string | null;
+  /** When no derivable video thumbnail (e.g. MEGA embed), use this image URL. */
+  posterUrl?: string | null;
   className?: string;
 }) {
-  const thumb = cloudinaryVideoThumbnailUrl(url);
+  const fromVideo = url ? catalogVideoThumbnailUrl(url) : null;
+  const fromPoster = posterUrl?.trim() ? posterUrl.trim() : null;
+  const thumb = fromVideo ?? fromPoster;
 
   if (!thumb) {
     return (

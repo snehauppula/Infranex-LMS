@@ -106,7 +106,7 @@ export async function POST(req: Request) {
     }
   }
 
-  let { data: student, error: sErr } = await admin
+  const { data: studentRow, error: sErr } = await admin
     .from("students")
     .select("id")
     .eq("user_id", user.id)
@@ -115,6 +115,8 @@ export async function POST(req: Request) {
   if (sErr) {
     return NextResponse.json({ error: sErr.message }, { status: 500 });
   }
+
+  let student = studentRow;
 
   if (!student) {
     const display = getUserDisplayName(user);
@@ -168,7 +170,7 @@ export async function POST(req: Request) {
 
   revalidatePath("/dashboard");
   revalidatePath("/courses");
-  revalidatePath(`/courses/${courseId}`);
+  revalidatePath(`/courses/${course.slug}`);
 
   return NextResponse.json({ ok: true });
 }

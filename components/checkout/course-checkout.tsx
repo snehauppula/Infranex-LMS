@@ -29,10 +29,13 @@ function loadRazorpay(): Promise<boolean> {
 
 export function CourseCheckout({
   courseId,
+  courseSlug,
   title,
   enrolled = false,
 }: {
   courseId: string;
+  /** Canonical slug for post-checkout celebration page. */
+  courseSlug: string;
   title: string;
   /** When true, payment is hidden and learner can jump to the player. */
   enrolled?: boolean;
@@ -96,13 +99,9 @@ export function CourseCheckout({
               setBusy(false);
               return;
             }
-            toast.success(`Enrolled — ${title}`, {
-              description: "Opening your dashboard with My courses…",
-              duration: 4500,
-            });
             setBusy(false);
             router.refresh();
-            router.push("/dashboard");
+            router.push(`/courses/${courseSlug}/success`);
           } catch {
             toast.error("Could not confirm payment. Contact support if you were charged.");
             setBusy(false);
@@ -117,11 +116,11 @@ export function CourseCheckout({
       toast.error(e instanceof Error ? e.message : "Payment failed");
       setBusy(false);
     }
-  }, [courseId, router, title]);
+  }, [courseId, courseSlug, router, title]);
 
   if (enrolled) {
     return (
-      <div className="mt-6 space-y-3">
+      <div className="mt-4 space-y-3">
         <p className="text-sm font-medium text-deep">You already have this course.</p>
         <Button
           type="button"
@@ -141,7 +140,7 @@ export function CourseCheckout({
   return (
     <Button
       type="button"
-      className="mt-6 w-full"
+      className="mt-4 w-full"
       disabled={busy}
       onClick={() => void pay()}
     >

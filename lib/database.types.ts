@@ -14,30 +14,39 @@ export type Database = {
     Tables: {
       courses: {
         Row: {
-          cloudinary_url: string | null;
+          video_url: string | null;
+          poster_url: string | null;
+          highlights: string[] | null;
           created_at: string;
           description: string | null;
           duration: string | null;
           id: string;
           price: number;
+          slug: string;
           title: string;
         };
         Insert: {
-          cloudinary_url?: string | null;
+          video_url?: string | null;
+          poster_url?: string | null;
+          highlights?: string[] | null;
           created_at?: string;
           description?: string | null;
           duration?: string | null;
           id?: string;
           price?: number;
+          slug?: string;
           title: string;
         };
         Update: {
-          cloudinary_url?: string | null;
+          video_url?: string | null;
+          poster_url?: string | null;
+          highlights?: string[] | null;
           created_at?: string;
           description?: string | null;
           duration?: string | null;
           id?: string;
           price?: number;
+          slug?: string;
           title?: string;
         };
         Relationships: [];

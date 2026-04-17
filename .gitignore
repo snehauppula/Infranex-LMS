@@ -54,6 +54,7 @@ ehthumbs.db
 Desktop.ini
 
 # IDE / editors
+.cursor/
 .idea/
 *.suo
 *.ntvs*

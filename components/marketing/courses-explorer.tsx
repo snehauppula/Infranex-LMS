@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Search } from "lucide-react";
 import type { CourseRow } from "@/types";
 import { Container } from "@/components/layout/container";
@@ -17,6 +17,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { inferCourseDomainSlug, getDomainBySlug } from "@/lib/infranex-domains";
 import { CourseVideoThumb } from "@/components/courses/course-video-thumb";
+import { courseDetailPath } from "@/lib/course-path";
+import { DURATION, transitionEase } from "@/lib/motion";
 
 function formatInrPaise(paise: number) {
   return new Intl.NumberFormat("en-IN", {
@@ -28,6 +30,7 @@ function formatInrPaise(paise: number) {
 
 export function CoursesExplorer({ courses }: { courses: CourseRow[] }) {
   const [q, setQ] = useState("");
+  const reduceMotion = useReducedMotion();
 
   const filtered = useMemo(() => {
     return courses.filter((c) => {
@@ -40,7 +43,7 @@ export function CoursesExplorer({ courses }: { courses: CourseRow[] }) {
   if (courses.length === 0) {
     return (
       <Container className="mt-10">
-        <div className="mt-8 rounded-2xl border border-dashed border-border bg-white/60 px-8 py-16 text-center">
+        <div className="mt-8 rounded-2xl border border-dashed border-border bg-card px-8 py-16 text-center shadow-sm">
           <p className="text-lg font-medium text-deep">No courses yet</p>
           <p className="mt-2 text-sm text-muted">
             Add rows to the <span className="font-medium text-deep/80">courses</span>{" "}
@@ -68,7 +71,7 @@ export function CoursesExplorer({ courses }: { courses: CourseRow[] }) {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="mt-16 rounded-2xl border border-dashed border-border bg-white/60 px-8 py-16 text-center">
+        <div className="mt-16 rounded-2xl border border-dashed border-border bg-card px-8 py-16 text-center shadow-sm">
           <p className="text-lg font-medium text-deep">No courses match</p>
           <p className="mt-2 text-sm text-muted">
             Try another keyword or clear the search box.
@@ -91,12 +94,17 @@ export function CoursesExplorer({ courses }: { courses: CourseRow[] }) {
             return (
               <motion.div
                 key={c.id}
-                initial={{ opacity: 0, y: 12 }}
+                initial={
+                  reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }
+                }
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.04, duration: 0.35 }}
+                transition={{
+                  ...transitionEase(DURATION.md, reduceMotion),
+                  delay: reduceMotion ? 0 : i * 0.04,
+                }}
               >
-                <Link href={`/courses/${c.id}`}>
-                  <Card className="h-full overflow-hidden transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                <Link href={courseDetailPath(c)}>
+                  <Card className="h-full overflow-hidden transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-sm">
                     <div className="flex items-center justify-between gap-2 px-6 pt-6">
                       <span
                         className="inline-flex min-w-0 max-w-[85%] items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-deep"
@@ -120,17 +128,14 @@ export function CoursesExplorer({ courses }: { courses: CourseRow[] }) {
                       </span>
                     </div>
                     <div className="relative mx-6 mt-4 h-28 overflow-hidden rounded-xl border border-border bg-deep">
-                      {c.cloudinary_url ? (
+                      {c.video_url || c.poster_url ? (
                         <>
                           <CourseVideoThumb
-                            url={c.cloudinary_url}
-                            title={c.title}
+                            url={c.video_url}
+                            posterUrl={c.poster_url}
                             className="absolute inset-0"
                           />
                           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-deep/70 via-deep/15 to-transparent" />
-                          <span className="pointer-events-none absolute bottom-2 right-3 rounded-md bg-black/35 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white/95 ring-1 ring-white/20 backdrop-blur-sm">
-                            Preview
-                          </span>
                         </>
                       ) : (
                         <div className="h-full w-full bg-surface" />

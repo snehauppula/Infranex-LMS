@@ -14,11 +14,18 @@ export type StudentRow = {
 
 export type CourseRow = {
   id: string;
+  /** URL segment for `/courses/:slug` (short, human-readable). */
+  slug: string;
   title: string;
   description: string | null;
   duration: string | null;
   price: number;
-  cloudinary_url: string | null;
+  /** Direct HTTPS URL to the lesson video (e.g. `.mp4`). Thumbnails use Cloudinary URLs when applicable. */
+  video_url: string | null;
+  /** Optional image URL for catalog cards / marketing when no Cloudinary thumbnail exists (e.g. MEGA embed). */
+  poster_url: string | null;
+  /** Optional bullet strings for the course detail page; when empty, a generic fallback is shown. */
+  highlights: string[] | null;
   created_at: string;
 };
 

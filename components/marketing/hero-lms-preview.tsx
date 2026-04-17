@@ -10,7 +10,7 @@ export function HeroLmsPreview() {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-      className="relative mx-auto w-full min-w-0 max-w-md lg:mx-0 lg:max-w-none"
+      className="relative mx-auto w-full min-w-0 max-w-[560px]"
     >
       <div
         className="pointer-events-none absolute -inset-3 rounded-[2rem] bg-primary/[0.04] blur-2xl"
@@ -18,7 +18,7 @@ export function HeroLmsPreview() {
       />
 
       <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-3 shadow-sm sm:p-4">
-        <div className="relative mx-auto aspect-[3/2] w-full max-w-lg">
+        <div className="relative mx-auto aspect-[3/2] w-full max-w-[620px]">
           <HeroOnlineLearningAnimation className="absolute inset-0" />
         </div>
       </div>

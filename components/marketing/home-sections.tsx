@@ -2,13 +2,21 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, BookOpen, LineChart, ShieldCheck, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  BookOpen,
+  LineChart,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 import type { CourseRow } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
 import { DomainsMarquee } from "@/components/marketing/domains-marquee";
 import { HeroLmsPreview } from "@/components/marketing/hero-lms-preview";
 import { CourseVideoThumb } from "@/components/courses/course-video-thumb";
+import { courseDetailPath } from "@/lib/course-path";
 import { cn } from "@/lib/utils";
 
 const fadeUp = {
@@ -52,26 +60,44 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
   return (
     <>
       {/* —— Hero: light LMS, placements + learning —— */}
-      <section className="relative overflow-x-clip overflow-y-hidden border-b border-border bg-background py-16 sm:py-24 lg:min-h-[min(88dvh,840px)] lg:py-28">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_100%_70%_at_15%_-15%,rgba(0,174,239,0.06),transparent_52%)]" />
+      <section
+        className={cn(
+          "relative isolate overflow-x-clip bg-gradient-to-b from-background via-surface to-background",
+          /* Clear fixed overlay nav (~72–88px) + top inset + safe area. */
+          "pt-[max(6.75rem,calc(5.5rem+env(safe-area-inset-top,0px)))] pb-16 sm:pt-[max(7.25rem,calc(6rem+env(safe-area-inset-top,0px)))] sm:pb-24",
+          /* On large screens, keep the hero vertically centered in the viewport. */
+          "lg:flex lg:min-h-[min(86dvh,860px)] lg:items-center lg:pt-[max(7.5rem,calc(6.1rem+env(safe-area-inset-top,0px)))] lg:pb-24"
+        )}
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_0%_-20%,rgba(0,174,239,0.14),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_100%_0%,rgba(0,174,239,0.08),transparent_45%)]" />
+        <div
+          className="absolute inset-0 opacity-[0.35]"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(10,31,68,0.04) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(10,31,68,0.04) 1px, transparent 1px)`,
+            backgroundSize: "48px 48px",
+          }}
+        />
         <motion.div
-          className="pointer-events-none absolute -left-20 top-1/4 h-72 w-72 rounded-full bg-primary/[0.06] blur-3xl home-ambient-float"
+          className="pointer-events-none absolute -left-20 top-1/4 h-72 w-72 rounded-full bg-primary/[0.12] blur-3xl home-ambient-float"
           aria-hidden
         />
         <motion.div
-          className="pointer-events-none absolute -right-16 bottom-1/4 h-64 w-64 rounded-full bg-deep/[0.04] blur-3xl home-ambient-float-delayed"
+          className="pointer-events-none absolute -right-16 bottom-1/4 h-64 w-64 rounded-full bg-sky-200/50 blur-3xl home-ambient-float-delayed"
           aria-hidden
         />
 
-        <Container className="relative z-10 max-w-[1360px]">
-          <div className="grid min-w-0 items-center gap-10 sm:gap-12 lg:grid-cols-12 lg:gap-16">
-            <div className="min-w-0 lg:col-span-6 xl:col-span-6">
+        <Container className="relative z-10 max-w-[1240px]">
+          <div className="grid min-w-0 items-center gap-10 sm:gap-12 lg:grid-cols-2 lg:gap-14 xl:gap-16">
+            <div className="min-w-0">
               <motion.div
                 initial={{ opacity: 0, y: 22 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                className="pt-0 sm:pt-1 lg:pt-2"
               >
-                <div className="inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-deep shadow-sm sm:px-3.5 sm:text-[11px] sm:tracking-[0.16em]">
+                <div className="inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-primary/20 bg-white/90 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-deep/85 shadow-sm sm:px-3.5 sm:text-[11px] sm:tracking-[0.16em]">
                   <Sparkles className="h-3.5 w-3.5 shrink-0 text-primary" />
                   <span className="break-words">
                     Infranex LMS · Where skills become offers
@@ -79,7 +105,10 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                 </div>
 
                 <h1 className="mt-6 max-w-[20ch] text-[clamp(1.85rem,6vw+0.4rem,2.75rem)] font-semibold leading-[1.08] tracking-tight text-deep sm:mt-7 sm:max-w-[18ch] sm:text-5xl sm:leading-[1.06] lg:max-w-[20ch] lg:text-[3.25rem] lg:leading-[1.04]">
-                  Learn. Build. <span className="text-primary">Get placed.</span>
+                  Learn. Build.{" "}
+                  <span className="bg-gradient-to-r from-primary to-[#0088bc] bg-clip-text text-transparent">
+                    Get placed.
+                  </span>
                 </h1>
 
                 <p className="mt-5 max-w-xl text-[0.9375rem] leading-relaxed text-muted sm:mt-6 sm:text-base sm:leading-relaxed md:text-lg">
@@ -98,7 +127,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                   <Link href="/courses" className="sm:w-auto">
                     <Button
                       size="lg"
-                      className="h-12 w-full rounded-xl px-7 text-[15px] font-semibold transition-transform duration-200 hover:-translate-y-0.5 sm:w-auto"
+                      className="h-12 w-full rounded-xl px-7 text-[15px] font-semibold shadow-[0_16px_44px_-18px_rgba(0,174,239,0.45)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_50px_-16px_rgba(0,174,239,0.4)] sm:w-auto"
                     >
                       Find your next course
                       <ArrowRight className="h-4 w-4" />
@@ -108,7 +137,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                     <Button
                       size="lg"
                       variant="secondary"
-                      className="h-12 w-full rounded-xl border border-border bg-card px-7 text-[15px] font-semibold text-deep shadow-sm transition-all duration-200 hover:border-primary/30 sm:w-auto"
+                      className="h-12 w-full rounded-xl border border-deep/[0.08] bg-white px-7 text-[15px] font-semibold text-deep shadow-sm transition-all duration-200 hover:border-primary/25 hover:bg-white sm:w-auto"
                     >
                       See how we get you hired
                     </Button>
@@ -117,7 +146,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
 
                 {/* Trust strip — LMS outcomes */}
                 <div className="mt-12 max-w-xl">
-                  <div className="flex flex-col divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card shadow-sm sm:flex-row sm:divide-y-0 sm:divide-x">
+                  <div className="flex flex-col overflow-hidden rounded-2xl border border-deep/[0.06] bg-white/90 shadow-[0_20px_50px_-36px_rgba(10,31,68,0.12)] sm:flex-row">
                     {[
                       { k: "50+", v: "Paths to ship" },
                       { k: "10,000+", v: "Learners in motion" },
@@ -140,7 +169,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
               </motion.div>
             </div>
 
-            <div className="relative min-w-0 lg:col-span-6 xl:col-span-6">
+            <div className="relative min-w-0 pt-0 sm:pt-1 lg:pt-2">
               <HeroLmsPreview />
             </div>
           </div>
@@ -179,7 +208,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
       </section>
 
       {/* —— Featured courses —— */}
-      <section className="relative border-y border-border bg-surface py-24 sm:py-28">
+      <section className="relative border-b border-border bg-surface py-24 sm:py-28">
         <Container className="relative z-10 max-w-[1360px]">
           <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
             <motion.div {...fadeUp} transition={{ duration: 0.5 }}>
@@ -216,13 +245,13 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                 {...fadeUp}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
               >
-                <Link href={`/courses/${c.id}`} className="group block">
+                <Link href={courseDetailPath(c)} className="group block">
                   <article className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-border hover:shadow-md">
                     <div className="relative aspect-[16/11] overflow-hidden bg-deep">
-                      {c.cloudinary_url ? (
+                      {c.video_url || c.poster_url ? (
                         <CourseVideoThumb
-                          url={c.cloudinary_url}
-                          title={c.title}
+                          url={c.video_url}
+                          posterUrl={c.poster_url}
                           className="absolute inset-0 scale-[1.02]"
                         />
                       ) : null}
@@ -296,7 +325,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                   )}
                 >
                   <div className="min-w-0 lg:w-[42%]">
-                    <span className="inline-block bg-gradient-to-br from-primary to-deep bg-clip-text text-6xl font-black leading-none tracking-tighter text-transparent sm:text-7xl md:text-[5rem]">
+                    <span className="inline-block bg-gradient-to-br from-primary from-15% via-[#4dc8f5] to-[#006fa3] bg-clip-text text-transparent text-6xl font-black leading-none tracking-tighter sm:text-7xl md:text-[5rem]">
                       {row.n}
                     </span>
                   </div>
@@ -321,6 +350,9 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
           </div>
         </Container>
       </section>
+
+      {/* —— Domains —— */}
+      {/* —— Domains —— */}
 
       {/* —— CTA —— */}
       <section className="relative pb-24 pt-4 sm:pb-32">

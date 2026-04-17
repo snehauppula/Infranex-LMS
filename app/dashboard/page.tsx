@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getSessionUser, getUserDisplayName } from "@/services/auth";
 import { getStudentEnrollments } from "@/services/enrollments";
+import { courseDetailPath } from "@/lib/course-path";
 import { Suspense } from "react";
 
 async function Enrollments() {
@@ -54,33 +55,64 @@ async function Enrollments() {
         )
       : 0;
 
+  const total = rows.length;
+  const completedCount = rows.filter((r) => r.status === "completed").length;
+  const pausedCount = rows.filter((r) => r.status === "paused").length;
+  const summaryStatus =
+    completedCount === total
+      ? total === 1
+        ? "Course complete"
+        : "All courses complete"
+      : `${completedCount} of ${total} complete`;
+  const summaryDetail =
+    pausedCount > 0
+      ? `${pausedCount} paused`
+      : completedCount === total
+        ? null
+        : avg > 0
+          ? `${avg}% avg progress`
+          : "Start your first lesson";
+  const statusScreenReader = summaryDetail
+    ? `${summaryStatus}. ${summaryDetail}.`
+    : `${summaryStatus}.`;
+
   return (
     <>
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-border bg-white px-5 py-4 shadow-sm">
+        <div className="rounded-2xl border border-border bg-card px-5 py-4 shadow-sm ring-1 ring-border/60">
           <p className="text-xs font-medium uppercase tracking-wide text-muted">
             Active courses
           </p>
-          <p className="mt-1 text-2xl font-semibold text-deep">{rows.length}</p>
+          <p className="mt-1 text-2xl font-semibold tabular-nums tracking-tight text-deep">
+            {rows.length}
+          </p>
         </div>
-        <div className="rounded-2xl border border-border bg-white px-5 py-4 shadow-sm">
+        <div className="rounded-2xl border border-border bg-card px-5 py-4 shadow-sm ring-1 ring-border/60">
           <p className="text-xs font-medium uppercase tracking-wide text-muted">
             Avg progress
           </p>
-          <p className="mt-1 text-2xl font-semibold text-deep">{avg}%</p>
+          <p className="mt-1 text-2xl font-semibold tabular-nums tracking-tight text-deep">
+            {avg}%
+          </p>
         </div>
-        <div className="rounded-2xl border border-border bg-white px-5 py-4 shadow-sm sm:col-span-1">
+        <div className="rounded-2xl border border-border bg-card px-5 py-4 shadow-sm ring-1 ring-border/60 sm:col-span-1">
           <p className="text-xs font-medium uppercase tracking-wide text-muted">
             Status
           </p>
-          <p className="mt-1 text-sm font-semibold text-deep">On track</p>
+          <p className="sr-only">{statusScreenReader}</p>
+          <p className="mt-1 text-sm font-semibold leading-snug text-deep text-balance">
+            {summaryStatus}
+          </p>
+          {summaryDetail ? (
+            <p className="mt-1 text-xs font-medium leading-snug text-muted">{summaryDetail}</p>
+          ) : null}
         </div>
       </div>
       <div className="grid gap-6 md:grid-cols-2">
         {rows.map((e) => (
           <Card
             key={e.id}
-            className="overflow-hidden border-border transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md"
+            className="overflow-hidden border-border transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-sm"
           >
             <div className="h-1 bg-primary" />
             <CardHeader>
@@ -95,16 +127,23 @@ async function Enrollments() {
                   <span>Progress</span>
                   <span>{e.progress}%</span>
                 </div>
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-surface-strong">
+                <div
+                  className="mt-2 h-2 overflow-hidden rounded-full bg-surface-strong"
+                  role="progressbar"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={e.progress}
+                  aria-label={`Progress for ${e.course.title}`}
+                >
                   <div
-                    className="h-full rounded-full bg-primary transition-all"
+                    className="h-full rounded-full bg-primary transition-[width] duration-300 ease-out motion-reduce:transition-none"
                     style={{ width: `${e.progress}%` }}
                   />
                 </div>
               </div>
               <div className="flex flex-wrap gap-2">
                 <Button asChild size="sm">
-                  <Link href={`/courses/${e.course.id}#course-player`}>
+                  <Link href={`${courseDetailPath(e.course)}#course-player`}>
                     Open course
                   </Link>
                 </Button>

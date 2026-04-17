@@ -1,3 +1,5 @@
+import { SkipToContent } from "@/components/layout/skip-to-content";
+
 export default function AuthLayout({
   children,
 }: {
@@ -5,7 +7,10 @@ export default function AuthLayout({
 }) {
   return (
     <div className="min-h-full min-w-0 overflow-x-clip bg-background">
-      {children}
+      <SkipToContent />
+      <main id="main-content" tabIndex={-1} className="min-h-full outline-none">
+        {children}
+      </main>
     </div>
   );
 }

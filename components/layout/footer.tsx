@@ -89,7 +89,7 @@ export function Footer() {
             </p>
             <Link
               href="/courses"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
+              className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm outline-none transition hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-deep"
             >
               Browse courses
               <ArrowRight className="h-4 w-4" strokeWidth={2.25} aria-hidden />

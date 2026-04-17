@@ -1,6 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  megaEmbedSrcFromVideoUrl,
+  megaEmbedSrcWithStartSeconds,
+  parseVideoDurationLabelToSeconds,
+} from "@/lib/video";
 
 const SAVE_DEBOUNCE_MS = 4000;
 
@@ -13,12 +18,18 @@ export function EnrolledCourseVideo({
   src,
   title,
   initialProgress,
+  videoDurationLabel,
 }: {
   courseId: string;
   src: string;
   title: string;
   /** Last saved 0–100 from `enrollments.progress` */
   initialProgress: number;
+  /**
+   * When this matches the real video length as a clock (e.g. `2:55:30` or `45:30`), MEGA embeds
+   * get a `!{seconds}s` hash suffix so the iframe opens near the learner’s saved percent.
+   */
+  videoDurationLabel?: string | null;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const lastSent = useRef(Math.max(0, Math.min(100, Math.round(initialProgress))));
@@ -115,6 +126,55 @@ export function EnrolledCourseVideo({
     return () => el.removeEventListener("loadedmetadata", onMeta);
   }, [initialProgress, src]);
 
+  const baseMegaSrc = megaEmbedSrcFromVideoUrl(src);
+  const durationSec = parseVideoDurationLabelToSeconds(videoDurationLabel ?? undefined);
+
+  let megaSrc = baseMegaSrc;
+  if (baseMegaSrc && durationSec != null && durationSec > 0) {
+    const endish = Math.max(0, durationSec - 1);
+    if (initialProgress >= 100) {
+      megaSrc = megaEmbedSrcWithStartSeconds(baseMegaSrc, endish);
+    } else if (initialProgress > 0) {
+      megaSrc = megaEmbedSrcWithStartSeconds(
+        baseMegaSrc,
+        Math.min(endish, Math.floor((initialProgress / 100) * durationSec))
+      );
+    }
+  }
+
+  const megaNoticeTitle =
+    durationSec != null && durationSec > 0
+      ? "MEGA cannot report live playback to this site. When the course duration matches the file length, we set MEGA’s !seconds start in the embed URL from your saved percent."
+      : "Embedded MEGA players cannot share playback position with this site for security reasons.";
+  const megaNoticeText =
+    durationSec != null && durationSec > 0 && initialProgress > 0
+      ? "Live position isn’t saved; opened near your saved progress."
+      : "Watch progress isn’t saved for this MEGA embed.";
+
+  if (megaSrc) {
+    return (
+      <div className="relative h-full w-full">
+        <iframe
+          title={title}
+          src={megaSrc}
+          className="h-full w-full border-0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+          allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
+        />
+        <p
+          className="pointer-events-none absolute bottom-3 right-3 max-w-[min(100%,16rem)] rounded-md bg-black/40 px-2 py-1 text-[10px] font-medium leading-snug text-white/85 backdrop-blur-sm"
+          aria-live="polite"
+          title={megaNoticeTitle}
+        >
+          {megaNoticeText}
+        </p>
+      </div>
+    );
+  }
+
+  const videoSrc = src.split("#")[0];
+
   return (
     <div className="relative h-full w-full">
       <video
@@ -123,7 +183,7 @@ export function EnrolledCourseVideo({
         controls
         playsInline
         preload="auto"
-        src={src}
+        src={videoSrc}
         title={title}
         onTimeUpdate={onTimeUpdate}
         onEnded={onEnded}

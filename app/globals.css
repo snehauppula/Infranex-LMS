@@ -2,18 +2,18 @@
 
 :root {
   /* Brand — logo only */
-  --background: #f4f6f9;
-  --foreground: #0a1f44;
+  --background: #f6f7fa;
+  --foreground: #081c3d;
   --primary: #00aeef;
   --primary-foreground: #ffffff;
-  --deep: #0a1f44;
-  --muted: #6b7280;
+  --deep: #081c3d;
+  --muted: #5f6b7a;
   --card: #ffffff;
-  --border: #e5e7eb;
+  --border: #d8dee8;
   --ring: #00aeef;
   /* Section fills — neutral, low chroma */
-  --surface: #eef1f6;
-  --surface-strong: #e5e9f0;
+  --surface: #eef2f7;
+  --surface-strong: #e3e8f1;
 }
 
 @theme inline {
@@ -35,20 +35,47 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  background-color: var(--background);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {
   min-height: 100%;
   min-width: 0;
+  /* Hero-aligned page canvas: cool neutrals + same cyan radial as marketing hero (no near-white band behind the floating nav) */
   background-color: var(--background);
-  background-image: linear-gradient(
-    180deg,
-    #fafbfc 0%,
-    var(--background) 40%,
-    #f0f2f5 100%
-  );
+  background-image:
+    radial-gradient(
+      ellipse 100% 70% at 15% -15%,
+      rgba(0, 174, 239, 0.06),
+      transparent 52%
+    ),
+    linear-gradient(
+      180deg,
+      var(--surface) 0%,
+      var(--background) 42%,
+      #e7ebf2 100%
+    );
   color: var(--foreground);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Links & native fields — visible keyboard focus (buttons use component rings) */
+:where(a[href]):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: 0.125rem;
+}
+
+:where(input:not([type="hidden"]), select, textarea):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 
 ::selection {
@@ -78,16 +105,16 @@ body {
     transform: translate3d(0, 0, 0) scale(1);
   }
   50% {
-    transform: translate3d(0, -12px, 0) scale(1.03);
+    transform: translate3d(0, -8px, 0) scale(1.015);
   }
 }
 
 .home-ambient-float {
-  animation: home-float 9s ease-in-out infinite;
+  animation: home-float 14s ease-in-out infinite;
 }
 
 .home-ambient-float-delayed {
-  animation: home-float 11s ease-in-out infinite;
+  animation: home-float 18s ease-in-out infinite;
   animation-delay: -2s;
 }
 

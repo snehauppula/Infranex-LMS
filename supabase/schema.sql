@@ -18,12 +18,16 @@ create unique index if not exists students_user_id_key on public.students (user_
 
 create table if not exists public.courses (
   id uuid primary key default gen_random_uuid(),
+  slug text not null,
   title text not null,
   description text,
   duration text,
   price integer not null default 0,
-  cloudinary_url text,
-  created_at timestamptz not null default now()
+  video_url text,
+  poster_url text,
+  highlights text[],
+  created_at timestamptz not null default now(),
+  unique (slug)
 );
 
 create table if not exists public.enrollments (

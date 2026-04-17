@@ -21,11 +21,19 @@ export function DashboardWelcomeToast({ firstName }: { firstName: string }) {
       description:
         "Head to the catalog to enroll, or jump back into a course below. Progress saves automatically across devices.",
       duration: 9000,
-      icon: <Sparkles className="h-4 w-4 text-primary" aria-hidden />,
+      icon: (
+        <Sparkles
+          className="h-5 w-5 shrink-0 text-primary"
+          strokeWidth={2}
+          aria-hidden
+        />
+      ),
       classNames: {
-        toast: "border-border bg-card shadow-md",
-        title: "font-semibold text-deep",
-        description: "text-muted leading-snug",
+        toast:
+          "rounded-2xl border border-border bg-card p-4 shadow-[0_20px_50px_-28px_rgba(8,28,61,0.28)] ring-1 ring-black/[0.04]",
+        title: "text-[15px] font-semibold leading-snug tracking-tight text-deep",
+        description: "mt-2 text-sm leading-relaxed text-muted",
+        icon: "self-start pt-0.5",
       },
     });
   }, [firstName]);
