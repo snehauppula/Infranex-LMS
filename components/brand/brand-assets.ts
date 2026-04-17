@@ -1,6 +1,9 @@
 /**
- * Single brand image for the whole app (navbar, footer, auth, favicon, etc.).
+ * Single brand image for the whole app (navbar, footer, auth, etc.).
  * Source file: `public/brand/infranex.png`
+ *
+ * After replacing that PNG, regenerate tab / Apple icons: `npm run brand:icons`
+ * (writes `app/icon.png` + `app/apple-icon.png` from the lockup).
  */
 export const BRAND_IMAGE_SRC = "/brand/infranex.png";
 
