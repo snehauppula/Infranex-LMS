@@ -18,7 +18,7 @@ export function HeroLmsPreview() {
       />
 
       <div className="relative overflow-hidden rounded-3xl border border-border bg-card p-3 shadow-sm sm:p-4">
-        <div className="relative mx-auto aspect-[3/2] w-full max-w-[620px]">
+        <div className="relative mx-auto aspect-[3/2] w-full max-h-[min(38dvh,400px)] max-w-[620px] sm:max-h-[min(42dvh,420px)]">
           <HeroOnlineLearningAnimation className="absolute inset-0" />
         </div>
       </div>

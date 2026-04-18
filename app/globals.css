@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@layer base {
+  h1 {
+    font-weight: 700;
+  }
+}
+
 :root {
   /* Motion — calm ease-out (matches lib/motion EASE_OUT) */
   --ease-brand-out: cubic-bezier(0.22, 1, 0.36, 1);

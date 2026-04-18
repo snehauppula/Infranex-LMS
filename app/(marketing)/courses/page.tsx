@@ -37,7 +37,7 @@ export default async function CoursesPage() {
       />
       <Container>
         <div className="relative max-w-2xl min-w-0">
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
+          <p className="mb-2.5 text-xs font-bold uppercase tracking-[0.22em] text-primary sm:mb-3">
             Course catalog
           </p>
           <h1 className="text-[clamp(1.65rem,5vw+0.5rem,3rem)] font-bold leading-tight tracking-tight text-deep sm:text-4xl md:text-5xl">

@@ -76,7 +76,7 @@ export function AboutPageSections() {
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
               About Infranex Technologies
             </p>
-            <h1 className="mt-3 text-[clamp(1.75rem,5vw+0.5rem,3.25rem)] font-semibold leading-[1.12] tracking-tight text-deep sm:mt-4 sm:text-5xl lg:text-[3.25rem]">
+            <h1 className="mt-3 text-[clamp(1.75rem,5vw+0.5rem,3.25rem)] font-bold leading-[1.12] tracking-tight text-deep sm:mt-4 sm:text-5xl lg:text-[3.25rem]">
               Theory gets you in the room.{" "}
               <span className="text-primary">Proof gets you the seat.</span>
             </h1>

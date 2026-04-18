@@ -68,8 +68,9 @@ export function scrollCoursePlayerIntoViewAndFullscreen(): void {
 
     const iframe = wrap.querySelector("iframe");
     if (iframe instanceof HTMLIFrameElement) {
-      if (requestElFullscreen(iframe)) return;
+      /* Prefer shell fullscreen so site overlays + exit control stay on top of Drive/MEGA chrome. */
       if (requestElFullscreen(wrap)) return;
+      if (requestElFullscreen(iframe)) return;
       try {
         iframe.focus();
       } catch {

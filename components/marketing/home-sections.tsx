@@ -6,9 +6,12 @@ import {
   ArrowRight,
   ArrowUpRight,
   BookOpen,
+  Briefcase,
   LineChart,
+  Route,
   ShieldCheck,
   Sparkles,
+  Users,
 } from "lucide-react";
 import type { CourseRow } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -62,11 +65,14 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
       {/* —— Hero: light LMS, placements + learning —— */}
       <section
         className={cn(
-          "relative isolate overflow-x-clip bg-gradient-to-b from-background via-surface to-background",
+          "relative isolate flex min-h-[100dvh] flex-col overflow-x-clip bg-gradient-to-b from-background via-surface to-background",
           /* Clear fixed overlay nav (~64–76px) + top inset + safe area. */
-          "pt-[max(6.1rem,calc(5.15rem+env(safe-area-inset-top,0px)))] pb-16 sm:pt-[max(6.45rem,calc(5.55rem+env(safe-area-inset-top,0px)))] sm:pb-24",
-          /* On large screens, keep the hero vertically centered in the viewport. */
-          "lg:flex lg:min-h-[min(86dvh,860px)] lg:items-center lg:pt-[max(7rem,calc(5.85rem+env(safe-area-inset-top,0px)))] lg:pb-24"
+          "pt-[max(6.1rem,calc(5.15rem+env(safe-area-inset-top,0px)))] sm:pt-[max(6.45rem,calc(5.55rem+env(safe-area-inset-top,0px)))]",
+          /* Single-screen hero: minimal bottom inset so the next section stays below the fold. */
+          "pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] sm:pb-[max(1rem,env(safe-area-inset-bottom,0px))]",
+          /* Short viewports: tighten vertical rhythm so content still fits one screen when possible. */
+          "[@media(max-height:780px)]:pt-[max(5.5rem,calc(4.85rem+env(safe-area-inset-top,0px)))] [@media(max-height:780px)]:pb-2",
+          "[@media(max-height:700px)]:pt-[max(5.25rem,calc(4.65rem+env(safe-area-inset-top,0px)))]"
         )}
       >
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_0%_-20%,rgba(0,174,239,0.14),transparent_50%)]" />
@@ -88,14 +94,14 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
           aria-hidden
         />
 
-        <Container className="relative z-10 max-w-[1240px]">
-          <div className="grid min-w-0 items-center gap-10 sm:gap-12 lg:grid-cols-2 lg:gap-14 xl:gap-16">
+        <Container className="relative z-10 flex min-h-0 w-full max-w-[1240px] flex-1 flex-col justify-start py-6 sm:py-8 lg:justify-center lg:py-5 [@media(max-height:780px)]:py-4 [@media(max-height:780px)]:lg:py-3">
+          <div className="grid min-h-0 min-w-0 items-start gap-10 sm:gap-12 lg:grid-cols-2 lg:items-center lg:gap-14 xl:gap-[4.25rem] [@media(max-height:780px)]:gap-8 [@media(max-height:780px)]:lg:gap-11">
             <div className="min-w-0">
               <motion.div
                 initial={{ opacity: 0, y: 22 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="pt-0 sm:pt-1 lg:pt-2"
+                className="pt-0 sm:pt-0.5 lg:pt-1"
               >
                 <div className="inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-primary/20 bg-white/90 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-deep/85 shadow-sm sm:px-3.5 sm:text-[11px] sm:tracking-[0.16em]">
                   <Sparkles className="h-3.5 w-3.5 shrink-0 text-primary" />
@@ -104,14 +110,14 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                   </span>
                 </div>
 
-                <h1 className="mt-6 max-w-[20ch] text-[clamp(1.85rem,6vw+0.4rem,2.75rem)] font-bold leading-[1.08] tracking-tight text-deep sm:mt-7 sm:max-w-[18ch] sm:text-5xl sm:leading-[1.06] lg:max-w-[20ch] lg:text-[3.25rem] lg:leading-[1.04]">
+                <h1 className="mt-7 max-w-[20ch] text-[clamp(1.75rem,5.2vw+0.35rem,2.65rem)] font-bold leading-[1.08] tracking-tight text-deep sm:mt-8 sm:max-w-[18ch] sm:text-[clamp(2rem,4.5vw+0.5rem,3rem)] sm:leading-[1.06] lg:max-w-[20ch] lg:text-[3.05rem] lg:leading-[1.04] [@media(max-height:780px)]:mt-5 [@media(max-height:780px)]:sm:mt-6 [@media(max-height:820px)]:mt-6 [@media(max-height:820px)]:sm:mt-7">
                   Learn. Build.{" "}
                   <span className="bg-gradient-to-r from-primary to-[#0088bc] bg-clip-text text-transparent">
                     Get placed.
                   </span>
                 </h1>
 
-                <p className="mt-5 max-w-xl text-[0.9375rem] leading-relaxed text-muted sm:mt-6 sm:text-base sm:leading-relaxed md:text-lg">
+                <p className="mt-6 max-w-xl text-[0.9375rem] leading-relaxed text-muted sm:mt-7 sm:text-base sm:leading-relaxed md:text-[1.0625rem] [@media(max-height:780px)]:mt-4 [@media(max-height:780px)]:sm:mt-5 [@media(max-height:780px)]:leading-snug [@media(max-height:820px)]:mt-5 [@media(max-height:820px)]:sm:mt-6">
                   Stop collecting certificates that nobody asks for. Stack{" "}
                   <span className="font-medium text-deep/90">real projects</span>
                   , get{" "}
@@ -123,7 +129,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                   one calm, placement-minded platform.
                 </p>
 
-                <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <div className="mt-8 flex flex-col gap-4 sm:mt-9 sm:flex-row sm:items-center [@media(max-height:780px)]:mt-6 [@media(max-height:780px)]:gap-3 [@media(max-height:820px)]:mt-7 [@media(max-height:820px)]:sm:mt-8">
                   <Link href="/courses" className="sm:w-auto">
                     <Button
                       size="lg"
@@ -145,31 +151,62 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                 </div>
 
                 {/* Trust strip — LMS outcomes */}
-                <div className="mt-12 max-w-xl">
-                  <div className="flex flex-col overflow-hidden rounded-2xl border border-deep/[0.06] bg-white/90 shadow-[0_20px_50px_-36px_rgba(10,31,68,0.12)] sm:flex-row">
-                    {[
-                      { k: "50+", v: "Paths to ship" },
-                      { k: "10,000+", v: "Learners in motion" },
-                      { k: "Placement", v: "In your corner" },
-                    ].map((m) => (
-                      <div
-                        key={m.v}
-                        className="flex flex-1 flex-col justify-center px-5 py-4 sm:px-6 sm:py-5"
-                      >
-                        <p className="text-2xl font-bold tabular-nums tracking-tight text-deep sm:text-[1.65rem]">
-                          {m.k}
-                        </p>
-                        <p className="mt-1 text-xs font-medium uppercase tracking-wider text-muted">
-                          {m.v}
-                        </p>
-                      </div>
-                    ))}
+                <div className="mt-10 max-w-full sm:mt-11 [@media(max-height:780px)]:mt-7 [@media(max-height:780px)]:sm:mt-8 [@media(max-height:820px)]:mt-8 [@media(max-height:820px)]:sm:mt-10">
+                  <div className="grid grid-cols-1 divide-y divide-deep/[0.06] overflow-hidden rounded-2xl border border-deep/[0.06] bg-white/95 shadow-[0_20px_50px_-36px_rgba(10,31,68,0.12)] sm:grid-cols-[minmax(5.75rem,1fr)_minmax(7.5rem,1.15fr)_minmax(7.25rem,1fr)] sm:divide-x sm:divide-y-0">
+                    {(
+                      [
+                        {
+                          k: "50+",
+                          v: "Paths to ship",
+                          icon: Route,
+                        },
+                        {
+                          k: "10,000+",
+                          v: "Learners in motion",
+                          icon: Users,
+                        },
+                        {
+                          k: "Placement",
+                          v: "In your corner",
+                          icon: Briefcase,
+                        },
+                      ] as const
+                    ).map((m) => {
+                      const TileIcon = m.icon;
+                      return (
+                        <div
+                          key={m.v}
+                          className="relative isolate flex min-h-0 min-w-0 flex-col justify-center"
+                        >
+                          <div
+                            aria-hidden
+                            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-10%,rgba(0,174,239,0.07),transparent_62%)]"
+                          />
+                          <div className="relative flex min-w-0 items-center gap-2 px-3 py-3.5 sm:gap-2.5 sm:px-2.5 sm:py-4 md:gap-3 md:px-3.5 lg:py-5">
+                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/85 shadow-[inset_0_0_0_1px_rgba(0,174,239,0.12)] backdrop-blur-[2px] sm:h-9 sm:w-9 md:rounded-xl md:h-10 md:w-10">
+                              <TileIcon
+                                className="h-4 w-4 text-primary md:h-[18px] md:w-[18px]"
+                                aria-hidden
+                              />
+                            </span>
+                            <div className="min-w-0">
+                              <p className="whitespace-nowrap font-bold tabular-nums leading-none tracking-tight text-deep text-[clamp(0.8125rem,0.68rem+0.85vw,1.125rem)] md:text-[clamp(0.9375rem,0.78rem+0.55vw,1.1875rem)]">
+                                {m.k}
+                              </p>
+                              <p className="mt-1.5 text-[10px] font-medium uppercase leading-snug tracking-wider text-muted sm:text-[11px]">
+                                {m.v}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </motion.div>
             </div>
 
-            <div className="relative min-w-0 pt-0 sm:pt-1 lg:pt-2">
+            <div className="relative flex min-h-0 min-w-0 items-center justify-center pt-6 sm:pt-8 lg:pt-0 [@media(max-height:780px)]:pt-4">
               <HeroLmsPreview />
             </div>
           </div>

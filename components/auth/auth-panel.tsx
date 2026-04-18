@@ -32,8 +32,11 @@ function formatAuthError(e: unknown): string {
   return e.message;
 }
 
-/** Supabase often returns in under ~100ms — keep the loading pill visible so it feels intentional. */
-const MIN_AUTH_UI_MS = 980;
+/** Keep auth feedback on screen long enough for the progress ramp to read clearly (not a flash). */
+const MIN_AUTH_UI_MS = 2800;
+
+/** Wall-clock duration for the bar to ease up toward ~88% (left → right), if the network is fast. */
+const PROGRESS_RAMP_MS = 5600;
 
 async function ensureMinAuthUiVisible(startedAt: number) {
   const remaining = MIN_AUTH_UI_MS - (Date.now() - startedAt);
@@ -74,11 +77,16 @@ export function AuthPanel({ authError }: { authError?: string }) {
     });
     const uiStartedAt = Date.now();
     progressTickRef.current = setInterval(() => {
-      setLoadingProgress((p) => {
-        if (p >= 88) return p;
-        return Math.min(88, p + 2 + Math.floor(Math.random() * 7));
+      setLoadingProgress((prev) => {
+        const elapsed = Date.now() - uiStartedAt;
+        const t = Math.min(1, elapsed / PROGRESS_RAMP_MS);
+        /* Ease-out: moves decisively at first, then settles toward 88% without jumping to done. */
+        const eased = 1 - (1 - t) ** 1.65;
+        const cap = 88;
+        const timeBased = Math.min(cap, Math.round(eased * cap));
+        return Math.max(prev, timeBased);
       });
-    }, 120);
+    }, 90);
     /** When true, skip resetting `loading` in `finally` so the pill stays up until navigation unmounts (avoids a 1-frame Sign in button flash). */
     let holdLoadingUntilRouteChange = false;
     try {
@@ -109,6 +117,7 @@ export function AuthPanel({ authError }: { authError?: string }) {
 
         const identities = data.user?.identities ?? [];
         if (data.user && identities.length === 0) {
+          await ensureMinAuthUiVisible(uiStartedAt);
           toast.message(
             "This email is already registered. Try signing in instead.",
             { duration: 7000 }
@@ -118,6 +127,9 @@ export function AuthPanel({ authError }: { authError?: string }) {
 
         await ensureMinAuthUiVisible(uiStartedAt);
         setLoadingProgress(100);
+        await new Promise<void>((r) => {
+          window.setTimeout(r, 280);
+        });
         toast.success("Check your email to confirm your account.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({
@@ -221,7 +233,7 @@ export function AuthPanel({ authError }: { authError?: string }) {
           transition={transitionEase(DURATION.sm, reduceMotion)}
           className="flex flex-col gap-2"
         >
-          <h1 className="text-2xl font-semibold tracking-tight text-deep">
+          <h1 className="text-2xl font-bold tracking-tight text-deep">
             {mode === "signin" ? "Sign in" : "Create your account"}
           </h1>
           <p className="text-sm leading-relaxed text-muted">
@@ -297,25 +309,31 @@ export function AuthPanel({ authError }: { authError?: string }) {
           <span className="min-w-0 shrink-0 text-sm font-semibold tracking-tight text-white">
             {mode === "signin" ? "Signing in" : "Creating account"}
           </span>
-          <div className="relative h-2.5 min-w-0 flex-1 overflow-hidden rounded-full bg-white/35 shadow-[inset_0_1px_4px_rgba(0,0,0,0.55)] ring-1 ring-white/35">
-            {reduceMotion ? (
-              <div
-                className="h-full w-3/5 rounded-full bg-gradient-to-r from-cyan-200 via-white to-cyan-200 shadow-[0_0_12px_rgba(255,255,255,0.55)]"
-                aria-hidden
-              />
-            ) : (
+          <div className="relative h-2.5 min-w-0 flex-1 overflow-hidden rounded-full bg-black/40 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55)] ring-1 ring-white/25">
+            {/* Blue gradient fill grows left → right with loadingProgress (reference: gold bar behavior). */}
+            <div
+              className={cn(
+                "h-full max-w-full rounded-full bg-gradient-to-r from-sky-400 via-[#00aeef] to-[#0088bc] shadow-[inset_0_1px_0_rgba(255,255,255,0.42),0_0_14px_rgba(0,174,239,0.55)] transition-[width] duration-500 ease-out motion-reduce:transition-none",
+                loadingProgress > 0 && loadingProgress < 5 && "min-w-[6px]"
+              )}
+              style={{
+                width: `${Math.min(100, Math.max(0, loadingProgress))}%`,
+              }}
+              aria-hidden
+            />
+            {!reduceMotion ? (
               <motion.div
-                className="absolute inset-y-0 w-[42%] rounded-full bg-gradient-to-r from-cyan-200 via-white to-cyan-200 shadow-[0_0_14px_rgba(255,255,255,0.75),0_0_24px_rgba(34,211,238,0.45)]"
+                className="pointer-events-none absolute inset-y-0 left-0 w-[42%] rounded-full bg-gradient-to-r from-transparent via-white/55 to-transparent opacity-70"
                 aria-hidden
-                initial={false}
-                animate={{ left: ["-44%", "108%"] }}
+                initial={{ x: "-115%" }}
+                animate={{ x: ["-115%", "265%"] }}
                 transition={{
-                  duration: 1.45,
+                  duration: 1.65,
                   repeat: Infinity,
                   ease: "linear",
                 }}
               />
-            )}
+            ) : null}
           </div>
           <span className="shrink-0 tabular-nums text-sm font-semibold text-white">
             {loadingProgress}%

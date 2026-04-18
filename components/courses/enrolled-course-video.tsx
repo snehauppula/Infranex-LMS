@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Minimize2 } from "lucide-react";
 import {
   googleDriveEmbedSrcFromVideoUrl,
   megaEmbedSrcFromVideoUrl,
@@ -9,6 +10,74 @@ import {
 } from "@/lib/video";
 
 const SAVE_DEBOUNCE_MS = 4000;
+
+/** Must match `#course-player` on the course detail page (fullscreen target). */
+const COURSE_PLAYER_SHELL_ID = "course-player";
+
+function useCourseShellFullscreen(): { active: boolean; exit: () => void } {
+  const [active, setActive] = useState(false);
+
+  const sync = useCallback(() => {
+    const shell = document.getElementById(COURSE_PLAYER_SHELL_ID);
+    const fs =
+      document.fullscreenElement ??
+      (
+        document as Document & {
+          webkitFullscreenElement?: Element | null;
+        }
+      ).webkitFullscreenElement ??
+      null;
+    setActive(shell != null && fs === shell);
+  }, []);
+
+  useEffect(() => {
+    sync();
+    document.addEventListener("fullscreenchange", sync);
+    document.addEventListener("webkitfullscreenchange", sync);
+    return () => {
+      document.removeEventListener("fullscreenchange", sync);
+      document.removeEventListener("webkitfullscreenchange", sync);
+    };
+  }, [sync]);
+
+  const exit = useCallback(() => {
+    const doc = document as Document & {
+      webkitExitFullscreen?: () => Promise<void> | void;
+      mozCancelFullScreen?: () => Promise<void> | void;
+      msExitFullscreen?: () => Promise<void> | void;
+    };
+    const fn =
+      document.exitFullscreen ??
+      doc.webkitExitFullscreen ??
+      doc.mozCancelFullScreen ??
+      doc.msExitFullscreen;
+    if (fn) void fn.call(document);
+  }, []);
+
+  return { active, exit };
+}
+
+function CourseFullscreenExitBar({
+  visible,
+  onExit,
+}: {
+  visible: boolean;
+  onExit: () => void;
+}) {
+  if (!visible) return null;
+  return (
+    <div className="pointer-events-none absolute inset-0 z-20">
+      <button
+        type="button"
+        onClick={onExit}
+        className="pointer-events-auto absolute left-3 top-3 flex items-center gap-2 rounded-lg border border-white/25 bg-black/75 px-3 py-2 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition-colors hover:bg-black/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+      >
+        <Minimize2 className="h-4 w-4 shrink-0" aria-hidden />
+        Exit fullscreen
+      </button>
+    </div>
+  );
+}
 
 /**
  * Full lesson video for enrolled users: resumes from saved progress and POSTs
@@ -112,6 +181,8 @@ export function EnrolledCourseVideo({
     };
   }, []);
 
+  const courseShellFullscreen = useCourseShellFullscreen();
+
   /* Resume near last saved position once metadata is known */
   useEffect(() => {
     const el = videoRef.current;
@@ -164,6 +235,10 @@ export function EnrolledCourseVideo({
           allowFullScreen
           referrerPolicy="strict-origin-when-cross-origin"
         />
+        <CourseFullscreenExitBar
+          visible={courseShellFullscreen.active}
+          onExit={courseShellFullscreen.exit}
+        />
         <p
           className="pointer-events-none absolute bottom-3 right-3 max-w-[min(100%,16rem)] rounded-md bg-black/40 px-2 py-1 text-[10px] font-medium leading-snug text-white/85 backdrop-blur-sm"
           aria-live="polite"
@@ -188,11 +263,15 @@ export function EnrolledCourseVideo({
         />
         {/*
           Drive’s “open in new tab” lives inside a cross-origin iframe; we can’t remove it via API.
-          A small top-right layer blocks clicks so learners aren’t bounced out to Drive mid-lesson.
+          Transparent strip blocks header clicks without a visible blackout.
         */}
         <div
-          className="pointer-events-auto absolute right-0 top-0 z-10 h-12 w-[4.75rem] bg-black sm:h-14 sm:w-[5.25rem]"
+          className="pointer-events-auto absolute inset-x-0 top-0 z-10 h-[3.25rem] bg-transparent sm:h-14"
           aria-hidden
+        />
+        <CourseFullscreenExitBar
+          visible={courseShellFullscreen.active}
+          onExit={courseShellFullscreen.exit}
         />
       </div>
     );
@@ -215,6 +294,10 @@ export function EnrolledCourseVideo({
       >
         Your browser does not support embedded video.
       </video>
+      <CourseFullscreenExitBar
+        visible={courseShellFullscreen.active}
+        onExit={courseShellFullscreen.exit}
+      />
       {saveState !== "idle" ? (
         <p
           className="pointer-events-none absolute bottom-3 right-3 rounded-lg bg-black/55 px-2 py-1 text-[11px] font-medium text-white backdrop-blur-sm"
