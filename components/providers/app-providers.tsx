@@ -13,7 +13,13 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
         offset="1rem"
         toastOptions={{
           classNames: {
-            toast: "rounded-2xl border-border shadow-lg",
+            toast:
+              "rounded-2xl border-border shadow-lg !py-3 !gap-3 min-h-[3.25rem] items-center",
+            title: "font-semibold text-deep",
+            description: "text-muted text-sm",
+            actionButton:
+              "rounded-lg font-semibold !bg-primary !text-primary-foreground",
+            cancelButton: "rounded-lg font-medium",
           },
         }}
       />

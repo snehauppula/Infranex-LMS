@@ -3,7 +3,8 @@ import { Container } from "@/components/layout/container";
 
 export const metadata: Metadata = {
   title: "Privacy",
-  description: "How Infranex LMS handles your information on this site.",
+  description:
+    "How Infranex Technologies Pvt Ltd handles your information on this site.",
 };
 
 export default function PrivacyPage() {

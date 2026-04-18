@@ -11,6 +11,18 @@ import { Container } from "@/components/layout/container";
 import { InfranexLogoMark } from "@/components/brand/infranex-logo";
 import { cn } from "@/lib/utils";
 
+/** Credit link — opens WhatsApp with a prefilled inquiry (FlowSite AI). */
+const FLOWSITE_WHATSAPP_PHONE = "918500097071";
+const FLOWSITE_WHATSAPP_MESSAGE =
+  "Hi FlowSite AI! I came across your work on the Infranex website. I'd like to get a similar website built for my business. Could you share details on your services and pricing?";
+
+function flowsiteWhatsAppHref() {
+  const q = new URLSearchParams({
+    text: FLOWSITE_WHATSAPP_MESSAGE,
+  });
+  return `https://wa.me/${FLOWSITE_WHATSAPP_PHONE}?${q.toString()}`;
+}
+
 function FooterLink({
   href,
   children,
@@ -120,16 +132,20 @@ export function Footer() {
             <FooterHeading>Follow us</FooterHeading>
             <div className="mt-3 flex items-center gap-3">
               {[
-                { href: "#", label: "Website", Icon: Globe },
-                { href: "#", label: "Updates", Icon: ExternalLink },
-                { href: "#", label: "Community", Icon: ExternalLink },
-                { href: "#", label: "Media", Icon: ExternalLink },
+                { href: "/", label: "Home", Icon: Globe },
+                { href: "/courses", label: "Courses", Icon: ExternalLink },
+                {
+                  href: "mailto:support@infranex.tech",
+                  label: "Email support",
+                  Icon: Mail,
+                },
+                { href: "/privacy", label: "Privacy", Icon: ExternalLink },
               ].map(({ href, label, Icon }) => (
                 <Link
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-white shadow-sm backdrop-blur-sm transition hover:border-primary/35 hover:bg-white/15"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-white shadow-sm backdrop-blur-sm transition-[border-color,background-color,transform] duration-300 ease-brand-out hover:border-primary/35 hover:bg-white/15 hover:scale-[1.03] active:scale-[0.98] motion-reduce:hover:scale-100 motion-reduce:active:scale-100"
                 >
                   <Icon className="h-4 w-4" aria-hidden />
                 </Link>
@@ -140,13 +156,32 @@ export function Footer() {
             </p>
           </div>
         </div>
+      </Container>
 
-        <div className="mt-6 border-t border-white/10 pt-4">
-          <p className="text-center text-[11px] text-white/50 sm:text-left">
+      {/* Full-bleed credit strip — same palette as footer (no flat black) */}
+      <div className="relative border-t border-white/15 bg-deep px-4 py-3.5 sm:py-4">
+        <div
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_95%_90%_at_50%_120%,rgba(0,174,239,0.08),transparent_58%)]"
+          aria-hidden
+        />
+        <div className="relative">
+          <p className="text-center text-[13px] font-medium leading-snug text-white sm:text-sm">
+            <span className="text-white/85">Designed & developed by </span>
+            <a
+              href={flowsiteWhatsAppHref()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-primary underline decoration-primary decoration-2 underline-offset-[3px] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/55 focus-visible:ring-offset-2 focus-visible:ring-offset-deep"
+              aria-label="Message FlowSite AI on WhatsApp about building a website for your business"
+            >
+              FlowSite AI
+            </a>
+          </p>
+          <p className="mt-1.5 text-center text-[11px] leading-relaxed text-white/55 sm:text-xs">
             © {year} Infranex Technologies. All rights reserved.
           </p>
         </div>
-      </Container>
+      </div>
     </footer>
   );
 }

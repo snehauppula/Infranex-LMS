@@ -71,7 +71,7 @@ export function CourseCheckout({
       const options = {
         key,
         currency: data.currency ?? "INR",
-        name: "Infranex LMS",
+        name: "Infranex Technologies Pvt Ltd",
         description: title,
         order_id: data.orderId,
         modal: {

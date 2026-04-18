@@ -3,7 +3,7 @@ import { Container } from "@/components/layout/container";
 
 export const metadata: Metadata = {
   title: "Terms",
-  description: "Terms of use for the Infranex LMS platform.",
+  description: "Terms of use for Infranex Technologies Pvt Ltd.",
 };
 
 export default function TermsPage() {

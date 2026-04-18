@@ -108,7 +108,7 @@ export function Navbar({
           <MotionLink
             href="/"
             className="group flex items-center py-0.5 outline-none transition-opacity duration-300 ease-brand-out motion-reduce:duration-150 hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            aria-label="Infranex LMS home"
+            aria-label="Infranex Technologies Pvt Ltd home"
             whileTap={reduceMotion ? undefined : { scale: 0.98 }}
             transition={transitionSpring(reduceMotion)}
           >
@@ -221,7 +221,7 @@ export function Navbar({
         <Link
           href="/"
           className="flex min-w-0 flex-1 items-center py-0.5 pr-2"
-          aria-label="Infranex LMS home"
+          aria-label="Infranex Technologies Pvt Ltd home"
         >
           <InfranexLogoMark
             priority

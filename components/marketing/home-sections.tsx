@@ -72,7 +72,7 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_0%_-20%,rgba(0,174,239,0.14),transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_100%_0%,rgba(0,174,239,0.08),transparent_45%)]" />
         <div
-          className="absolute inset-0 opacity-[0.35]"
+          className="absolute inset-0 opacity-[0.22] motion-reduce:opacity-[0.14]"
           style={{
             backgroundImage: `linear-gradient(to right, rgba(10,31,68,0.04) 1px, transparent 1px),
               linear-gradient(to bottom, rgba(10,31,68,0.04) 1px, transparent 1px)`,
@@ -100,11 +100,11 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                 <div className="inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-primary/20 bg-white/90 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-deep/85 shadow-sm sm:px-3.5 sm:text-[11px] sm:tracking-[0.16em]">
                   <Sparkles className="h-3.5 w-3.5 shrink-0 text-primary" />
                   <span className="break-words">
-                    Infranex LMS · Where skills become offers
+                    Infranex Technologies · Where skills become offers
                   </span>
                 </div>
 
-                <h1 className="mt-6 max-w-[20ch] text-[clamp(1.85rem,6vw+0.4rem,2.75rem)] font-semibold leading-[1.08] tracking-tight text-deep sm:mt-7 sm:max-w-[18ch] sm:text-5xl sm:leading-[1.06] lg:max-w-[20ch] lg:text-[3.25rem] lg:leading-[1.04]">
+                <h1 className="mt-6 max-w-[20ch] text-[clamp(1.85rem,6vw+0.4rem,2.75rem)] font-bold leading-[1.08] tracking-tight text-deep sm:mt-7 sm:max-w-[18ch] sm:text-5xl sm:leading-[1.06] lg:max-w-[20ch] lg:text-[3.25rem] lg:leading-[1.04]">
                   Learn. Build.{" "}
                   <span className="bg-gradient-to-r from-primary to-[#0088bc] bg-clip-text text-transparent">
                     Get placed.
@@ -244,8 +244,8 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                 {...fadeUp}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
               >
-                <Link href={courseDetailPath(c)} className="group block">
-                  <article className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-border hover:shadow-md">
+                <Link href={courseDetailPath(c)} className="group block rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background">
+                  <article className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm ring-1 ring-transparent transition-[transform,box-shadow,border-color,ring-color] duration-300 ease-brand-out motion-reduce:duration-150 hover:-translate-y-1 hover:border-primary/20 hover:shadow-md hover:ring-primary/10">
                     <div className="relative aspect-[16/11] overflow-hidden bg-deep">
                       {c.video_url || c.poster_url ? (
                         <CourseVideoThumb
@@ -275,9 +275,9 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                           {formatInrPaise(c.price)}
                         </span>
                       </div>
-                      <span className="flex items-center gap-1 text-sm font-semibold text-primary opacity-0 transition-all duration-300 group-hover:opacity-100">
+                      <span className="flex items-center gap-1 text-sm font-semibold text-primary transition-[gap,opacity,color] duration-300 ease-brand-out md:opacity-80 md:group-hover:opacity-100 md:group-hover:gap-1.5">
                         View course
-                        <ArrowUpRight className="h-4 w-4" />
+                        <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden />
                       </span>
                     </div>
                   </article>
@@ -356,9 +356,6 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
           </div>
         </Container>
       </section>
-
-      {/* —— Domains —— */}
-      {/* —— Domains —— */}
 
       {/* —— CTA —— */}
       <section className="relative pb-20 pt-2 sm:pb-24">

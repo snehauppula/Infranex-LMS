@@ -41,12 +41,19 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* Fixed marketing navbar — in-page anchors land below the bar */
+  scroll-padding-top: max(5.75rem, calc(4.85rem + env(safe-area-inset-top, 0px)));
   background-color: var(--background);
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+    scroll-padding-top: 4.5rem;
+  }
+
+  #main-content {
+    scroll-margin-top: 4.5rem;
   }
 }
 
@@ -86,7 +93,11 @@ body {
 :where(a[href]):focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 3px;
-  border-radius: 0.125rem;
+  border-radius: 0.25rem;
+}
+
+#main-content {
+  scroll-margin-top: max(5.75rem, calc(4.85rem + env(safe-area-inset-top, 0px)));
 }
 
 :where(input:not([type="hidden"]), select, textarea):focus-visible {

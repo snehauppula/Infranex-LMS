@@ -1,10 +1,11 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import {
   AnimatePresence,
   LayoutGroup,
@@ -60,13 +61,17 @@ export function AuthPanel({ authError }: { authError?: string }) {
   const progressTickRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   async function submit() {
+    if (loading) return;
     const supabase = createClient();
     if (!supabase) {
       toast.error("Supabase is not configured");
       return;
     }
-    setLoading(true);
-    setLoadingProgress(8);
+    /* Paint loading bar before awaiting network (otherwise signup can feel “stuck” with no feedback). */
+    flushSync(() => {
+      setLoading(true);
+      setLoadingProgress(8);
+    });
     const uiStartedAt = Date.now();
     progressTickRef.current = setInterval(() => {
       setLoadingProgress((p) => {
@@ -112,6 +117,7 @@ export function AuthPanel({ authError }: { authError?: string }) {
         }
 
         await ensureMinAuthUiVisible(uiStartedAt);
+        setLoadingProgress(100);
         toast.success("Check your email to confirm your account.");
       } else {
         const { error } = await supabase.auth.signInWithPassword({
@@ -282,23 +288,27 @@ export function AuthPanel({ authError }: { authError?: string }) {
               ? "Signing in, please wait"
               : "Creating your account, please wait"
           }
-          className="flex h-12 w-full items-center gap-3 rounded-2xl bg-[#05162e] px-4 text-white shadow-[0_14px_36px_-14px_rgba(5,22,46,0.65)] ring-1 ring-white/12 sm:h-[3.25rem] sm:rounded-full sm:px-5"
+          className="flex h-12 w-full items-center gap-2.5 rounded-2xl border border-white/25 bg-slate-950 px-3 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_14px_36px_-14px_rgba(5,22,46,0.65)] sm:h-[3.25rem] sm:gap-3 sm:rounded-full sm:px-5"
         >
-          <span className="shrink-0 text-sm font-semibold tracking-tight text-white">
+          <Loader2
+            className="h-4 w-4 shrink-0 animate-spin text-cyan-300 motion-reduce:animate-none sm:h-[1.125rem] sm:w-[1.125rem]"
+            aria-hidden
+          />
+          <span className="min-w-0 shrink-0 text-sm font-semibold tracking-tight text-white">
             {mode === "signin" ? "Signing in" : "Creating account"}
           </span>
-          <div className="relative h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-white/14 ring-1 ring-white/10">
+          <div className="relative h-2.5 min-w-0 flex-1 overflow-hidden rounded-full bg-white/35 shadow-[inset_0_1px_4px_rgba(0,0,0,0.55)] ring-1 ring-white/35">
             {reduceMotion ? (
               <div
-                className="h-full w-3/5 rounded-full bg-gradient-to-r from-primary via-sky-200 to-primary opacity-95 shadow-[0_0_18px_rgba(0,174,239,0.55)]"
+                className="h-full w-3/5 rounded-full bg-gradient-to-r from-cyan-200 via-white to-cyan-200 shadow-[0_0_12px_rgba(255,255,255,0.55)]"
                 aria-hidden
               />
             ) : (
               <motion.div
-                className="absolute inset-y-0 w-[40%] rounded-full bg-gradient-to-r from-primary via-cyan-100 to-primary shadow-[0_0_18px_rgba(0,174,239,0.7),0_0_28px_rgba(0,174,239,0.25)]"
+                className="absolute inset-y-0 w-[42%] rounded-full bg-gradient-to-r from-cyan-200 via-white to-cyan-200 shadow-[0_0_14px_rgba(255,255,255,0.75),0_0_24px_rgba(34,211,238,0.45)]"
                 aria-hidden
                 initial={false}
-                animate={{ left: ["-42%", "108%"] }}
+                animate={{ left: ["-44%", "108%"] }}
                 transition={{
                   duration: 1.45,
                   repeat: Infinity,
@@ -307,7 +317,7 @@ export function AuthPanel({ authError }: { authError?: string }) {
               />
             )}
           </div>
-          <span className="shrink-0 tabular-nums text-sm font-semibold text-white/90">
+          <span className="shrink-0 tabular-nums text-sm font-semibold text-white">
             {loadingProgress}%
           </span>
         </div>

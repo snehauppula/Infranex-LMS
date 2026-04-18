@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Infranex LMS Platform",
-    template: "%s · Infranex LMS",
+    default: "Infranex Technologies Pvt Ltd",
+    template: "%s · Infranex Technologies Pvt Ltd",
   },
   description:
     "Premium SaaS learning platform — courses, enrollments, and analytics in one calm surface.",
