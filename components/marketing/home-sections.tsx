@@ -16,6 +16,7 @@ import {
 import type { CourseRow } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
+import { CollaboratorsSection } from "@/components/marketing/collaborators-section";
 import { DomainsMarquee } from "@/components/marketing/domains-marquee";
 import { HeroLmsPreview } from "@/components/marketing/hero-lms-preview";
 import { CourseVideoThumb } from "@/components/courses/course-video-thumb";
@@ -242,6 +243,8 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
         </Container>
         <DomainsMarquee />
       </section>
+
+      <CollaboratorsSection />
 
       {/* —— Featured courses —— */}
       <section className="relative border-b border-border bg-surface pt-14 pb-20 sm:pt-16 sm:pb-24">

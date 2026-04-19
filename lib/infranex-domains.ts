@@ -28,6 +28,11 @@ export type LearningDomain = {
   blurb: string;
   /** Lowercase phrases; earlier domains are checked first (put specific before broad). */
   keywords: readonly string[];
+  /**
+   * Optional hero image URL under `/public` (home domain marquee).
+   * Example: `/domains/vlsi.png`
+   */
+  imageSrc?: string;
 };
 
 export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
@@ -37,6 +42,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
     label: "AI-Driven Data Analytics",
     blurb: "Decision systems that pair models with governed data products.",
     keywords: ["ai-driven data", "ai driven data", "ai-driven analytics"],
+    imageSrc: "/domains/ai-driven-data-analytics.png",
   },
   {
     slug: "generative-ai",
@@ -51,20 +57,21 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
       "diffusion",
       "rag",
     ],
+    imageSrc: "/domains/generative-ai.png",
   },
   {
     slug: "professional-ai-data-analytics",
     icon: Bot,
     label: "Professional AI & Data Analytics",
-    blurb: "Industry-ready AI and analytics stacks from ingestion to insight.",
-    keywords: ["professional ai", "ai & data analytics", "ai and data analytics"],
-  },
-  {
-    slug: "professional-data-analytics",
-    icon: BarChart3,
-    label: "Professional Data Analytics",
-    blurb: "Dashboards, metrics design, and stakeholder-ready storytelling.",
-    keywords: ["professional data analytics"],
+    blurb:
+      "Industry-ready AI and analytics stacks from ingestion to insight — dashboards, metrics design, and stakeholder-ready storytelling.",
+    keywords: [
+      "professional ai",
+      "ai & data analytics",
+      "ai and data analytics",
+      "professional data analytics",
+    ],
+    imageSrc: "/domains/professional-ai-data-analytics.png",
   },
   {
     slug: "professional-ui-ux",
@@ -72,6 +79,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
     label: "Professional UI/UX Design",
     blurb: "Research, systems thinking, and craft at SaaS quality bars.",
     keywords: ["ui/ux", "ui ux", "user experience", "user interface", "figma"],
+    imageSrc: "/domains/professional-ui-ux.png",
   },
   {
     slug: "ai-ml-integrated",
@@ -79,6 +87,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
     label: "AI & ML (Integrated Specialization)",
     blurb: "Unified depth across classical ML and applied AI engineering.",
     keywords: ["integrated specialization", "ai & ml integrated", "ai and ml integrated"],
+    imageSrc: "/domains/ai-ml-integrated.png",
   },
   {
     slug: "machine-learning",
@@ -86,6 +95,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
     label: "Machine Learning (ML)",
     blurb: "Training, evaluation, and deployment without the hand-wavy math.",
     keywords: ["machine learning"],
+    imageSrc: "/domains/machine-learning.png",
   },
   {
     slug: "artificial-intelligence",
@@ -93,6 +103,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
     label: "Artificial Intelligence (AI)",
     blurb: "Search, planning, agents, and responsible AI product patterns.",
     keywords: ["artificial intelligence", " ai ", " ai,", " ai-"],
+    imageSrc: "/domains/artificial-intelligence.png",
   },
   {
     slug: "data-science",
@@ -100,6 +111,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
     label: "Data Science",
     blurb: "Experimentation, modeling, and communication for real decisions.",
     keywords: ["data science"],
+    imageSrc: "/domains/data-science.png",
   },
   {
     slug: "data-analytics",
@@ -107,6 +119,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
     label: "Data Analytics",
     blurb: "SQL, warehousing, and metrics that survive exec scrutiny.",
     keywords: ["data analytics", "business intelligence"],
+    imageSrc: "/domains/data-analytics.png",
   },
   {
     slug: "cyber-security",
@@ -114,6 +127,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
     label: "Cyber Security",
     blurb: "Defense in depth, identity, and pragmatic threat reduction.",
     keywords: ["cyber security", "cybersecurity", "infosec", "security engineering"],
+    imageSrc: "/domains/cyber-security.png",
   },
   {
     slug: "application-development",
@@ -128,6 +142,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
       "flutter",
       "react native",
     ],
+    imageSrc: "/domains/application-development.png",
   },
   {
     slug: "web-development",
@@ -144,6 +159,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
       "next.js",
       "node.js",
     ],
+    imageSrc: "/domains/web-development.png",
   },
   {
     slug: "digital-marketing",
@@ -151,6 +167,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
     label: "Digital Marketing",
     blurb: "Growth loops, attribution, and creative that converts.",
     keywords: ["digital marketing", "growth marketing", "seo", "sem", "ads"],
+    imageSrc: "/domains/digital-marketing.png",
   },
   {
     slug: "cse",
@@ -164,6 +181,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
       "algorithms",
       "operating systems",
     ],
+    imageSrc: "/domains/cse.png",
   },
   {
     slug: "ece",
@@ -176,6 +194,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
       "communication engineering",
       "signal processing",
     ],
+    imageSrc: "/domains/ece.png",
   },
   {
     slug: "embedded-systems",
@@ -183,6 +202,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
     label: "Embedded Systems",
     blurb: "Firmware, RTOS, and tight coupling to physical constraints.",
     keywords: ["embedded systems", "embedded software", "rtos", "firmware", "iot"],
+    imageSrc: "/domains/embedded-systems.png",
   },
   {
     slug: "vlsi",
@@ -190,6 +210,7 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
     label: "VLSI Design",
     blurb: "RTL-to-GDSII literacy for serious silicon-minded engineers.",
     keywords: ["vlsi", "verilog", "vhdl", "fpga", "asic"],
+    imageSrc: "/domains/vlsi.png",
   },
 ];
 

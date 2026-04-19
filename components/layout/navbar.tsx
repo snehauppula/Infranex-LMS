@@ -26,6 +26,7 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/courses", label: "Courses" },
   { href: "/about", label: "About us" },
+  { href: "/careers", label: "Careers" },
 ] as const;
 
 function primaryNavLinks(sessionEmail: string | null | undefined) {

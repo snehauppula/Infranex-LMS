@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {
-  ArrowRight,
   ExternalLink,
   Globe,
   Mail,
@@ -9,7 +8,6 @@ import {
 } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { InfranexLogoMark } from "@/components/brand/infranex-logo";
-import { cn } from "@/lib/utils";
 
 /** Credit link — opens WhatsApp with a prefilled inquiry (FlowSite AI). */
 const FLOWSITE_WHATSAPP_PHONE = "918500097071";
@@ -21,39 +19,6 @@ function flowsiteWhatsAppHref() {
     text: FLOWSITE_WHATSAPP_MESSAGE,
   });
   return `https://wa.me/${FLOWSITE_WHATSAPP_PHONE}?${q.toString()}`;
-}
-
-function FooterLink({
-  href,
-  children,
-  className,
-  showArrow = true,
-}: {
-  href: string;
-  children: React.ReactNode;
-  className?: string;
-  showArrow?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={cn(
-        "group inline-flex items-center gap-1.5 text-[13px] text-white/72 transition-[color,opacity] duration-300 ease-brand-out motion-reduce:duration-150 hover:text-white",
-        className
-      )}
-    >
-      <span className="border-b border-transparent pb-px transition-[border-color] duration-300 ease-brand-out motion-reduce:duration-150 group-hover:border-primary/80">
-        {children}
-      </span>
-      {showArrow ? (
-        <ArrowRight
-          className="h-3.5 w-3.5 shrink-0 opacity-0 transition-[opacity,transform] duration-300 ease-brand-out motion-reduce:duration-150 group-hover:translate-x-0.5 group-hover:opacity-100"
-          strokeWidth={2.25}
-          aria-hidden
-        />
-      ) : null}
-    </Link>
-  );
 }
 
 function FooterHeading({ children }: { children: React.ReactNode }) {
@@ -95,17 +60,6 @@ export function Footer() {
                 energy on skills, not fighting the product.
               </p>
             </div>
-            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-[13px]">
-              <FooterLink href="/courses" showArrow={false}>
-                Courses
-              </FooterLink>
-              <FooterLink href="/about" showArrow={false}>
-                About
-              </FooterLink>
-              <FooterLink href="/dashboard" showArrow={false}>
-                Dashboard
-              </FooterLink>
-            </div>
           </div>
 
           {/* Contact */}
@@ -114,15 +68,15 @@ export function Footer() {
             <ul className="mt-3 space-y-2.5 text-[13px] text-white/72">
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-primary" aria-hidden />
-                <span>+91 97052 81105</span>
+                <span>+91 90198 57285</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-primary" aria-hidden />
-                <span>support@infranex.tech</span>
+                <span>support@infranextech.in</span>
               </li>
               <li className="flex items-center gap-2">
                 <MapPin className="h-4 w-4 text-primary" aria-hidden />
-                <span>Hyderabad, India</span>
+                <span>Yelahanka, Bangalore, Karnataka</span>
               </li>
             </ul>
           </div>
@@ -135,7 +89,7 @@ export function Footer() {
                 { href: "/", label: "Home", Icon: Globe },
                 { href: "/courses", label: "Courses", Icon: ExternalLink },
                 {
-                  href: "mailto:support@infranex.tech",
+                  href: "mailto:support@infranextech.in",
                   label: "Email support",
                   Icon: Mail,
                 },
