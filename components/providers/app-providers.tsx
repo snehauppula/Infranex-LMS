@@ -11,6 +11,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
         position="top-right"
         closeButton
         offset="1rem"
+        className="!z-[100]"
         toastOptions={{
           classNames: {
             toast:

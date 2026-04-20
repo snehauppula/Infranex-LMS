@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import type { AdminCourseRow, AdminStudentRow } from "@/services/admin";
 import { revalidateAdminPage } from "@/app/admin/actions";
+import { RefreshCw } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Container } from "@/components/layout/container";
@@ -82,7 +83,8 @@ export function AdminConsole({
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <form action={revalidateAdminPage}>
-              <Button type="submit" variant="outline" size="sm" className="rounded-lg">
+              <Button type="submit" variant="outline" size="sm">
+                <RefreshCw className="text-primary" aria-hidden />
                 Refresh data
               </Button>
             </form>

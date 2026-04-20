@@ -66,6 +66,8 @@ export function Navbar({
   const reduceMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
   const navItems = primaryNavLinks(sessionEmail);
+  /** Extra link (Dashboard) + flex-wrap was stacking a second row and stretching the bar. */
+  const compactNavPills = navItems.length >= 5;
 
   return (
     <header
@@ -102,7 +104,7 @@ export function Navbar({
         className="relative z-10 mx-auto hidden h-[76px] w-full max-w-[1280px] items-center gap-4 px-5 sm:px-8 md:grid"
         style={{
           gridTemplateColumns:
-            "minmax(15rem, min(34vw, 26rem)) 1fr minmax(11rem, auto)",
+            "minmax(11rem, min(30vw, 22rem)) minmax(0, 1fr) minmax(9.5rem, auto)",
         }}
       >
         <div className="flex shrink-0 justify-start pr-2">
@@ -118,11 +120,16 @@ export function Navbar({
         </div>
 
         <nav
-          className="flex justify-center justify-self-center"
+          className="flex min-w-0 justify-center justify-self-center"
           aria-label="Primary"
         >
           <LayoutGroup id="nav-pills">
-            <div className="inline-flex max-w-full flex-wrap items-center justify-center gap-1 rounded-full border border-border bg-surface p-1">
+            <div
+              className={cn(
+                "flex w-max max-w-full flex-nowrap items-center justify-center gap-0.5 overflow-x-auto rounded-full border border-border bg-surface p-1 sm:gap-1",
+                "[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+              )}
+            >
               {navItems.map((l) => {
                 const active = linkIsActive(pathname, l.href);
                 return (
@@ -130,7 +137,10 @@ export function Navbar({
                     key={l.href}
                     href={l.href}
                     className={cn(
-                      "relative min-w-0 rounded-full px-3 py-2 text-center text-sm font-semibold tracking-tight transition-[color,background-color,box-shadow] duration-300 ease-brand-out motion-reduce:duration-150 sm:px-4 sm:text-[15px]",
+                      "relative shrink-0 rounded-full text-center font-semibold tracking-tight transition-[color,background-color,box-shadow] duration-300 ease-brand-out motion-reduce:duration-150",
+                      compactNavPills
+                        ? "px-2.5 py-1.5 text-[13px] sm:px-3 sm:py-2 sm:text-[14px]"
+                        : "px-3 py-2 text-sm sm:px-4 sm:text-[15px]",
                       "outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                       active
                         ? "bg-card text-deep shadow-sm ring-1 ring-border"
@@ -143,7 +153,12 @@ export function Navbar({
                     {active ? (
                       <motion.span
                         layoutId="nav-active-underline"
-                        className="pointer-events-none absolute inset-x-3 bottom-1 h-0.5 rounded-full bg-primary sm:inset-x-4"
+                        className={cn(
+                          "pointer-events-none absolute bottom-1 h-0.5 rounded-full bg-primary",
+                          compactNavPills
+                            ? "inset-x-2.5 sm:inset-x-3"
+                            : "inset-x-3 sm:inset-x-4"
+                        )}
                         aria-hidden
                         transition={transitionSpring(reduceMotion)}
                       />
@@ -155,7 +170,7 @@ export function Navbar({
           </LayoutGroup>
         </nav>
 
-        <div className="flex min-w-0 shrink-0 flex-wrap items-center justify-end gap-2 pl-2">
+        <div className="flex min-w-0 shrink-0 flex-nowrap items-center justify-end gap-1.5 pl-2 sm:gap-2">
           {sessionEmail ? (
             <>
               <div
@@ -193,11 +208,11 @@ export function Navbar({
                 <SignOutButton appearance="icon" />
               </div>
               {role === "admin" && (
-                <Link href="/admin">
+                <Link href="/admin" className="shrink-0">
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-9 rounded-full border-border bg-card px-4 text-xs font-bold uppercase tracking-wider text-deep shadow-sm transition hover:border-primary/30"
+                    className="h-8 rounded-full border-border bg-card px-3 text-[10px] font-bold uppercase tracking-wider text-deep shadow-sm transition hover:border-primary/30 sm:h-9 sm:px-4 sm:text-xs"
                   >
                     Admin
                   </Button>

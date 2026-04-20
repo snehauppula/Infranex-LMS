@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, Shield } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { DashboardWelcomeToast } from "@/components/dashboard/dashboard-welcome-toast";
 import {
@@ -183,36 +183,10 @@ export default async function DashboardPage() {
   return (
     <div className="border-b border-border bg-background pb-12 pt-6 sm:pb-20 sm:pt-10">
       <Container className="max-w-5xl min-w-0">
-        <DashboardWelcomeToast firstName={firstName} />
-        {role === "admin" ? (
-          <div className="mb-8 rounded-2xl border border-border border-l-4 border-l-primary bg-card p-5 shadow-sm sm:p-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex gap-3">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-surface text-primary">
-                  <Shield className="h-5 w-5" aria-hidden />
-                </span>
-                <div>
-                  <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
-                    Administrator
-                  </p>
-                  <p className="mt-1 text-lg font-semibold leading-snug text-deep">
-                    Admin console is available
-                  </p>
-                  <p className="mt-1 text-sm text-muted">
-                    Learners, courses, and enrollments — open the console anytime.
-                  </p>
-                </div>
-              </div>
-              <Button
-                asChild
-                size="lg"
-                className="h-12 w-full shrink-0 sm:w-auto sm:px-8"
-              >
-                <Link href="/admin">Open admin console</Link>
-              </Button>
-            </div>
-          </div>
-        ) : null}
+        <DashboardWelcomeToast
+          firstName={firstName}
+          isAdmin={role === "admin"}
+        />
 
         <section className="mt-8 sm:mt-10">
           <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
