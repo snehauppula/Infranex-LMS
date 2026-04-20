@@ -16,6 +16,7 @@ import {
 import type { CourseRow } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/layout/container";
+import { AlumniSuccessSection } from "@/components/marketing/alumni-success-section";
 import { CollaboratorsSection } from "@/components/marketing/collaborators-section";
 import { DomainsMarquee } from "@/components/marketing/domains-marquee";
 import { HeroLmsPreview } from "@/components/marketing/hero-lms-preview";
@@ -327,6 +328,8 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
           </div>
         </Container>
       </section>
+
+      <AlumniSuccessSection />
 
       {/* —— Why us: tight grid (less “void space” than alternating wide rails) —— */}
       <section className="relative border-t border-border py-16 sm:py-20">

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { scrollCoursePlayerIntoViewAndFullscreen } from "@/lib/focus-course-video";
 
 declare global {
   interface Window {
@@ -120,20 +119,12 @@ export function CourseCheckout({
 
   if (enrolled) {
     return (
-      <div className="mt-4 space-y-3">
-        <p className="text-sm font-medium text-deep">You already have this course.</p>
-        <Button
-          type="button"
-          variant="secondary"
-          className="w-full border-primary/25"
-          onClick={() => scrollCoursePlayerIntoViewAndFullscreen()}
-        >
-          Watch in fullscreen
-        </Button>
-        <Button asChild className="w-full">
-          <Link href="/dashboard">View on dashboard</Link>
-        </Button>
-      </div>
+      <Button
+        asChild
+        className="h-11 w-full rounded-xl text-[15px] font-semibold shadow-md shadow-primary/20"
+      >
+        <Link href="/dashboard">View on dashboard</Link>
+      </Button>
     );
   }
 

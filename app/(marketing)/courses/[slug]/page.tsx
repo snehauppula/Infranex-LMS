@@ -236,21 +236,31 @@ export default async function CourseDetailPage({
           </div>
 
           {/* Full-width action bar — balances the layout under the video */}
-          <footer className="border-t border-border bg-gradient-to-b from-surface/90 to-surface/40 px-5 py-6 sm:px-8 sm:py-7">
-            <div className="mx-auto flex max-w-5xl flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+          <footer
+            className={cn(
+              "border-t border-border px-5 py-7 sm:px-8 sm:py-8",
+              isEnrolled
+                ? "bg-gradient-to-b from-primary/[0.05] via-surface to-surface/85"
+                : "bg-gradient-to-b from-surface/90 to-surface/40"
+            )}
+          >
+            <div className="mx-auto flex max-w-5xl flex-col gap-8 lg:flex-row lg:items-stretch lg:justify-between lg:gap-12">
               <div className="min-w-0 lg:flex-1">
                 {isEnrolled ? (
-                  <div className="flex flex-wrap items-start gap-4">
-                    <div className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/12 text-primary lg:flex">
-                      <Shield className="h-6 w-6" aria-hidden />
+                  <div className="flex flex-wrap items-start gap-4 sm:gap-5">
+                    <div className="hidden h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-primary/20 bg-primary/[0.08] text-primary shadow-sm shadow-primary/5 lg:flex">
+                      <Shield className="h-6 w-6" strokeWidth={1.75} aria-hidden />
                     </div>
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                    <div className="min-w-0">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
                         Your access
                       </p>
-                      <p className="mt-1 text-lg font-semibold text-deep">You are enrolled</p>
-                      <p className="mt-1 max-w-md text-sm text-muted">
-                        Continue in the lesson player — fullscreen recommended for long sessions.
+                      <p className="mt-2 text-xl font-bold tracking-tight text-deep sm:text-[1.35rem]">
+                        You are enrolled
+                      </p>
+                      <p className="mt-2 max-w-md text-sm leading-relaxed text-muted">
+                        Resume in the lesson player above — playback and progress stay in sync
+                        with your dashboard.
                       </p>
                     </div>
                   </div>
@@ -270,7 +280,12 @@ export default async function CourseDetailPage({
                 )}
               </div>
 
-              <div className="w-full shrink-0 space-y-4 lg:max-w-[min(100%,20rem)]">
+              <div
+                className={cn(
+                  "w-full shrink-0 lg:max-w-[min(100%,20rem)]",
+                  isEnrolled ? "flex flex-col gap-5" : "space-y-4"
+                )}
+              >
                 {user ? (
                   <>
                     <CourseCheckout
@@ -280,10 +295,12 @@ export default async function CourseDetailPage({
                       enrolled={isEnrolled}
                     />
                     {isEnrolled && enrollment ? (
-                      <ManualCourseComplete
-                        courseId={course.id}
-                        initialProgress={enrollment.progress}
-                      />
+                      <div className="rounded-xl border border-border/80 bg-card/90 p-4 shadow-sm ring-1 ring-deep/[0.03]">
+                        <ManualCourseComplete
+                          courseId={course.id}
+                          initialProgress={enrollment.progress}
+                        />
+                      </div>
                     ) : null}
                   </>
                 ) : (

@@ -131,6 +131,18 @@ body {
   will-change: transform;
 }
 
+/* Alumni employers — same seam as domains, slightly slower */
+.domains-marquee-track.alumni-marquee-track {
+  gap: 1.5rem;
+  animation-duration: 52s;
+}
+
+@media (min-width: 640px) {
+  .domains-marquee-track.alumni-marquee-track {
+    gap: 2rem;
+  }
+}
+
 /* Soft ambient motion for hero accents */
 @keyframes home-float {
   0%,

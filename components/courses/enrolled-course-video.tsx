@@ -262,11 +262,11 @@ export function EnrolledCourseVideo({
           referrerPolicy="strict-origin-when-cross-origin"
         />
         {/*
-          Drive’s “open in new tab” lives inside a cross-origin iframe; we can’t remove it via API.
-          Transparent strip blocks header clicks without a visible blackout.
+          Drive preview embeds include an “open in new tab” control we can’t disable via iframe API.
+          Solid bar over the header masks that chrome and blocks clicks (blends with the player).
         */}
         <div
-          className="pointer-events-auto absolute inset-x-0 top-0 z-10 h-[3.25rem] bg-transparent sm:h-14"
+          className="pointer-events-auto absolute inset-x-0 top-0 z-10 h-[3.25rem] bg-black sm:h-14 md:h-16"
           aria-hidden
         />
         <CourseFullscreenExitBar
