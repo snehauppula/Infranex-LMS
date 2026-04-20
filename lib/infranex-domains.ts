@@ -69,7 +69,6 @@ export const INFRANEX_DOMAINS: readonly LearningDomain[] = [
       "professional ai",
       "ai & data analytics",
       "ai and data analytics",
-      "professional data analytics",
     ],
     imageSrc: "/domains/professional-ai-data-analytics.png",
   },
@@ -228,9 +227,23 @@ export function inferCourseDomainSlug(course: {
   description: string | null;
 }): string | null {
   const hay = `${course.title} ${course.description ?? ""}`.toLowerCase();
+
+  const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const matchesKeyword = (kw: string) => {
+    // Some keywords are intentionally padded (e.g. " ai ") to avoid accidental matches.
+    if (kw.trim() !== kw) return hay.includes(kw);
+    // Multi-word phrases are already specific enough for substring matching.
+    if (kw.includes(" ")) return hay.includes(kw);
+    // Short tokens (e.g. "rag") must match whole words to avoid false positives like "pRAGmatic".
+    if (kw.length <= 3) {
+      return new RegExp(`\\b${escapeRegExp(kw)}\\b`, "i").test(hay);
+    }
+    return hay.includes(kw);
+  };
+
   for (const d of INFRANEX_DOMAINS) {
     for (const kw of d.keywords) {
-      if (hay.includes(kw)) return d.slug;
+      if (matchesKeyword(kw)) return d.slug;
     }
   }
   return null;

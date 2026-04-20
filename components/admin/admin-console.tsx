@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import type { AdminCourseRow, AdminStudentRow } from "@/services/admin";
-import { revalidateAdminPage } from "@/app/admin/actions";
+import { adminDeleteUser, revalidateAdminPage } from "@/app/admin/actions";
 import { RefreshCw } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -154,12 +154,42 @@ export function AdminConsole({
                           <CardTitle>{s.name}</CardTitle>
                           <p className="mt-1 text-sm text-muted">{s.email}</p>
                         </div>
-                        <div className="flex flex-wrap gap-2 text-xs">
-                          <StatPill label="Avg progress" value={`${avg(progresses)}%`} />
+                        <div className="flex flex-wrap items-center gap-2 text-xs">
+                          <StatPill
+                            label="Avg progress"
+                            value={`${avg(progresses)}%`}
+                          />
                           <StatPill
                             label="Completed"
                             value={`${completed}/${s.enrollments?.length ?? 0}`}
                           />
+
+                          <form
+                            action={adminDeleteUser}
+                            onSubmit={(e) => {
+                              if (!serviceRoleConfigured) return;
+                              const ok = window.confirm(
+                                `Delete ${s.name} (${s.email ?? "no email"})?\n\nThis permanently removes the user in Supabase Auth and cascades their profile/enrollments.`
+                              );
+                              if (!ok) e.preventDefault();
+                            }}
+                            className="ml-auto"
+                          >
+                            <input type="hidden" name="userId" value={s.user_id} />
+                            <Button
+                              type="submit"
+                              size="sm"
+                              variant="destructive"
+                              disabled={!serviceRoleConfigured}
+                              title={
+                                serviceRoleConfigured
+                                  ? "Delete user"
+                                  : "Set SUPABASE_SERVICE_ROLE_KEY to enable deletes"
+                              }
+                            >
+                              Delete user
+                            </Button>
+                          </form>
                         </div>
                       </CardHeader>
                       <CardContent>

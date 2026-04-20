@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { ArrowLeft, Check, Shield, Sparkles } from "lucide-react";
@@ -14,6 +15,54 @@ import { ManualCourseComplete } from "@/components/courses/manual-course-complet
 import { catalogVideoThumbnailUrl, megaEmbedSrcFromVideoUrl } from "@/lib/video";
 import { courseDetailPath } from "@/lib/course-path";
 import { cn } from "@/lib/utils";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.infranextech.in";
+
+function courseOgImage(course: CourseRow): string | null {
+  const poster = course.poster_url?.trim() || null;
+  if (poster) return poster;
+  if (course.video_url) return catalogVideoThumbnailUrl(course.video_url);
+  return null;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug: param } = await params;
+  const course = await getCourseForDetailPage(param);
+  if (!course) return { title: "Course not found", robots: { index: false, follow: false } };
+
+  const canonical = courseDetailPath(course);
+  const desc =
+    course.description?.trim() ||
+    "Course details, preview, pricing, and enrollment on Infranex Technologies.";
+  const img = courseOgImage(course);
+
+  return {
+    title: course.title,
+    description: desc,
+    alternates: { canonical },
+    openGraph: {
+      type: "article",
+      url: canonical,
+      title: course.title,
+      description: desc,
+      images: img ? [{ url: img }] : undefined,
+    },
+    twitter: {
+      card: img ? "summary_large_image" : "summary",
+      title: course.title,
+      description: desc,
+      images: img ? [img] : undefined,
+    },
+    other: {
+      "og:site_name": "Infranex Technologies",
+      "og:url": `${SITE_URL}${canonical}`,
+    },
+  };
+}
 
 function formatInrPaise(paise: number) {
   return new Intl.NumberFormat("en-IN", {
@@ -130,11 +179,12 @@ export default async function CourseDetailPage({
                   />
                 ) : isEnrolled && !course.video_url ? (
                   <div className="flex h-full min-h-[12rem] w-full flex-col items-center justify-center gap-2 bg-deep/[0.04] p-8 text-center">
-                    <p className="text-sm font-semibold text-deep">No video URL on this course</p>
+                    <p className="text-sm font-semibold text-deep">
+                      Lessons coming soon
+                    </p>
                     <p className="max-w-sm text-sm text-muted">
-                      Set <span className="font-mono text-xs">video_url</span> to a direct{" "}
-                      <span className="font-mono text-xs">.mp4</span> or MEGA{" "}
-                      <span className="font-mono text-xs">embed</span> URL (include the hash).
+                      You&apos;re enrolled — we&apos;ll unlock the player here as soon as the
+                      videos are published.
                     </p>
                   </div>
                 ) : previewThumb ? (

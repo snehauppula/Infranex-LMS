@@ -1,8 +1,22 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import { CoursesExplorer } from "@/components/marketing/courses-explorer";
 import { Container } from "@/components/layout/container";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCourses } from "@/services/courses";
+
+export const metadata: Metadata = {
+  title: "Courses",
+  description:
+    "Browse placement-focused programs with previews, pricing, and instant enrollment.",
+  alternates: { canonical: "/courses" },
+  openGraph: {
+    title: "Courses · Infranex Technologies",
+    description:
+      "Browse placement-focused programs with previews, pricing, and instant enrollment.",
+    url: "/courses",
+  },
+};
 
 function CoursesFallback() {
   return (

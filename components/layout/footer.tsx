@@ -99,7 +99,9 @@ export function Footer() {
                 <li className="flex items-start gap-2">
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
                   <span className="break-words leading-snug">
-                    Yelahanka, Bangalore, Karnataka
+                    3rd Floor, Infront of Indian Oil, Sy No 1, Shivanahalli,
+                    Yelahanka, Jakkur Main Rd, Nehru Nagar, Bengaluru, Karnataka
+                    560064
                   </span>
                 </li>
               </ul>
