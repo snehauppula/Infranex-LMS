@@ -11,13 +11,21 @@ const fadeUp = {
   viewport: { once: true, margin: "-60px" },
 };
 
-/** Swap files in `/public/partners/` for real brand marks; update `name` to match the organization. */
 const COLLABORATORS = [
-  { id: "astra", name: "AstraWorks", src: "/partners/partner-astra.svg" },
-  { id: "nexstream", name: "NexStream", src: "/partners/partner-nexstream.svg" },
-  { id: "kinetic", name: "Kinetic Labs", src: "/partners/partner-kinetic.svg" },
-  { id: "vertex", name: "Vertex India", src: "/partners/partner-vertex.svg" },
-  { id: "orion", name: "Orion Digital", src: "/partners/partner-orion.svg" },
+  { id: "esb", name: "ESB", src: "/partners/esb.png?v=2" },
+  {
+    id: "communication",
+    name: "Communication Skills for Business",
+    src: "/partners/communication.png?v=2",
+  },
+  {
+    id: "pmi",
+    name: "Project Management Institute",
+    src: "/partners/pmi.png?v=2",
+  },
+  { id: "unity", name: "Unity", src: "/partners/unity.png?v=2" },
+  { id: "cisco", name: "Cisco", src: "/partners/cisco.png?v=2" },
+  { id: "wipro", name: "Wipro", src: "/partners/wipro.png?v=2" },
 ] as const;
 
 export function CollaboratorsSection() {
@@ -45,7 +53,7 @@ export function CollaboratorsSection() {
         </motion.div>
 
         <ul
-          className="mt-8 grid list-none grid-cols-2 gap-4 sm:mt-10 sm:grid-cols-3 sm:gap-5 lg:grid-cols-5"
+          className="mt-8 grid list-none grid-cols-2 gap-4 sm:mt-10 sm:grid-cols-3 sm:gap-5 lg:grid-cols-6"
           aria-label="Collaborating organizations"
         >
           {COLLABORATORS.map((c, i) => (
@@ -53,14 +61,11 @@ export function CollaboratorsSection() {
               key={c.id}
               {...fadeUp}
               transition={{ duration: 0.45, delay: 0.04 * i }}
-              className={cn(
-                i === COLLABORATORS.length - 1 &&
-                  "col-span-2 flex justify-center sm:col-span-1"
-              )}
+              className="flex"
             >
               <div
                 className={cn(
-                  "group flex h-full w-full min-h-[6.75rem] max-w-[280px] flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-card px-3 py-4 shadow-sm sm:max-w-none sm:min-h-[7.25rem] sm:gap-2.5 sm:px-4 sm:py-5",
+                  "group flex h-full w-full flex-1 min-h-[7.25rem] flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-card px-3 py-4 shadow-sm sm:min-h-[7.75rem] sm:gap-2.5 sm:px-4 sm:py-5",
                   "transition-[border-color,box-shadow,transform] duration-300 ease-brand-out motion-reduce:duration-150",
                   "hover:border-primary/18 hover:shadow-md hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
                 )}
@@ -68,10 +73,10 @@ export function CollaboratorsSection() {
                 <img
                   src={c.src}
                   alt=""
-                  width={120}
-                  height={40}
+                  width={180}
+                  height={60}
                   decoding="async"
-                  className="h-10 w-auto max-w-[min(100%,11rem)] shrink-0 object-contain object-center opacity-95 transition-[opacity,transform] duration-300 ease-brand-out sm:h-[2.65rem] sm:max-w-[min(100%,12rem)] group-hover:scale-[1.02]"
+                  className="h-12 w-auto max-w-[min(100%,14rem)] shrink-0 object-contain object-center opacity-95 transition-[opacity,transform] duration-300 ease-brand-out sm:h-14 sm:max-w-[min(100%,15rem)] group-hover:scale-[1.02]"
                 />
                 <p className="max-w-full text-center text-[11px] font-semibold leading-snug tracking-tight text-deep/75 sm:text-xs">
                   {c.name}
