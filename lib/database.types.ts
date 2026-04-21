@@ -55,6 +55,7 @@ export type Database = {
         Row: {
           course_id: string;
           id: string;
+          purchase_source: string;
           progress: number;
           status: string;
           student_id: string;
@@ -62,6 +63,7 @@ export type Database = {
         Insert: {
           course_id: string;
           id?: string;
+          purchase_source?: string;
           progress?: number;
           status?: string;
           student_id: string;
@@ -69,6 +71,7 @@ export type Database = {
         Update: {
           course_id?: string;
           id?: string;
+          purchase_source?: string;
           progress?: number;
           status?: string;
           student_id?: string;
