@@ -36,6 +36,7 @@ create table if not exists public.enrollments (
   course_id uuid not null references public.courses (id) on delete cascade,
   progress integer not null default 0 check (progress >= 0 and progress <= 100),
   status text not null default 'active' check (status in ('active', 'completed', 'paused')),
+  purchase_source text not null default 'razorpay' check (purchase_source in ('razorpay', 'coupon')),
   unique (student_id, course_id)
 );
 

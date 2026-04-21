@@ -154,18 +154,37 @@ export async function POST(req: Request) {
     }
   }
 
-  const { error: eErr } = await admin.from("enrollments").upsert(
+  const attempt = await admin.from("enrollments").upsert(
     {
       student_id: student.id,
       course_id: courseId,
       progress: 0,
       status: "active",
+      purchase_source: "razorpay",
     },
     { onConflict: "student_id,course_id" }
   );
 
-  if (eErr) {
-    return NextResponse.json({ error: eErr.message }, { status: 500 });
+  // Backward-compat: if DB hasn’t been migrated yet, retry without the column.
+  if (
+    attempt.error &&
+    /purchase_source/i.test(attempt.error.message) &&
+    /column/i.test(attempt.error.message)
+  ) {
+    const fallback = await admin.from("enrollments").upsert(
+      {
+        student_id: student.id,
+        course_id: courseId,
+        progress: 0,
+        status: "active",
+      },
+      { onConflict: "student_id,course_id" }
+    );
+    if (fallback.error) {
+      return NextResponse.json({ error: fallback.error.message }, { status: 500 });
+    }
+  } else if (attempt.error) {
+    return NextResponse.json({ error: attempt.error.message }, { status: 500 });
   }
 
   revalidatePath("/dashboard");

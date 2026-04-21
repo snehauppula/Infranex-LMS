@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import type { AdminCourseRow, AdminStudentRow } from "@/services/admin";
 import { adminDeleteUser, revalidateAdminPage } from "@/app/admin/actions";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, Tag } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Container } from "@/components/layout/container";
@@ -212,8 +212,16 @@ export function AdminConsole({
                                     {e.status}
                                   </p>
                                 </div>
-                                <div className="text-sm font-semibold text-primary">
-                                  {e.progress}%
+                                <div className="flex items-center gap-3">
+                                  {e.purchase_source === "coupon" ? (
+                                    <span className="inline-flex items-center gap-1 rounded-full border border-primary/25 bg-primary/[0.10] px-2 py-1 text-[11px] font-semibold text-deep">
+                                      <Tag className="h-3.5 w-3.5 text-primary" aria-hidden />
+                                      Free
+                                    </span>
+                                  ) : null}
+                                  <div className="text-sm font-semibold text-primary">
+                                    {e.progress}%
+                                  </div>
                                 </div>
                               </div>
                             ))
@@ -283,6 +291,12 @@ export function AdminConsole({
                                   {e.status}
                                 </p>
                               </div>
+                              {e.purchase_source === "coupon" ? (
+                                <span className="inline-flex items-center gap-1 rounded-full border border-primary/25 bg-primary/[0.10] px-2 py-1 text-[11px] font-semibold text-deep">
+                                  <Tag className="h-3.5 w-3.5 text-primary" aria-hidden />
+                                  Free
+                                </span>
+                              ) : null}
                               <span className="shrink-0 font-semibold text-primary tabular-nums">
                                 {e.progress}%
                               </span>

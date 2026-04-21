@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 /** Bumped when toast copy/behavior changes so users aren’t stuck behind an old session flag. */
 const STORAGE_KEY = "infranex-dashboard-welcome-toast-v3";
+const ADMIN_STORAGE_KEY = "infranex-dashboard-welcome-toast-admin-v1";
 
 export function DashboardWelcomeToast({
   firstName,
@@ -18,8 +19,11 @@ export function DashboardWelcomeToast({
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    /* Admins: show on every dashboard visit (no sessionStorage — shared key was blocking repeats). */
+    /* Guard against React Strict Mode double-invoking effects in dev. */
     if (isAdmin) {
+      if (sessionStorage.getItem(ADMIN_STORAGE_KEY)) return;
+      sessionStorage.setItem(ADMIN_STORAGE_KEY, "1");
+
       toast(
         firstName !== "there"
           ? `Welcome, ${firstName}`

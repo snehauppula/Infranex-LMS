@@ -12,6 +12,7 @@ const fadeUp = {
 };
 
 const COLLABORATORS = [
+  { id: "wipro", name: "Wipro", src: "/partners/wipro.png?v=2" },
   { id: "esb", name: "ESB", src: "/partners/esb.png?v=2" },
   {
     id: "communication",
@@ -25,7 +26,6 @@ const COLLABORATORS = [
   },
   { id: "unity", name: "Unity", src: "/partners/unity.png?v=2" },
   { id: "cisco", name: "Cisco", src: "/partners/cisco.png?v=2" },
-  { id: "wipro", name: "Wipro", src: "/partners/wipro.png?v=2" },
 ] as const;
 
 export function CollaboratorsSection() {
@@ -70,17 +70,24 @@ export function CollaboratorsSection() {
                   "hover:border-primary/18 hover:shadow-md hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
                 )}
               >
-                <img
-                  src={c.src}
-                  alt=""
-                  width={180}
-                  height={60}
-                  decoding="async"
-                  className="h-12 w-auto max-w-[min(100%,14rem)] shrink-0 object-contain object-center opacity-95 transition-[opacity,transform] duration-300 ease-brand-out sm:h-14 sm:max-w-[min(100%,15rem)] group-hover:scale-[1.02]"
-                />
+                <div className="relative flex items-center justify-center">
+                  <img
+                    src={c.src}
+                    alt=""
+                    width={180}
+                    height={60}
+                    decoding="async"
+                    className="h-12 w-auto max-w-[min(100%,14rem)] shrink-0 object-contain object-center opacity-95 transition-[opacity,transform] duration-300 ease-brand-out sm:h-14 sm:max-w-[min(100%,15rem)] group-hover:scale-[1.02]"
+                  />
+                </div>
                 <p className="max-w-full text-center text-[11px] font-semibold leading-snug tracking-tight text-deep/75 sm:text-xs">
                   {c.name}
                 </p>
+                {c.id === "wipro" ? (
+                  <p className="text-center text-[11px] font-extrabold uppercase tracking-[0.18em] text-primary">
+                    Credentials Partner
+                  </p>
+                ) : null}
               </div>
             </motion.li>
           ))}

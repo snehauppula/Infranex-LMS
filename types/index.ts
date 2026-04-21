@@ -37,6 +37,8 @@ export type EnrollmentRow = {
   course_id: string;
   progress: number;
   status: EnrollmentStatus;
+  /** How the seat was acquired (paid vs coupon). */
+  purchase_source?: "razorpay" | "coupon";
 };
 
 export type CourseWithMeta = CourseRow & {

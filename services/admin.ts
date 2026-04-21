@@ -15,7 +15,7 @@ async function adminDataClient() {
 
 export type AdminEnrollmentView = Pick<
   EnrollmentRow,
-  "id" | "progress" | "status"
+  "id" | "progress" | "status" | "purchase_source"
 > & {
   course: Pick<CourseRow, "id" | "title">;
 };
@@ -28,7 +28,7 @@ export type AdminStudentRow = StudentRow & {
 /** Enrollment row shown under a course in admin (includes learner name). */
 export type AdminCourseSeatRow = Pick<
   EnrollmentRow,
-  "id" | "progress" | "status" | "student_id"
+  "id" | "progress" | "status" | "student_id" | "purchase_source"
 > & {
   studentName: string;
 };
@@ -78,10 +78,27 @@ export async function getAdminStudents(): Promise<AdminStudentRow[]> {
   );
 
   const studentIds = learners.map((s) => s.id as string);
-  const { data: enrollmentsRaw, error: enErr } = await supabase
+
+  const attempt = await supabase
     .from("enrollments")
-    .select("id, student_id, course_id, progress, status")
+    .select("id, student_id, course_id, progress, status, purchase_source")
     .in("student_id", studentIds);
+
+  const fallback =
+    attempt.error &&
+    /purchase_source/i.test(attempt.error.message) &&
+    /schema cache/i.test(attempt.error.message)
+      ? await supabase
+          .from("enrollments")
+          .select("id, student_id, course_id, progress, status")
+          .in("student_id", studentIds)
+      : null;
+
+  const enrollmentsRaw = (fallback?.data ?? attempt.data) as
+    | Array<Record<string, unknown>>
+    | null
+    | undefined;
+  const enErr = fallback?.error ?? attempt.error;
 
   if (enErr && process.env.NODE_ENV === "development") {
     console.error("[getAdminStudents] enrollments", enErr.message);
@@ -114,6 +131,7 @@ export async function getAdminStudents(): Promise<AdminStudentRow[]> {
       id: e.id as string,
       progress: Number(e.progress),
       status: e.status as EnrollmentStatus,
+      purchase_source: (e.purchase_source as "razorpay" | "coupon" | null) ?? undefined,
       course: {
         id: courseId,
         title: courseTitleById.get(courseId) ?? "Unknown course",
@@ -151,10 +169,27 @@ export async function getAdminCourses(): Promise<AdminCourseRow[]> {
   if (!courses?.length) return [];
 
   const courseIds = courses.map((c) => c.id as string);
-  const { data: enrollmentsRaw, error: enErr } = await supabase
+
+  const attempt = await supabase
     .from("enrollments")
-    .select("id, student_id, course_id, progress, status")
+    .select("id, student_id, course_id, progress, status, purchase_source")
     .in("course_id", courseIds);
+
+  const fallback =
+    attempt.error &&
+    /purchase_source/i.test(attempt.error.message) &&
+    /schema cache/i.test(attempt.error.message)
+      ? await supabase
+          .from("enrollments")
+          .select("id, student_id, course_id, progress, status")
+          .in("course_id", courseIds)
+      : null;
+
+  const enrollmentsRaw = (fallback?.data ?? attempt.data) as
+    | Array<Record<string, unknown>>
+    | null
+    | undefined;
+  const enErr = fallback?.error ?? attempt.error;
 
   if (enErr && process.env.NODE_ENV === "development") {
     console.error("[getAdminCourses] enrollments", enErr.message);
@@ -188,6 +223,7 @@ export async function getAdminCourses(): Promise<AdminCourseRow[]> {
       student_id: sid,
       progress: Number(e.progress),
       status: e.status as EnrollmentStatus,
+      purchase_source: (e.purchase_source as "razorpay" | "coupon" | null) ?? undefined,
       studentName: studentNameById.get(sid) ?? "Learner",
     };
     const list = enrollmentsByCourse.get(cid) ?? [];

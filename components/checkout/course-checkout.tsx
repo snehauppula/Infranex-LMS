@@ -31,6 +31,7 @@ export function CourseCheckout({
   courseSlug,
   title,
   enrolled = false,
+  couponCode,
 }: {
   courseId: string;
   /** Canonical slug for post-checkout celebration page. */
@@ -38,6 +39,7 @@ export function CourseCheckout({
   title: string;
   /** When true, payment is hidden and learner can jump to the player. */
   enrolled?: boolean;
+  couponCode?: string;
 }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
@@ -58,7 +60,7 @@ export function CourseCheckout({
       const res = await fetch("/api/razorpay/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ courseId }),
+        body: JSON.stringify({ courseId, couponCode }),
       });
       const data = (await res.json()) as {
         orderId?: string;
@@ -90,6 +92,7 @@ export function CourseCheckout({
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
                 courseId,
+                couponCode,
               }),
             });
             const v = (await verify.json()) as { ok?: boolean; error?: string };
@@ -115,7 +118,7 @@ export function CourseCheckout({
       toast.error(e instanceof Error ? e.message : "Payment failed");
       setBusy(false);
     }
-  }, [courseId, courseSlug, router, title]);
+  }, [couponCode, courseId, courseSlug, router, title]);
 
   if (enrolled) {
     return (

@@ -9,6 +9,7 @@ import { getCourseForDetailPage } from "@/services/courses";
 import { getSessionUser } from "@/services/auth";
 import { getEnrollmentForCourse } from "@/services/enrollments";
 import { CourseCheckout } from "@/components/checkout/course-checkout";
+import { CoursePurchasePanel } from "@/components/checkout/course-purchase-panel";
 import { CoursePlayerScroll } from "@/components/courses/course-player-scroll";
 import { EnrolledCourseVideo } from "@/components/courses/enrolled-course-video";
 import { ManualCourseComplete } from "@/components/courses/manual-course-complete";
@@ -62,14 +63,6 @@ export async function generateMetadata({
       "og:url": `${SITE_URL}${canonical}`,
     },
   };
-}
-
-function formatInrPaise(paise: number) {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(paise / 100);
 }
 
 function courseHighlightLines(course: CourseRow): string[] {
@@ -316,49 +309,53 @@ export default async function CourseDetailPage({
                   </div>
                 ) : (
                   <>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-muted">
-                      Tuition
-                    </p>
-                    <p className="mt-1 text-4xl font-bold tabular-nums tracking-tight text-primary sm:text-[2.65rem] sm:leading-none">
-                      {formatInrPaise(course.price)}
-                    </p>
-                    <p className="mt-2 max-w-md text-sm text-muted">
-                      One-time payment in INR. Secure Razorpay checkout — enrollment unlocks
-                      immediately after payment.
-                    </p>
+                    <CoursePurchasePanel
+                      courseId={course.id}
+                      courseSlug={course.slug}
+                      title={course.title}
+                      basePricePaise={course.price}
+                      signedIn={user != null}
+                    />
                   </>
                 )}
               </div>
 
-              <div
-                className={cn(
-                  "w-full shrink-0 lg:max-w-[min(100%,20rem)]",
-                  isEnrolled ? "flex flex-col gap-5" : "space-y-4"
-                )}
-              >
-                {user ? (
-                  <>
-                    <CourseCheckout
-                      courseId={course.id}
-                      courseSlug={course.slug}
-                      title={course.title}
-                      enrolled={isEnrolled}
-                    />
-                    {isEnrolled && enrollment ? (
-                      <div className="rounded-xl border border-border/80 bg-card/90 p-4 shadow-sm ring-1 ring-deep/[0.03]">
-                        <ManualCourseComplete
+              {isEnrolled || !user ? (
+                <div
+                  className={cn(
+                    "w-full shrink-0 lg:max-w-[min(100%,20rem)]",
+                    isEnrolled ? "flex flex-col gap-5" : "space-y-4"
+                  )}
+                >
+                  {user ? (
+                    <>
+                      {isEnrolled ? (
+                        <CourseCheckout
                           courseId={course.id}
-                          initialProgress={enrollment.progress}
+                          courseSlug={course.slug}
+                          title={course.title}
+                          enrolled={isEnrolled}
                         />
-                      </div>
-                    ) : null}
-                  </>
-                ) : (
-                  <Button asChild className="h-12 w-full text-base font-semibold shadow-md shadow-primary/20">
-                    <Link href="/auth">Sign in to enroll</Link>
-                  </Button>
-                )}
-              </div>
+                      ) : null}
+                      {isEnrolled && enrollment ? (
+                        <div className="rounded-xl border border-border/80 bg-card/90 p-4 shadow-sm ring-1 ring-deep/[0.03]">
+                          <ManualCourseComplete
+                            courseId={course.id}
+                            initialProgress={enrollment.progress}
+                          />
+                        </div>
+                      ) : null}
+                    </>
+                  ) : (
+                    <Button
+                      asChild
+                      className="h-12 w-full text-base font-semibold shadow-md shadow-primary/20"
+                    >
+                      <Link href="/auth">Sign in to enroll</Link>
+                    </Button>
+                  )}
+                </div>
+              ) : null}
             </div>
           </footer>
         </article>

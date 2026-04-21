@@ -31,10 +31,11 @@ function useCourseShellFullscreen(): { active: boolean; exit: () => void } {
   }, []);
 
   useEffect(() => {
-    sync();
+    const raf = window.requestAnimationFrame(() => sync());
     document.addEventListener("fullscreenchange", sync);
     document.addEventListener("webkitfullscreenchange", sync);
     return () => {
+      window.cancelAnimationFrame(raf);
       document.removeEventListener("fullscreenchange", sync);
       document.removeEventListener("webkitfullscreenchange", sync);
     };
