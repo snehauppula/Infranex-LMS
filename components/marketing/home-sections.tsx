@@ -38,6 +38,8 @@ function formatInrPaise(paise: number) {
   }).format(paise / 100);
 }
 
+const ORIGINAL_PRICE_PAISE = 1499900;
+
 export function HomeSections({ courses }: { courses: CourseRow[] }) {
   const featured = courses.slice(0, 3);
 
@@ -312,8 +314,17 @@ export function HomeSections({ courses }: { courses: CourseRow[] }) {
                         <span className="text-xs font-semibold uppercase tracking-wider text-muted">
                           {c.duration ?? "Self-paced"}
                         </span>
-                        <span className="text-lg font-bold text-deep">
-                          {formatInrPaise(c.price)}
+                        <span className="flex flex-wrap items-center justify-end gap-x-2 gap-y-1 text-right">
+                          {c.price === 450000 || c.price === 500000 ? (
+                            <>
+                              <span className="text-sm font-semibold tabular-nums text-muted line-through decoration-muted/60">
+                                {formatInrPaise(ORIGINAL_PRICE_PAISE)}
+                              </span>
+                            </>
+                          ) : null}
+                          <span className="text-lg font-bold tabular-nums text-deep">
+                            {formatInrPaise(c.price)}
+                          </span>
                         </span>
                       </div>
                       <span className="flex items-center gap-1 text-sm font-semibold text-primary transition-[gap,opacity,color] duration-300 ease-brand-out md:opacity-80 md:group-hover:opacity-100 md:group-hover:gap-1.5">

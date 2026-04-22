@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { CourseCheckout } from "@/components/checkout/course-checkout";
 
 const COUPON_CODE = "INFRANEX100";
+const ORIGINAL_PRICE_PAISE = 1499900;
 
 function formatInrPaise(paise: number) {
   return new Intl.NumberFormat("en-IN", {
@@ -38,6 +39,8 @@ export function CoursePurchasePanel({
   const couponApplied = normalized === COUPON_CODE;
   const showInvalid = signedIn && normalized.length > 0 && !couponApplied;
   const effectivePrice = couponApplied ? 0 : basePricePaise;
+  const showOriginalPrice =
+    basePricePaise === 450000 || basePricePaise === 500000;
 
   async function enrollFree() {
     setBusy(true);
@@ -65,9 +68,16 @@ export function CoursePurchasePanel({
           Tuition
         </p>
         <div className="mt-1 flex flex-wrap items-end gap-x-3 gap-y-2">
-          <p className="text-4xl font-bold tabular-nums tracking-tight text-primary sm:text-[2.65rem] sm:leading-none">
-            {formatInrPaise(effectivePrice)}
-          </p>
+          <div className="flex flex-wrap items-end gap-x-2 gap-y-1">
+            {showOriginalPrice ? (
+              <span className="text-base font-semibold tabular-nums text-muted line-through decoration-muted/60 decoration-2 sm:text-lg">
+                {formatInrPaise(ORIGINAL_PRICE_PAISE)}
+              </span>
+            ) : null}
+            <p className="text-4xl font-bold tabular-nums tracking-tight text-primary sm:text-[2.65rem] sm:leading-none">
+              {formatInrPaise(effectivePrice)}
+            </p>
+          </div>
           {couponApplied ? (
             <span className="inline-flex items-center gap-1 rounded-full border border-primary/25 bg-primary/[0.10] px-2.5 py-1 text-xs font-semibold text-deep">
               <Check className="h-3.5 w-3.5 text-primary" aria-hidden />

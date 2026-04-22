@@ -28,6 +28,8 @@ function formatInrPaise(paise: number) {
   }).format(paise / 100);
 }
 
+const ORIGINAL_PRICE_PAISE = 1499900;
+
 export function CoursesExplorer({ courses }: { courses: CourseRow[] }) {
   const [q, setQ] = useState("");
   const reduceMotion = useReducedMotion();
@@ -171,8 +173,17 @@ export function CoursesExplorer({ courses }: { courses: CourseRow[] }) {
                     {/* Action bar */}
                     <CardContent className="mt-auto p-5 pt-4">
                       <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
-                        <span className="text-base font-semibold tracking-tight text-deep">
-                          {formatInrPaise(c.price)}
+                        <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                          {c.price === 450000 || c.price === 500000 ? (
+                            <>
+                              <span className="text-sm font-semibold tabular-nums text-muted line-through decoration-muted/60">
+                                {formatInrPaise(ORIGINAL_PRICE_PAISE)}
+                              </span>
+                            </>
+                          ) : null}
+                          <span className="text-base font-semibold tabular-nums tracking-tight text-deep">
+                            {formatInrPaise(c.price)}
+                          </span>
                         </span>
                         <span className="inline-flex items-center gap-1 text-sm font-semibold text-primary transition-transform duration-300 ease-brand-out motion-reduce:duration-150 group-hover:translate-x-0.5">
                           View details
