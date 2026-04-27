@@ -4,6 +4,7 @@ import { CoursesExplorer } from "@/components/marketing/courses-explorer";
 import { Container } from "@/components/layout/container";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCourses } from "@/services/courses";
+import { ORGANIZATION_LEGAL_NAME } from "@/lib/site-seo";
 
 export const metadata: Metadata = {
   title: "Courses",
@@ -11,10 +12,12 @@ export const metadata: Metadata = {
     "Browse placement-focused programs with previews, pricing, and instant enrollment.",
   alternates: { canonical: "/courses" },
   openGraph: {
-    title: "Courses · Infranex Technologies",
+    title: `Courses · ${ORGANIZATION_LEGAL_NAME}`,
     description:
       "Browse placement-focused programs with previews, pricing, and instant enrollment.",
     url: "/courses",
+    siteName: ORGANIZATION_LEGAL_NAME,
+    locale: "en_IN",
   },
 };
 

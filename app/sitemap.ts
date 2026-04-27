@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site-seo";
 import { getCourses } from "@/services/courses";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.infranextech.in";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();

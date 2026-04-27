@@ -16,8 +16,7 @@ import { ManualCourseComplete } from "@/components/courses/manual-course-complet
 import { catalogVideoThumbnailUrl, megaEmbedSrcFromVideoUrl } from "@/lib/video";
 import { courseDetailPath } from "@/lib/course-path";
 import { cn } from "@/lib/utils";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.infranextech.in";
+import { ORGANIZATION_LEGAL_NAME } from "@/lib/site-seo";
 
 function courseOgImage(course: CourseRow): string | null {
   const poster = course.poster_url?.trim() || null;
@@ -38,7 +37,7 @@ export async function generateMetadata({
   const canonical = courseDetailPath(course);
   const desc =
     course.description?.trim() ||
-    "Course details, preview, pricing, and enrollment on Infranex Technologies.";
+    `Course details, preview, pricing, and enrollment with ${ORGANIZATION_LEGAL_NAME}.`;
   const img = courseOgImage(course);
 
   return {
@@ -48,6 +47,8 @@ export async function generateMetadata({
     openGraph: {
       type: "article",
       url: canonical,
+      siteName: ORGANIZATION_LEGAL_NAME,
+      locale: "en_IN",
       title: course.title,
       description: desc,
       images: img ? [{ url: img }] : undefined,
@@ -57,10 +58,6 @@ export async function generateMetadata({
       title: course.title,
       description: desc,
       images: img ? [img] : undefined,
-    },
-    other: {
-      "og:site_name": "Infranex Technologies",
-      "og:url": `${SITE_URL}${canonical}`,
     },
   };
 }

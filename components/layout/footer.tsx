@@ -158,7 +158,7 @@ export function Footer() {
             </a>
           </p>
           <p className="mt-1.5 text-center text-[11px] leading-relaxed text-white/55 sm:text-xs">
-            © {year} Infranex Technologies. All rights reserved.
+            © {year} Infranex Technologies Pvt Ltd. All rights reserved.
           </p>
         </div>
       </div>

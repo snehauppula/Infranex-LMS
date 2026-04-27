@@ -1,9 +1,18 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/layout/container";
+import { ORGANIZATION_LEGAL_NAME } from "@/lib/site-seo";
 
 export const metadata: Metadata = {
   title: "Terms",
   description: "Terms of use for Infranex Technologies Pvt Ltd.",
+  alternates: { canonical: "/terms" },
+  openGraph: {
+    title: `Terms · ${ORGANIZATION_LEGAL_NAME}`,
+    description: "Terms of use for Infranex Technologies Pvt Ltd.",
+    url: "/terms",
+    siteName: ORGANIZATION_LEGAL_NAME,
+    locale: "en_IN",
+  },
 };
 
 export default function TermsPage() {

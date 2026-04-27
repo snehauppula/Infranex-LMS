@@ -1,24 +1,37 @@
+import type { Metadata } from "next";
+import { BRAND_IMAGE_URL } from "@/components/brand/brand-assets";
 import { HomeSections } from "@/components/marketing/home-sections";
+import {
+  absoluteUrl,
+  ORGANIZATION_LEGAL_NAME,
+  ORGANIZATION_SHORT_NAME,
+  SITE_URL,
+} from "@/lib/site-seo";
 import { getCourses } from "@/services/courses";
 
-export const metadata = {
-  title: "Infranex Technologies — Fast, reliable, future-ready",
-  description:
-    "Placement-focused courses and a calm learning surface—so you spend energy on skills, not fighting the product.",
+const HOME_TITLE = `${ORGANIZATION_LEGAL_NAME} — Fast, reliable, future-ready`;
+const HOME_DESCRIPTION = `${ORGANIZATION_LEGAL_NAME} — placement-focused courses and a calm learning surface. Spend energy on skills, not fighting the product.`;
+
+export const metadata: Metadata = {
+  title: {
+    /** Avoid root `%s · …` template appending the legal name twice on `/`. */
+    absolute: HOME_TITLE,
+  },
+  description: HOME_DESCRIPTION,
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Infranex Technologies — Fast, reliable, future-ready",
-    description:
-      "Placement-focused courses and a calm learning surface—so you spend energy on skills, not fighting the product.",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
     url: "/",
-    images: [{ url: "/brand/infranex.png" }],
+    siteName: ORGANIZATION_LEGAL_NAME,
+    locale: "en_IN",
+    images: [{ url: BRAND_IMAGE_URL }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Infranex Technologies — Fast, reliable, future-ready",
-    description:
-      "Placement-focused courses and a calm learning surface—so you spend energy on skills, not fighting the product.",
-    images: ["/brand/infranex.png"],
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: [BRAND_IMAGE_URL],
   },
 };
 
@@ -26,10 +39,12 @@ export default async function HomePage() {
   const courses = await getCourses();
   const orgJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Infranex Technologies Pvt Ltd",
-    url: "https://www.infranextech.in/",
-    logo: "https://www.infranextech.in/brand/infranex.png",
+    "@type": ["Organization", "EducationalOrganization"],
+    name: ORGANIZATION_LEGAL_NAME,
+    legalName: ORGANIZATION_LEGAL_NAME,
+    alternateName: [ORGANIZATION_SHORT_NAME, "Infranex"],
+    url: `${SITE_URL}/`,
+    logo: absoluteUrl("/brand/infranex.png"),
     email: "support@infranextech.in",
     telephone: "+91 90198 57285",
     address: {
@@ -50,13 +65,9 @@ export default async function HomePage() {
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Infranex Technologies",
-    url: "https://www.infranextech.in/",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: "https://www.infranextech.in/courses?q={search_term_string}",
-      "query-input": "required name=search_term_string",
-    },
+    name: ORGANIZATION_LEGAL_NAME,
+    alternateName: ORGANIZATION_SHORT_NAME,
+    url: `${SITE_URL}/`,
   };
 
   return (

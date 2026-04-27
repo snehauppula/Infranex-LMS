@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/layout/container";
+import { ORGANIZATION_LEGAL_NAME } from "@/lib/site-seo";
 
 export const metadata: Metadata = {
   title: "Privacy",
   description:
     "How Infranex Technologies Pvt Ltd handles your information on this site.",
+  alternates: { canonical: "/privacy" },
+  openGraph: {
+    title: `Privacy · ${ORGANIZATION_LEGAL_NAME}`,
+    description:
+      "How Infranex Technologies Pvt Ltd handles your information on this site.",
+    url: "/privacy",
+    siteName: ORGANIZATION_LEGAL_NAME,
+    locale: "en_IN",
+  },
 };
 
 export default function PrivacyPage() {
